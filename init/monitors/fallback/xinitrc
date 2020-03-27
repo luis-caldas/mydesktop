@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# load all the env vars for this display
+source "$MONITOR_BASE_FOLDER""/config.xinitrc"
+
+# set the appropriate dpi
+xrandr --dpi 96x96
+
+# set the background colour to the one in the global config
+xsetroot -solid "$BG_COLOUR" &
+
+# start openbox and tell it to execute the a script on startup
+openbox --config-file "$OPENBOX_FOLDER""/openbox.xml" --startup 'bash '"$MONITOR_BASE_FOLDER""/openbox.xinitrc" &
+
+# start the conky monitor
+conky &
+
+wait

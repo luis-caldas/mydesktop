@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resize>
+	<drawContents>yes</drawContents>
+	<popupShow>Nonpixel</popupShow>
+	<popupPosition>Center</popupPosition>
+	<popupFixedPosition>
+		<x>10</x>
+		<y>10</y>
+	</popupFixedPosition>
+</resize>

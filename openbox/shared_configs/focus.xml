@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<focus>
+	<focusNew>yes</focusNew>
+	<followMouse>no</followMouse>
+	<focusLast>yes</focusLast>
+	<underMouse>no</underMouse>
+	<focusDelay>200</focusDelay>
+	<raiseOnFocus>no</raiseOnFocus>
+</focus>

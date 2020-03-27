@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<placement>
+	<policy>Smart</policy>
+	<center>yes</center>
+	<monitor>Primary</monitor>
+	<primaryMonitor>1</primaryMonitor>
+</placement>

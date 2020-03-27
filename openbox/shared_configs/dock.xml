@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dock>
+	<position>TopLeft</position>
+	<floatingX>0</floatingX>
+	<floatingY>0</floatingY>
+	<noStrut>no</noStrut>
+	<stacking>Above</stacking>
+	<direction>Vertical</direction>
+	<autoHide>no</autoHide>
+	<hideDelay>300</hideDelay>
+	<showDelay>300</showDelay>
+	<moveButton>Middle</moveButton>
+</dock>

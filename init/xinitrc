@@ -1,0 +1,75 @@
+#!/bin/bash
+
+##################
+# Path Resolving #
+##################
+
+# get the folder we are at now
+this_init_folder="$ENTRYPOINT_FOLDER""/init"
+
+# export the relative openbox config folder
+# so that the monitors can see it
+OPENBOX_FOLDER="$ENTRYPOINT_FOLDER""/openbox"
+export OPENBOX_FOLDER
+
+# path resolving for binaries
+PROGRAMS_FOLDER="$ENTRYPOINT_FOLDER""/programs"
+PUBLIC_PROGRAMS_FOLDER="$PROGRAMS_FOLDER""/public"
+
+# create a path for the local programs path
+# so they can be located when needed
+LOCAL_PROGRAMS_PATH="$PROGRAMS_FOLDER""/local"
+export LOCAL_PROGRAMS_PATH
+
+# add the public programs to the path
+PATH="$PUBLIC_PROGRAMS_FOLDER"":""${PATH}"
+export PATH
+
+# source all the common functions
+source "$PROGRAMS_FOLDER""/functions/functions.bash"
+
+###########
+# Globals #
+###########
+
+# load global configurations
+source "$this_init_folder""/config.xinitrc"
+
+##########
+# Script #
+##########
+
+# get the monitors folder
+monitors_folder="$this_init_folder""/monitors"
+monitors_ref_folder="$monitors_folder""/list"
+
+# create a list with all the monitors
+# use nullglob from this command as well
+shopt -s nullglob
+all_monitors=("$monitors_ref_folder""/"*)
+shopt -u nullglob
+
+# check if the list is empty (no monitors in the list)
+# and use the fallback configuration if so
+if [ ${#all_monitors[@]} -eq 0 ]; then
+    all_monitors=("$monitors_folder""/fallback")
+else
+    # show the monitors that we found
+    # (some verbose)
+    echo "[my_init]" "found these monitors:" "${all_monitors[@]}"
+fi
+
+# start each monitor session
+for each_monitor in "${all_monitors[@]}"; do
+    {
+        MONITOR_BASE_FOLDER="$each_monitor"
+        export MONITOR_BASE_FOLDER
+        bash "$each_monitor""/xinitrc"
+    } &
+done
+
+# run the services
+bash "$this_init_folder""/services.xinitrc" &
+
+wait
+
