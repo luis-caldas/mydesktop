@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <desktops>
-	<number>4</number>
-	<firstdesk>1</firstdesk>
+  <number>4</number>
+  <firstdesk>1</firstdesk>
     <names>
         <name>零</name>
-		<name>一つ</name>
-		<name>二つ</name>
-		<name>三つ</name>
-		<name>四つ</name>
-		<name>五つ</name>
-		<name>六つ</name>
-		<name>七つ</name>
-		<name>八つ</name>
-		<name>九つ</name>
-	</names>
-	<popupTime>875</popupTime><!-- In milliseconds -->
+    <name>一つ</name>
+    <name>二つ</name>
+    <name>三つ</name>
+    <name>四つ</name>
+    <name>五つ</name>
+    <name>六つ</name>
+    <name>七つ</name>
+    <name>八つ</name>
+    <name>九つ</name>
+  </names>
+  <popupTime>875</popupTime><!-- In milliseconds -->
 </desktops>

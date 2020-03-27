@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openbox_config xmlns="http:gopenbox.org/3.4/rc" xmlns:xi="http://www.w3.org/2001/XInclude">
-    <xi:include href="./shared_configs/applications.xml"/>
-    <xi:include href="./shared_configs/desktops.xml"/>
-    <xi:include href="./shared_configs/dock.xml"/>
-    <xi:include href="./shared_configs/focus.xml"/>
-    <xi:include href="./shared_configs/keyboard.xml"/>
-    <xi:include href="./shared_configs/margins.xml"/>
-    <xi:include href="./shared_configs/menu.xml"/>
-    <xi:include href="./shared_configs/mouse.xml"/>
-    <xi:include href="./shared_configs/placement.xml"/>
-    <xi:include href="./shared_configs/resistance.xml"/>
-    <xi:include href="./shared_configs/resize.xml"/>
-    <xi:include href="./shared_configs/theme.xml"/>
+  <xi:include href="./shared_configs/applications.xml"/>
+  <xi:include href="./shared_configs/desktops.xml"/>
+  <xi:include href="./shared_configs/dock.xml"/>
+  <xi:include href="./shared_configs/focus.xml"/>
+  <xi:include href="./shared_configs/keyboard.xml"/>
+  <xi:include href="./shared_configs/margins.xml"/>
+  <xi:include href="./shared_configs/menu.xml"/>
+  <xi:include href="./shared_configs/mouse.xml"/>
+  <xi:include href="./shared_configs/placement.xml"/>
+  <xi:include href="./shared_configs/resistance.xml"/>
+  <xi:include href="./shared_configs/resize.xml"/>
+  <xi:include href="./shared_configs/theme.xml"/>
 </openbox_config>
