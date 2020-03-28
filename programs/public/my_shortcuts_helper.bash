@@ -57,7 +57,7 @@ case "$1" in
 
     # run exerything that is sent after the command argument
     command)
-        bash -c "${@:2}"
+        exec -- "${@:2}"
         ;;
 
     *)
