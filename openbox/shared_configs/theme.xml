@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <theme>
-  <name>Micro95</name>
+  <name>micro95</name>
   <titleLayout>NLIMC</titleLayout>
   <keepBorder>yes</keepBorder>
   <animateIconify>yes</animateIconify>
