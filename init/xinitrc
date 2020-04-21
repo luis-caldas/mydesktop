@@ -41,7 +41,7 @@ source "$this_init_folder""/config.xinitrc"
 
 # get the monitors folder
 monitors_folder="$this_init_folder""/monitors"
-monitors_ref_folder="$monitors_folder""/list"
+monitors_ref_folder="${HOME}""/.config/mymonitors"
 
 # create a list with all the monitors
 # use nullglob from this command as well
