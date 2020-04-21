@@ -7,10 +7,10 @@
 # get the folder we are at now
 this_init_folder="$ENTRYPOINT_FOLDER""/init"
 
-# export the relative openbox config folder
+# export the relative window manager folder
 # so that the monitors can see it
-OPENBOX_FOLDER="$ENTRYPOINT_FOLDER""/openbox"
-export OPENBOX_FOLDER
+WM_FOLDER="$ENTRYPOINT_FOLDER""/wm"
+export WM_FOLDER
 
 # path resolving for binaries
 PROGRAMS_FOLDER="$ENTRYPOINT_FOLDER""/programs"

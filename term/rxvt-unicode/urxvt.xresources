@@ -1,0 +1,80 @@
+! Set the terminal font to the preferred monospace
+URxvt.letterSpace: -1
+URxvt.font: xft:Mono:size=7:antialias=true
+
+! Remove the scroll bar
+URxvt.scrollBar: false
+
+! Invert the background colors
+URxvt*background: Black
+URxvt*foreground: White
+
+! Set the background to be transparent
+URxvt.depth:32
+URxvt.background:rgba:0d00/0d00/0d00/f500
+
+! Configure the keybidings for copy and paste
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+URxvt.keysym.Control-Meta-c: builtin-string:
+URxvt.keysym.Control-Meta-v: builtin-string:
+URxvt.iso14755: false
+URxvt.iso14755_52: false
+
+! Add the custom script to resize fonts
+URxvt.perl-ext-common: default,resize-font
+URxvt.keysym.Control-minus: resize-font:smaller
+URxvt.keysym.Control-equal: resize-font:bigger
+URxvt.keysym.Control-0: resize-font:reset
+
+! -----------
+! Font Config
+! -----------
+
+Xft.dpi: 96
+Xft.antialias: true
+Xft.rgba: rgb
+Xft.hinting: true
+Xft.hintstyle: hintfull
+Xft.autohint: true
+Xft.lcdfilter: lcddefault
+
+! ------------
+! Color Config
+! ------------
+
+! Changing the palette
+!*.foreground: #ffffff
+!*.background: #202020
+!*.cursorColor: #ffffff
+! --- black
+*.color0: #000000
+*.color8: #555555
+! --- red
+!*.color1: #97325b
+*.color1: #95043f
+*.color9: #95043f
+! --- green
+!*.color2: #4f823f
+*.color2: #3b931f
+*.color10: #3b931f
+! --- yellow
+!*.color3: #ba7730
+*.color3: #cf6f08
+*.color11: #cf6f08
+! --- blue
+!*.color4: #49669f
+*.color4: #214fa8
+*.color12: #214fa8
+! --- magenta
+!*.color5: #814ca1
+*.color5: #6f249d
+*.color13: #6f249d
+! --- cyan
+!*.color6: #b962ca
+*.color6: #de3ba0
+*.color14: #de3ba0
+! --- white
+*.color7: #aaaaaa
+*.color15: #ffffff
+

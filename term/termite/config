@@ -1,0 +1,35 @@
+[options]
+
+font = Monospace 12
+scrollback_lines = 10000
+allow_bold = false
+
+[colors]
+
+foreground = #FFFFFF
+background = #000000
+# background = rgba(13, 13, 13, 0.9608)
+# background = #C0C0C0
+
+color0 = #000000
+color1 = #95043F
+color2 = #3B931F
+color3 = #CF6F08
+color4 = #214FA8
+color5 = #6F249D
+color6 = #DE3BA0
+color7 = #AAAAAA
+
+color8 = #555555
+color9 = #95043F
+color10 = #3B931F
+color11 = #CF6F08
+color12 = #214FA8
+color13 = #6F249D
+color14 = #DE3BA0
+color15 = #FFFFFF
+
+[hints]
+
+
+# vim: ft=dosini cms=#%s
