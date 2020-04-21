@@ -41,4 +41,4 @@ export ENTRYPOINT_FOLDER
 set -u
 
 # call init and log it
-exec "$folder_now""/init/xinitrc" 2>&1 | logger -t "$LOG_TAG"
+exec bash "$folder_now""/init/xinitrc" 2>&1 | logger -t "$LOG_TAG"
