@@ -10,4 +10,4 @@ xrandr --dpi 96x96
 xsetroot -solid "$BG_COLOUR" &
 
 # start the window manager
-exec mywindowmanager
+mywindowmanager

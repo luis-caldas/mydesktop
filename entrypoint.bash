@@ -4,8 +4,7 @@
 # this file should be called from your xinit or whatever your system calls
 # after xorg initializes
 
-LOG_PATH="/var/log/my_dekstop_init.log"
-LOG_PATH_ALTERNATIVE="/tmp/my_desktop_init.log"
+LOG_TAG="deskutoppu"
 
 function get_folder() {
 
@@ -41,10 +40,5 @@ export ENTRYPOINT_FOLDER
 # show if some variable was not found
 set -u
 
-# check which path we should use for logging
-if [ ! -w "$LOG_PATH" ]; then
-    LOG_PATH="$LOG_PATH_ALTERNATIVE"
-fi
-
 # call init and log it
-bash "$folder_now""/init/xinitrc" &> "$LOG_PATH"
+exec "$folder_now""/init/xinitrc" 2>&1 | logger -t "$LOG_TAG"
