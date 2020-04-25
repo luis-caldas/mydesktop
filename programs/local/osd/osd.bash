@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # argument 1 is the percentage to be shown
 # argument 2 is the text to be shown on the top of the slider

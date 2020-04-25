@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # This file is the entrypoint to this desktops init system,
 # this file should be called from your xinit or whatever your system calls

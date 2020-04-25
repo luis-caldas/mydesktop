@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # my keyboard remappings
 # needed for a more hhkb like experience

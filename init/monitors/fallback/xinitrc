@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # load all the env vars for this display
 source "$MONITOR_BASE_FOLDER""/config.xinitrc"

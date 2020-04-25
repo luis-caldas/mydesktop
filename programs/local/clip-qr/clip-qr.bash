@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 QR_CODE_PIXEL_SIZE=6  # pixel size scaling in pixels
 
