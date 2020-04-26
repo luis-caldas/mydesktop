@@ -32,7 +32,7 @@ static const char *colorname[] = {
 unsigned int defaultfg = 15;
 unsigned int defaultbg = 259;
 
-static int borderperc = 1000;
+static int borderperc = 500;
 static int borderpx;
 
 // Original configuration
