@@ -4,6 +4,7 @@ import XMonad
 import XMonad.Layout.Spacing
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
+import XMonad.Util.Cursor
 import System.Environment
 
 --- }}}
@@ -52,6 +53,9 @@ myLayoutHook = avoidStruts $
                spacingRaw False (Border 10 10 10 10) True (Border 10 10 10 10) True $
                layoutHook defaultConfig
 
+-- Startup hook
+myStartupHook = setDefaultCursor xC_left_ptr
+
 -- XMobar config files
 displayVar = "DISPLAY"
 myBar = "xmobar"
@@ -67,6 +71,7 @@ myDefaultConfig = defaultConfig
         , normalBorderColor  = myNormalBorderColour
         , layoutHook         = myLayoutHook
         , manageHook         = manageHook defaultConfig <+> manageDocks
+        , startupHook        = myStartupHook
         , workspaces         = myWorkspaces
         } 
 
@@ -87,8 +92,8 @@ main = do
     let myBarCommand = myBar ++ " " ++ xmobarPath
 
     -- Configure the status bar
-    statusBarConfigured <- statusBar myBarCommand myPP toggleStrutsKey myDefaultConfig
+    -- statusBarConfigured <- statusBar myBarCommand myPP toggleStrutsKey myDefaultConfig
 
     -- Call xmonad
-    xmonad $ docks statusBarConfigured
+    xmonad $ docks myDefaultConfig
 -- }}}

@@ -35,9 +35,10 @@ unsigned int defaultbg = 259;
 static int borderperc = 500;
 static int borderpx;
 
+static char* mouseshape = "xterm";
+
 // Original configuration
 
-static unsigned int mouseshape = XC_left_ptr;
 static char *font = "Monospace:pixelsize=12:antialias=true:autohint=true";
 static char *shell = "/bin/sh";
 char *utmp = NULL;
@@ -61,8 +62,6 @@ static unsigned int defaultrcs = 257;
 static unsigned int cursorshape = 2;
 static unsigned int cols = 80;
 static unsigned int rows = 24;
-static unsigned int mousefg = 7;
-static unsigned int mousebg = 0;
 static unsigned int defaultattr = 11;
 static MouseShortcut mshortcuts[] = {
 	
