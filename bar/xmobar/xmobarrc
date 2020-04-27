@@ -8,7 +8,7 @@ Config {
    -- layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " <action=`neorofi`>Clock Tower</action> }%date%{ %dynnetwork% | %EICK% "
+   , template = " %UnsafeStdinReader% }    %date%    { %dynnetwork% | %EICK% "
    -- general behavior
    , lowerOnStart     = True
    , hideOnStart      = False
@@ -18,8 +18,10 @@ Config {
    , persistent       = True
    -- plugins
    , commands = [
+        -- stdin reader for the workspaces
+          Run UnsafeStdinReader
         -- weather monitor
-          Run Weather "EICK" [ "--template", "<station> . <skyCondition> . <tempC>°C"] 36000
+        , Run Weather "EICK" [ "--template", "<station> . <skyCondition> . <tempC>°C"] 36000
         -- network activity monitor (dynamic interface resolution)
         , Run DynNetwork     [ "--template", "<tx> <rx> <dev>" ] 10
         -- time and date indicator

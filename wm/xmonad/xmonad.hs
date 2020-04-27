@@ -1,31 +1,53 @@
+{-# LANGUAGE FlexibleContexts #-}
 -- {{{ Imports
 
+-- XMonad
 import XMonad
 import XMonad.Layout.Spacing
+import XMonad.Layout.LayoutModifier
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.DynamicLog
-import XMonad.Util.Cursor
+import XMonad.Util.Run
+import XMonad.Util.EZConfig
+import XMonad.Operations
+
+-- System
 import System.Environment
 
---- }}}
+-- }}}
 
 -- {{{ Functions
 
-lastN :: Int -> [Char] -> [Char]
-lastN n xs = drop (length xs - n) xs
-
-isMainMonitor :: [Char] -> Bool
-isMainMonitor display
-    | lastChars == ":0" = True
-    | lastChars == ".0" = True
-    | otherwise = False
+-- Receives a DISPLAY string and returns one of the items of the 
+-- given tuple
+monitorConfig :: String -> (String, String) -> String
+monitorConfig display displayConfigList
+    | lastChars == ":0" = mainMonitorConfig
+    | lastChars == ".0" = mainMonitorConfig
+    | otherwise = sideMonitorConfig
     where
-        lastChars = lastN 2 display
+        lastChars = drop (length display - 2) display
+        mainMonitorConfig = fst displayConfigList
+        sideMonitorConfig = snd displayConfigList
 
-getItemListBool :: Bool -> [[Char]] -> [Char]
-getItemListBool boolIn listIn
-    | boolIn    = listIn!!0
-    | otherwise = listIn!!1
+-- Creates a spacing that is scalable
+spacingRawScalable :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
+spacingRawScalable borderPx scalingFactor = 
+    spacingRaw False borderScaled True borderScaled True
+    where
+        borderSizeScaled = borderPx * scalingFactor
+        borderScaled = Border borderSizeScaled borderSizeScaled borderSizeScaled borderSizeScaled
+
+-- Spawn xmobar with input pipe
+spawnMyBar :: LayoutClass l Window => String -> PP -> XConfig l -> IO (XConfig (ModifiedLayout AvoidStruts l))
+spawnMyBar commandString ppIn confIn = do
+    pipe <- spawnPipe commandString
+    return $ docks $ confIn 
+        { layoutHook = avoidStruts (layoutHook confIn)
+        , logHook    = do
+                        logHook confIn
+                        dynamicLogWithPP ppIn { ppOutput = hPutStrLn pipe }
+        }
 
 -- }}}
 
@@ -36,9 +58,9 @@ myFontSize = 10
 myFontFace = "mono"
 
 -- My applications
-myTerminal = "APPLICATION_UNICODE=true " ++ " " ++
-             "st -f \"" ++ myFontFace ++ ":size=" ++ (show myFontSize) ++ "\""
+myTerminal = "APPLICATION_UNICODE=true st -f \"" ++ myFontFace ++ ":size=" ++ (show myFontSize) ++ "\""
 myBrowser = "surf"
+myLauncher = "neorofi"
 
 -- My borders
 myBorderWidth = 2
@@ -48,52 +70,99 @@ myNormalBorderColour = "#404040"
 -- Wokspaces
 myWorkspaces = [ "!", "@", "#", "$" ]
 
--- Spacing between windows
-myLayoutHook = avoidStruts $
-               spacingRaw False (Border 10 10 10 10) True (Border 10 10 10 10) True $
-               layoutHook defaultConfig
+-- Mod key
+myModKey = mod4Mask
 
--- Startup hook
-myStartupHook = setDefaultCursor xC_left_ptr
+-- Spacing between windows
+-- myLayoutHook = avoidStruts $
 
 -- XMobar config files
 displayVar = "DISPLAY"
 myBar = "xmobar"
-myBarConfigs = [ "\"${HOME}\"/.config/xmobar/mainrc"
-               , "\"${HOME}\"/.config/xmobar/siderc"
-               ]
+myBarConfigs = ( myBarConfigFolder ++ "/mainrc"
+               , myBarConfigFolder ++ "/siderc"
+               ) where
+                    myBarConfigFolder = "\"${HOME}\"/.config/xmobar/"
+myBarPP = def { ppCurrent         = wrap "[" "]"
+              , ppSep             = " | "
+              , ppHidden          = wrap " " "."
+              , ppHiddenNoWindows = wrap " " " "
+              , ppLayout          = const ""
+              , ppTitle           = shorten 70
+              } 
 
--- Main config
-myDefaultConfig = defaultConfig
-        { terminal           = myTerminal
-        , borderWidth        = myBorderWidth
-        , focusedBorderColor = myFocusedBorderColour
-        , normalBorderColor  = myNormalBorderColour
-        , layoutHook         = myLayoutHook
-        , manageHook         = manageHook defaultConfig <+> manageDocks
-        , startupHook        = myStartupHook
-        , workspaces         = myWorkspaces
-        } 
+-- Commands that should be run before startup
+myStartupCommands = [ 
+                      -- Cursor setting
+                      "xsetroot -cursor_name left_ptr"
+                      -- Custom key reassignment
+                      -- Tab will work as a Super_L key when held
+                      -- and normally as tab when tapped
+                    , "xmodmap -e 'keycode 23 = Super_L'"
+                    , "xmodmap -e 'keycode any = Tab'"
+                    , "pkill xcape"
+                    , "xcape -e 'Super_L=Tab'"
+                    ]
+-- }}}
 
+-- {{{ Keybindings
 
---- }}}
+-- Launching
+myKeyBindings = [ ("M-<Return>"   , spawn myTerminal)
+                , ("M-n"          , spawn myBrowser)
+                , ("M-<Space>"    , spawn myLauncher)
+                , ("M-<Backspace>", kill)
+                ]
 
--- Custom PP, configure it as you like. It determines what is being written to the bar.
-myPP = xmobarPP { ppCurrent = xmobarColor "#429942" "" . wrap "<" ">" }
+-- Bindings that should be removed
+myRemoveBindings = [ "M-S-<Return>"
+                 , "M-p"
+                 , "M-S-c"
+                 , "M-S-<Space>"
+                 , "M-,"
+                 , "M-."
+                 , "M-q"
+                 , "M-S-q"
+                 , "M-S-/"
+                 , "M-?"
+                 ] ++ 
+                 ["M-S-" ++ [n] | n <- ['1'..'9']] ++
+                 ["M-S-" ++ n | n <- ["w","e","r"]]
 
--- Key binding to toggle the gap for the bar.
-toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
+-- }}}
 
 -- {{{ Main
+
 main = do
     -- Get the display and the path for the selected display
-    display <- getEnv displayVar
-    let xmobarPath = getItemListBool (isMainMonitor display) myBarConfigs
-    let myBarCommand = myBar ++ " " ++ xmobarPath
+    display <- getEnv displayVar 
+    let myBarCommand = myBar ++ " " ++ (monitorConfig display myBarConfigs) ++
+                       " " ++ "-f" ++ " " ++ "xft:" ++ myFontFace ++ ":size=" ++ show(myFontSize)
 
-    -- Configure the status bar
-    -- statusBarConfigured <- statusBar myBarCommand myPP toggleStrutsKey myDefaultConfig
+   
+    -- Get the scaling of the session
+    scaling <- getEnv "GDK_SCALE"
+
+    -- Run all the startup commands
+    mapM_ unsafeSpawn myStartupCommands
+
+    -- Main config
+    let myDefaultConfig = defaultConfig
+            { modMask            = myModKey
+            , borderWidth        = myBorderWidth
+            , focusedBorderColor = myFocusedBorderColour
+            , normalBorderColor  = myNormalBorderColour
+            , layoutHook         = spacingRawScalable 10 (read scaling::Integer) $ 
+                                   layoutHook def
+            , manageHook         = manageHook defaultConfig <+> manageDocks
+            , workspaces         = myWorkspaces
+            } 
+   
+    xmobarSpawner <- spawnMyBar myBarCommand myBarPP $ myDefaultConfig
+                 `additionalKeysP` myKeyBindings
+                 `removeKeysP`     myRemoveBindings
 
     -- Call xmonad
-    xmonad $ docks myDefaultConfig
+    xmonad $ xmobarSpawner
+
 -- }}}
