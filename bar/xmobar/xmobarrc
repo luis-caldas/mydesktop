@@ -2,7 +2,7 @@
 Config { 
    -- appearance
      font        = "xft:Mono:size=12:bold"
-   , bgColor     = "#202020"
+   , bgColor     = "#0D0D0D"
    , fgColor     = "#E0E0E0"
    , position    = Top
    -- layout

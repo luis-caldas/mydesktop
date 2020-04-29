@@ -95,13 +95,6 @@ myBarPP = def { ppCurrent         = wrap "[" "]"
 myStartupCommands = [ 
                       -- Cursor setting
                       "xsetroot -cursor_name left_ptr"
-                      -- Custom key reassignment
-                      -- Tab will work as a Super_L key when held
-                      -- and normally as tab when tapped
-                    , "xmodmap -e 'keycode 23 = Super_L'"
-                    , "xmodmap -e 'keycode any = Tab'"
-                    , "pkill xcape"
-                    , "xcape -e 'Super_L=Tab'"
                     ]
 -- }}}
 
@@ -110,7 +103,6 @@ myStartupCommands = [
 -- Launching
 myKeyBindings = [ ("M-<Return>"   , spawn myTerminal)
                 , ("M-n"          , spawn myBrowser)
-                , ("M-<Space>"    , spawn myLauncher)
                 , ("M-<Backspace>", kill)
                 ]
 
