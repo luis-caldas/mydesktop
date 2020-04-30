@@ -30,12 +30,17 @@ monitorConfig display displayConfigList
         mainMonitorConfig = fst displayConfigList
         sideMonitorConfig = snd displayConfigList
 
+-- Scales pixels with a multiplier
+scalePixels :: Integer -> Integer -> Integer
+scalePixels scale inputPx =
+    scale * inputPx
+
 -- Creates a spacing that is scalable
 spacingRawScalable :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
 spacingRawScalable borderPx scalingFactor = 
     spacingRaw False borderScaled True borderScaled True
     where
-        borderSizeScaled = borderPx * scalingFactor
+        borderSizeScaled = scalePixels scalingFactor borderPx
         borderScaled = Border borderSizeScaled borderSizeScaled borderSizeScaled borderSizeScaled
 
 -- Spawn xmobar with input pipe
@@ -133,7 +138,8 @@ main = do
 
    
     -- Get the scaling of the session
-    scaling <- getEnv "GDK_SCALE"
+    scalingRaw <- getEnv "GDK_SCALE"
+    let scaling = read scalingRaw::Integer
 
     -- Run all the startup commands
     mapM_ unsafeSpawn myStartupCommands
@@ -141,15 +147,16 @@ main = do
     -- Main config
     let myDefaultConfig = defaultConfig
             { modMask            = myModKey
-            , borderWidth        = myBorderWidth
+            , borderWidth        = fromInteger $ scalePixels scaling myBorderWidth
             , focusedBorderColor = myFocusedBorderColour
             , normalBorderColor  = myNormalBorderColour
-            , layoutHook         = spacingRawScalable 10 (read scaling::Integer) $ 
+            , layoutHook         = spacingRawScalable 10 scaling $ 
                                    layoutHook def
             , manageHook         = manageHook defaultConfig <+> manageDocks
             , workspaces         = myWorkspaces
             } 
-   
+  
+    -- Add my key bindings
     xmobarSpawner <- spawnMyBar myBarCommand myBarPP $ myDefaultConfig
                  `additionalKeysP` myKeyBindings
                  `removeKeysP`     myRemoveBindings
