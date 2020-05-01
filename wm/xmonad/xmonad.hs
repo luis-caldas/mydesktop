@@ -14,6 +14,9 @@ import XMonad.Operations
 -- System
 import System.Environment
 
+-- Data
+import Data.List
+
 -- }}}
 
 -- {{{ Functions
@@ -54,6 +57,11 @@ spawnMyBar commandString ppIn confIn = do
                         dynamicLogWithPP ppIn { ppOutput = hPutStrLn pipe }
         }
 
+-- Transforms a list of arguments into a command string
+argumentsToString :: [String] -> String
+argumentsToString argsList = 
+    intercalate " " argsList
+
 -- }}}
 
 -- {{{ Config vars
@@ -84,6 +92,10 @@ myModKey = mod1Mask -- alt
 -- XMobar config files
 displayVar = "DISPLAY"
 myBar = "xmobar"
+myBarArguments :: Integer -> [String]
+myBarArguments scalingFactor =
+    [ "-f", "xft:" ++ myFontFace ++ ":size=" ++ (show myFontSize)
+    ]
 myBarConfigs = ( myBarConfigFolder ++ "/main.xmobarrc"
                , myBarConfigFolder ++ "/side.xmobarrc"
                ) where
@@ -95,6 +107,21 @@ myBarPP = def { ppCurrent         = wrap "[" "]"
               , ppLayout          = const ""
               , ppTitle           = shorten 70
               } 
+
+-- Picom config
+myCompositor = "picom"
+myCompositorArguments :: Integer -> [String]
+myCompositorArguments scalingFactor = 
+    [ "--shadow"
+    , "--shadow-opacity" , show 0.5
+    , "--shadow-radius"  , show $ scalingFactor * 10
+    , "--shadow-offset-x", show $ scalingFactor * 10
+    , "--shadow-offset-y", show $ scalingFactor * 10
+    , "--no-dock-shadow"
+    , "--fading"
+    , "--fade-delta"     , show 5
+    ]
+
 
 -- Commands that should be run before startup
 myStartupCommands = [ 
@@ -108,6 +135,7 @@ myStartupCommands = [
 -- Launching
 myKeyBindings = [ ("M-<Return>"   , spawn myTerminal)
                 , ("M-n"          , spawn myBrowser)
+                , ("M-<Space>"    , spawn myLauncher)
                 , ("M-<Backspace>", kill)
                 ]
 
@@ -131,15 +159,18 @@ myRemoveBindings = [ "M-S-<Return>"
 -- {{{ Main
 
 main = do
-    -- Get the display and the path for the selected display
-    display <- getEnv displayVar 
-    let myBarCommand = myBar ++ " " ++ (monitorConfig display myBarConfigs) ++
-                       " " ++ "-f" ++ " " ++ "xft:" ++ myFontFace ++ ":size=" ++ show(myFontSize)
-
-   
     -- Get the scaling of the session
     scalingRaw <- getEnv "GDK_SCALE"
     let scaling = read scalingRaw::Integer
+
+    -- Get the display and the path for the selected display
+    display <- getEnv displayVar 
+    let myBarCommand = myBar ++ " " ++ (monitorConfig display myBarConfigs) ++
+                       " " ++ (argumentsToString $ myBarArguments scaling)
+    let myCompositorCommand = myCompositor ++ " " ++ (argumentsToString $ myCompositorArguments scaling)
+
+    -- Run the window composer
+    unsafeSpawn myCompositorCommand
 
     -- Run all the startup commands
     mapM_ unsafeSpawn myStartupCommands
