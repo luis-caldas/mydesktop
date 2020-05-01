@@ -52,21 +52,17 @@ shopt -u nullglob
 # and use the fallback configuration if so
 if [ ${#all_monitors[@]} -eq 0 ]; then
     # we were unable to find any monitors
-    echo "[my_init]" "unable to find any monitors in folder ""$monitors_ref_folder"
+    echo "unable to find any monitors in folder ""$monitors_ref_folder"
     exit 1
 else
     # show the monitors that we found
     # (some verbose)
-    echo "[my_init]" "found these monitors:" "${all_monitors[@]}"
+    echo "found these monitors:" "${all_monitors[@]}"
 fi
 
 # start each monitor session
 for each_monitor in "${all_monitors[@]}"; do
-    {
-        MONITOR_BASE_FOLDER="$each_monitor"
-        export MONITOR_BASE_FOLDER
-        bash "$each_monitor""/xinitrc"
-    } &
+    bash "$each_monitor" &
 done
 
 # run the services
