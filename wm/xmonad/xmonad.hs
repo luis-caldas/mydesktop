@@ -84,8 +84,8 @@ myModKey = mod1Mask -- alt
 -- XMobar config files
 displayVar = "DISPLAY"
 myBar = "xmobar"
-myBarConfigs = ( myBarConfigFolder ++ "/mainrc"
-               , myBarConfigFolder ++ "/siderc"
+myBarConfigs = ( myBarConfigFolder ++ "/main.xmobarrc"
+               , myBarConfigFolder ++ "/side.xmobarrc"
                ) where
                     myBarConfigFolder = "\"${HOME}\"/.config/xmobar/"
 myBarPP = def { ppCurrent         = wrap "[" "]"
