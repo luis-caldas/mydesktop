@@ -87,7 +87,7 @@ myBar = "xmobar"
 myBarConfigs = ( myBarConfigFolder ++ "/main.xmobarrc"
                , myBarConfigFolder ++ "/side.xmobarrc"
                ) where
-                    myBarConfigFolder = "\"${HOME}\"/.config/xmobar/"
+                    myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
 myBarPP = def { ppCurrent         = wrap "[" "]"
               , ppSep             = " | "
               , ppHidden          = wrap " " "."
