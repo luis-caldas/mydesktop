@@ -76,7 +76,7 @@ myNormalBorderColour = "#404040"
 myWorkspaces = [ "!", "@", "#", "$" ]
 
 -- Mod key
-myModKey = mod4Mask
+myModKey = mod1Mask -- alt
 
 -- Spacing between windows
 -- myLayoutHook = avoidStruts $
