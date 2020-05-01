@@ -40,8 +40,7 @@ source "$this_init_folder""/config.xinitrc"
 ##########
 
 # get the monitors folder
-monitors_folder="$this_init_folder""/monitors"
-monitors_ref_folder="${HOME}""/.config/mymonitors"
+monitors_ref_folder="${HOME}""/.config/my-monitors"
 
 # create a list with all the monitors
 # use nullglob from this command as well
@@ -52,7 +51,9 @@ shopt -u nullglob
 # check if the list is empty (no monitors in the list)
 # and use the fallback configuration if so
 if [ ${#all_monitors[@]} -eq 0 ]; then
-    all_monitors=("$monitors_folder""/fallback")
+    # we were unable to find any monitors
+    echo "[my_init]" "unable to find any monitors in folder ""$monitors_ref_folder"
+    exit 1
 else
     # show the monitors that we found
     # (some verbose)
