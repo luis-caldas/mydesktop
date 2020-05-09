@@ -72,7 +72,7 @@ myFontFace = "mono"
 
 -- My applications
 myTerminal = "APPLICATION_UNICODE=true st -f \"" ++ myFontFace ++ ":size=" ++ (show myFontSize) ++ "\""
-myBrowser = "surf"
+myBrowser = "firefox"
 myLauncher = "neorofi"
 
 -- My borders
