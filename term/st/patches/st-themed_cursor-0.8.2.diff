@@ -1,17 +1,3 @@
-diff --git a/config.mk b/config.mk
-index 0cbb002..40a5763 100644
---- a/config.mk
-+++ b/config.mk
-@@ -18,7 +18,8 @@ INCS = -I$(X11INC) \
-        `$(PKG_CONFIG) --cflags freetype2`
- LIBS = -L$(X11LIB) -lm -lrt -lX11 -lutil -lXft \
-        `$(PKG_CONFIG) --libs fontconfig` \
--       `$(PKG_CONFIG) --libs freetype2`
-+       `$(PKG_CONFIG) --libs freetype2` \
-+       -lXcursor
- 
- # flags
- STCPPFLAGS = -DVERSION=\"$(VERSION)\" -D_XOPEN_SOURCE=600
 diff --git a/x.c b/x.c
 index c343ba2..5a7461e 100644
 --- a/x.c

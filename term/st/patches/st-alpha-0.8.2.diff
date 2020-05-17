@@ -1,15 +1,3 @@
-diff --git a/config.mk b/config.mk
-index 0cbb002..911b64c 100644
---- a/config.mk
-+++ b/config.mk
-@@ -17,6 +17,7 @@ INCS = -I$(X11INC) \
-        `$(PKG_CONFIG) --cflags fontconfig` \
-        `$(PKG_CONFIG) --cflags freetype2`
- LIBS = -L$(X11LIB) -lm -lrt -lX11 -lutil -lXft \
-+       -lXrender \
-        `$(PKG_CONFIG) --libs fontconfig` \
-        `$(PKG_CONFIG) --libs freetype2`
- 
 diff --git a/st.h b/st.h
 index 38c61c4..b7634ab 100644
 --- a/st.h

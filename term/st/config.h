@@ -37,7 +37,7 @@ static int borderpx;
 
 static char* mouseshape = "xterm";
 
-float alpha = 0.8;
+float alpha = 0.96;
  
 // Original configuration
 
