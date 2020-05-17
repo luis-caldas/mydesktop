@@ -37,6 +37,8 @@ static int borderpx;
 
 static char* mouseshape = "xterm";
 
+float alpha = 0.8;
+ 
 // Original configuration
 
 static char *font = "Monospace:pixelsize=12:antialias=true:autohint=true";

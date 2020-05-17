@@ -81,7 +81,7 @@ myFocusedBorderColour = "#a0a0a0"
 myNormalBorderColour = "#404040"
 
 -- Wokspaces
-myWorkspaces = [ "!", "@", "#", "$" ]
+myWorkspaces = map show [ 1 .. 9 ]
 
 -- Mod key
 myModKey = mod1Mask -- alt
