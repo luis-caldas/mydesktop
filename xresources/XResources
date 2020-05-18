@@ -1,0 +1,71 @@
+! vim: syntax=xdefaults
+
+! {{{ Initial defining
+
+! Font
+#define MY_FONT xft:mono:size=11
+
+! Borders and spacing
+#define MY_BORDER 2
+#define MY_INSIDE_SPACING 25
+#define MY_OUTSIDE_SPACING 10
+
+! Background and foregound
+#define MY_ALPHA_BACK  #E00D0D0D
+#define MY_BACKGROUND  #0D0D0D
+#define MY_FOREGROUND  #FFFFFF
+#define MY_TRANSPARENT #00000000
+
+! General colours
+#define MY_COLOUR_0 #95043F
+#define MY_COLOUR_1 #3B931F
+#define MY_COLOUR_2 #CF6F08
+#define MY_COLOUR_3 #214FA8
+#define MY_COLOUR_4 #6F249D
+#define MY_COLOUR_5 #DE3BA0
+
+! Shades
+#define MY_SHADE_0 #000000
+#define MY_SHADE_1 #AAAAAA
+#define MY_SHADE_2 #555555
+#define MY_SHADE_3 #FFFFFF
+
+! }}}
+
+! {{{ Reasigning configs to programs
+
+! My variables
+myvars.border: MY_BORDER
+myvars.space-inside: MY_INSIDE_SPACING
+myvars.space-outside: MY_OUTSIDE_SPACING
+
+! Foregrounds and backgrounds
+*.foreground:  MY_FOREGROUND
+*.background:  MY_BACKGROUND
+*.cursorColor: MY_FOREGROUND
+
+! Colours
+*.color0:  MY_SHADE_0
+*.color1:  MY_COLOUR_0
+*.color2:  MY_COLOUR_1
+*.color3:  MY_COLOUR_2
+*.color4:  MY_COLOUR_3
+*.color5:  MY_COLOUR_4
+*.color6:  MY_COLOUR_5
+*.color7:  MY_SHADE_1
+*.color8:  MY_SHADE_2
+*.color9:  MY_COLOUR_0
+*.color10: MY_COLOUR_1
+*.color11: MY_COLOUR_2
+*.color12: MY_COLOUR_3
+*.color13: MY_COLOUR_4
+*.color14: MY_COLOUR_5
+*.color15: MY_SHADE_3
+
+! Rofi
+rofi.color-window: MY_ALPHA_BACK , MY_FOREGROUND, MY_TRANSPARENT
+rofi.color-normal: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_4, MY_FOREGROUND
+rofi.color-active: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_0, MY_BACKGROUND
+rofi.color-urgent: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_0, MY_BACKGROUND
+
+! }}}
