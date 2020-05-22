@@ -14,6 +14,9 @@ import XMonad.Util.Run
 import XMonad.Util.EZConfig
 import XMonad.Operations
 
+-- Window focus
+import qualified XMonad.StackSet as W
+
 -- System
 import System.Environment
 
@@ -155,11 +158,35 @@ myStartupCommands = [
 -- {{{ Keybindings
 
 -- Launching
-myKeyBindings = [ ("M-<Return>"   , spawn myTerminal)
+myKeyBindings = [ 
+                -- Spawners
+                  ("M-<Return>"   , spawn myTerminal)
                 , ("M-n"          , spawn myBrowser)
                 , ("M-<Space>"    , spawn myLauncher)
+                -- Killer
                 , ("M-<Backspace>", kill)
-                ]
+                -- Navigation
+                , ("M-["          , windows W.focusUp)
+                , ("M-/"          , windows W.focusDown)
+                , ("M-p"          , windows W.swapMaster)
+                , ("M-S-["        , windows W.swapUp)
+                , ("M-S-/"        , windows W.swapDown)
+                -- Resizing
+                , ("M-'"          , sendMessage Expand)
+                , ("M-;"          , sendMessage Shrink)
+                ] ++ 
+                -- Displays shortcut
+                [ (("M" ++ shift ++ key), screenWorkspace sc >>= flip whenJust (windows . f))
+                    | (key, sc) <- zip (map ("-"++) ["q", "w", "e", "r"]) [0..]
+                    , (f, shift) <- [ (W.view, "")
+                                    , (\f -> W.view f . W.shift f, "-S")
+                                    ]] ++
+                -- Workspaces shortcuts
+                [ (("M" ++ shift ++ key), windows $ f i)
+                    | (i, key) <- zip myWorkspaces (map ("-"++) (map show [1..9]))
+                    , (f, shift) <- [ (W.greedyView, "")
+                                    , (\i -> W.greedyView i . W.shift i, "-S")
+                                    ]]
 
 -- Bindings that should be removed
 myRemoveBindings = [ "M-S-<Return>"
@@ -172,9 +199,12 @@ myRemoveBindings = [ "M-S-<Return>"
                  , "M-S-q"
                  , "M-S-/"
                  , "M-?"
-                 ]
---                 ["M-S-" ++ [n] | n <- ['1'..'9']] ++
---                 ["M-S-" ++ n | n <- ["w","e","r"]]
+                 ] ++ 
+                 (map ("M-"++) ["h", "j", "k", "l"]) ++
+                 ["M-" ++ n | n <- ["w", "e", "r"]] ++
+                 ["M-" ++ [n] | n <- ['1'..'9']] ++
+                 ["M-S-" ++ n | n <- ["w", "e", "r"]] ++
+                 ["M-S-" ++ [n] | n <- ['1'..'9']]
 
 -- }}}
 
@@ -213,8 +243,8 @@ main = do
   
     -- Add my key bindings
     xmobarSpawner <- spawnMyBar myBarCommand myBarPP $ ewmh $ myDefaultConfig
-                 `additionalKeysP` myKeyBindings
                  `removeKeysP`     myRemoveBindings
+                 `additionalKeysP` myKeyBindings
 
     -- Call xmonad
     xmonad $ xmobarSpawner
