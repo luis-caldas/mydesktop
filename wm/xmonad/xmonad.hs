@@ -233,7 +233,7 @@ main = do
             , borderWidth        = fromInteger $ scalePixels scaling myBorderWidth
             , focusedBorderColor = myFocusedBorderColour
             , normalBorderColor  = myNormalBorderColour
-            , layoutHook         = smartBorders $ spacingRawScalable 10 scaling $ 
+            , layoutHook         = spacingRawScalable 10 scaling $ 
                                    layoutHook def
             , manageHook         = manageDocks <+> manageHook def
             , handleEventHook    = handleEventHook def <+> fullscreenEventHook
