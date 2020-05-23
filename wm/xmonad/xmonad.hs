@@ -228,16 +228,16 @@ main = do
     mapM_ unsafeSpawn myStartupCommands
 
     -- Main config
-    let myDefaultConfig = defaultConfig
+    let myDefaultConfig = def
             { modMask            = myModKey
             , borderWidth        = fromInteger $ scalePixels scaling myBorderWidth
             , focusedBorderColor = myFocusedBorderColour
             , normalBorderColor  = myNormalBorderColour
             , layoutHook         = smartBorders $ spacingRawScalable 10 scaling $ 
-                                   layoutHook defaultConfig
-            , manageHook         = manageDocks <+> manageHook defaultConfig
-            , handleEventHook    = handleEventHook defaultConfig <+> fullscreenEventHook
-			, startupHook        = startupHook defaultConfig <+> setFullscreenSupported
+                                   layoutHook def
+            , manageHook         = manageDocks <+> manageHook def
+            , handleEventHook    = handleEventHook def <+> fullscreenEventHook
+            , startupHook        = startupHook def <+> setFullscreenSupported
             , workspaces         = myWorkspaces
             } 
   
