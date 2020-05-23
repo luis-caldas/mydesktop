@@ -22,6 +22,9 @@ import System.Environment
 
 -- Data
 import Data.List
+import Data.Maybe
+import qualified Data.Text as T
+import qualified Data.Map as Map
 
 -- }}}
 
@@ -87,6 +90,26 @@ argumentsToString :: [String] -> String
 argumentsToString argsList = 
     intercalate " " argsList
 
+-- Extract tuple of ':' separate data from a line
+extractTupleLine :: String -> (String, String)
+extractTupleLine lineInput =
+    (name, value) 
+    where    
+        fragmented = T.splitOn (T.pack ":") (T.pack lineInput)
+        name = T.unpack $ T.strip $ head fragmented
+        value = T.unpack $ T.strip $ fullString
+            where
+                fullString = T.pack $ intercalate " " $ map T.unpack (tail fragmented)
+
+-- Transforms a xresources string into a xresources data
+xrdbParse :: String -> Map.Map String String
+xrdbParse stringInput = 
+    Map.fromList dataList
+    where 
+        dataList = map extractTupleLine listLines
+            where
+                listLines = lines stringInput
+
 -- }}}
 
 -- {{{ Config vars
@@ -104,6 +127,9 @@ myLauncher = "neorofi"
 myBorderWidth = 2
 myFocusedBorderColour = "#a0a0a0"
 myNormalBorderColour = "#404040"
+
+-- Spacing
+myWindowSpacing = 5
 
 -- Wokspaces
 myWorkspaces = map show [ 1 .. 9 ]
@@ -221,6 +247,12 @@ main = do
                        " " ++ (argumentsToString $ myBarArguments scaling)
     let myCompositorCommand = myCompositor ++ " " ++ (argumentsToString $ myCompositorArguments scaling)
 
+    -- Extract all the xresource data
+    xrdbString  <- runProcessWithInput "xrdb" ["-query"] ""
+    let xrdbData = xrdbParse xrdbString
+    let xrBorder = read (fromMaybe (show myBorderWidth) (Map.lookup "myvars.border" xrdbData))::Integer
+    let xrSpace  = read (fromMaybe (show myWindowSpacing) (Map.lookup "myvars.space-outside" xrdbData))::Integer
+
     -- Run the window composer
     unsafeSpawn myCompositorCommand
 
@@ -230,10 +262,10 @@ main = do
     -- Main config
     let myDefaultConfig = def
             { modMask            = myModKey
-            , borderWidth        = fromInteger $ scalePixels scaling myBorderWidth
+            , borderWidth        = fromInteger $ scalePixels scaling xrBorder
             , focusedBorderColor = myFocusedBorderColour
             , normalBorderColor  = myNormalBorderColour
-            , layoutHook         = spacingRawScalable 10 scaling $ 
+            , layoutHook         = spacingRawScalable xrSpace scaling $ 
                                    layoutHook def
             , manageHook         = manageDocks <+> manageHook def
             , handleEventHook    = handleEventHook def <+> fullscreenEventHook

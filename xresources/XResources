@@ -6,9 +6,9 @@
 #define MY_FONT xft:mono:size=11
 
 ! Borders and spacing
-#define MY_BORDER 2
+#define MY_BORDER 4
 #define MY_INSIDE_SPACING 25
-#define MY_OUTSIDE_SPACING 10
+#define MY_OUTSIDE_SPACING 15
 
 ! Background and foregound
 #define MY_ALPHA_BACK  #E00D0D0D
