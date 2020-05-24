@@ -29,10 +29,8 @@ main = do
 
     -- Get the display and the path for the selected display
     display <- getEnv displayVar 
-    let myBarCommand = unwords [ myBar
-                               , monitorConfig display myBarConfigs
-                               , argumentsToString $ myBarArguments scaling
-                               ]
+
+    -- Create the compositor command
     let myCompositorCommand = unwords [ myCompositor
                                       , argumentsToString $ myCompositorArguments scaling
                                       ]
@@ -45,6 +43,15 @@ main = do
     let xrSpace        = mToInteger $ lookMap xrdbData xrVarSpace (show myWindowSpacing)
     let xrColour       = lookMap xrdbData xrVarBorderColour myNormalBorderColour
     let xrActiveColour = lookMap xrdbData xrVarBorderColourActive myFocusedBorderColour
+    let xrBarBack      = lookMap xrdbData xrVarBarBack myBarDefaultBack
+    let xrBarFore      = lookMap xrdbData xrVarBarFore myBarDefaultFore
+
+    -- Create the bar command
+    let myBarCommand = unwords [ myBar
+                               , monitorConfig display myBarConfigs
+                               , argumentsToString $ myBarArguments scaling
+                               , argumentsToString $ myBarColourArguments (addQuotes xrBarFore) (addQuotes xrBarBack)
+                               ]
 
     -- Run the window composer
     unsafeSpawn myCompositorCommand

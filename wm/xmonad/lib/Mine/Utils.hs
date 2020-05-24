@@ -82,6 +82,11 @@ argumentsToString :: [String] -> String
 argumentsToString argsList = 
     intercalate " " argsList
 
+-- Adds double quotes to the beginning and end of a string
+addQuotes :: String -> String
+addQuotes stringIn =
+    "\"" ++ stringIn ++ "\""
+
 -- Extract tuple of ':' separate data from a line
 extractTupleLine :: String -> (String, String)
 extractTupleLine lineInput =

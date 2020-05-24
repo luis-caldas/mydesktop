@@ -15,13 +15,16 @@ scalingVarName = "GDK_SCALE"
 
 -- XResources
 xrCommand               = ("xrdb", ["-query"])
+
 xrVarBorder             = "xmonad.border"
 xrVarSpace              = "xmonad.space"
 xrVarBorderColour       = "xmonad.border-colour"
 xrVarBorderColourActive = "xmonad.border-colour-active" 
+xrVarBarBack            = "xmobar.background"
+xrVarBarFore            = "xmobar.foreground"
 
 -- Font
-myFontSize = 10
+myFontSize = 12
 myFontFace = "mono"
 
 -- My applications
@@ -31,8 +34,9 @@ myLauncher = "neorofi"
 
 -- My borders
 myBorderWidth = 2
-myFocusedBorderColour = "#a0a0a0"
-myNormalBorderColour = "#404040"
+
+myFocusedBorderColour = "#FFFFFF"
+myNormalBorderColour  = "#000000"
 
 -- Spacing
 myWindowSpacing = 5
@@ -45,15 +49,26 @@ myModKey = mod1Mask -- alt
 
 -- XMobar config files
 displayVar = "DISPLAY"
+
 myBar = "xmobar"
+
+myBarDefaultBack = "#FFFFFF"
+myBarDefaultFore = "#000000"
+
 myBarArguments :: Integer -> [String]
 myBarArguments scalingFactor =
     [ "-f", "xft:" ++ myFontFace ++ ":size=" ++ (show myFontSize)
     ]
+
+myBarColourArguments :: String -> String -> [String]
+myBarColourArguments foreColour backColour =
+    [ "-F", foreColour, "-B", backColour]
+
 myBarConfigs = ( myBarConfigFolder ++ "/main.xmobarrc"
                , myBarConfigFolder ++ "/side.xmobarrc"
                ) where
                     myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
+
 myBarPP = def { ppCurrent         = wrap "[" "]"
               , ppSep             = " ||| "
               , ppHidden          = wrap "|" "|"
@@ -64,6 +79,7 @@ myBarPP = def { ppCurrent         = wrap "[" "]"
 
 -- Picom config
 myCompositor = "picom"
+
 myCompositorArguments :: Integer -> [String]
 myCompositorArguments scalingFactor = 
     [ "--shadow"
@@ -75,7 +91,6 @@ myCompositorArguments scalingFactor =
     , "--fading"
     , "--fade-delta"     , show 5
     ]
-
 
 -- Commands that should be run before startup
 myStartupCommands = [ 

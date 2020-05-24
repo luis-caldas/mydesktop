@@ -78,6 +78,10 @@ xmonad.space: MY_OUTSIDE_SPACING
 xmonad.border-colour: MY_UNACTIVE_BORDER_COLOUR
 xmonad.border-colour-active: MY_BORDER_COLOUR
 
+! XMobar
+xmobar.background: MY_BACKGROUND
+xmobar.foreground: MY_FOREGROUND
+
 ! St
 st.alpha:  MY_ALPHA
 st.border: MY_INSIDE_SPACING_REM

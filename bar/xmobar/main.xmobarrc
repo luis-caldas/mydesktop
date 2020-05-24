@@ -2,8 +2,8 @@
 Config { 
    -- appearance
      font        = "xft:Mono:size=12:bold"
-   , bgColor     = "#0D0D0D"
-   , fgColor     = "#E0E0E0"
+   , bgColor     = "#0000FF"
+   , fgColor     = "#FFFFFF"
    , position    = Top
    -- layout
    , sepChar  = "%"
