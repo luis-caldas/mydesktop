@@ -5,9 +5,13 @@
 ! Font
 #define MY_FONT xft:mono:size=11
 
+! Alphas
+#define MY_ALPHA 0.94
+
 ! Borders and spacing
-#define MY_BORDER 4
+#define MY_BORDER 5
 #define MY_INSIDE_SPACING 25
+#define MY_INSIDE_SPACING_REM 500
 #define MY_OUTSIDE_SPACING 15
 
 ! Background and foregound
@@ -15,6 +19,9 @@
 #define MY_BACKGROUND  #0D0D0D
 #define MY_FOREGROUND  #FFFFFF
 #define MY_TRANSPARENT #00000000
+
+#define MY_BORDER_COLOUR            #A0A0A0
+#define MY_UNACTIVE_BORDER_COLOUR   #404040
 
 ! General colours
 #define MY_COLOUR_0 #95043F
@@ -33,11 +40,6 @@
 ! }}}
 
 ! {{{ Reasigning configs to programs
-
-! My variables
-myvars.border: MY_BORDER
-myvars.space-inside: MY_INSIDE_SPACING
-myvars.space-outside: MY_OUTSIDE_SPACING
 
 ! Foregrounds and backgrounds
 *.foreground:  MY_FOREGROUND
@@ -63,13 +65,21 @@ myvars.space-outside: MY_OUTSIDE_SPACING
 *.color15: MY_SHADE_3
 
 ! Rofi
-rofi.color-window: MY_ALPHA_BACK , MY_FOREGROUND, MY_TRANSPARENT
+rofi.color-window: MY_ALPHA_BACK , MY_BORDER_COLOUR, MY_TRANSPARENT
 rofi.color-normal: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_4, MY_FOREGROUND
 rofi.color-active: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_0, MY_BACKGROUND
 rofi.color-urgent: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_0, MY_BACKGROUND
+rofi.border: MY_BORDER
+rofi.space: MY_INSIDE_SPACING
+
+! XMonad
+xmonad.border: MY_BORDER
+xmonad.space: MY_OUTSIDE_SPACING
+xmonad.border-colour: MY_UNACTIVE_BORDER_COLOUR
+xmonad.border-colour-active: MY_BORDER_COLOUR
 
 ! St
-st.alpha:  0.94
-st.border: 500
+st.alpha:  MY_ALPHA
+st.border: MY_INSIDE_SPACING_REM
 
 ! }}}

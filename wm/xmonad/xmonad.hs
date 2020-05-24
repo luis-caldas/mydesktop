@@ -1,236 +1,22 @@
-{-# LANGUAGE FlexibleContexts #-}
 -- {{{ Imports
+
+-- Local
+import Mine.Defaults
+import Mine.Utils
 
 -- XMonad
 import XMonad
-import XMonad.Layout.Spacing
-import XMonad.Layout.NoBorders
-import XMonad.Layout.LayoutModifier
-import XMonad.Hooks.ManageDocks
-import XMonad.Hooks.ManageHelpers
+-- import XMonad.Layout.NoBorders -- Still have to figure out how to remove borders on fullscreen
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.DynamicLog
-import XMonad.Util.Run
+import XMonad.Hooks.ManageDocks
 import XMonad.Util.EZConfig
-import XMonad.Operations
-
--- Window focus
-import qualified XMonad.StackSet as W
+import XMonad.Util.Run
 
 -- System
 import System.Environment
 
 -- Data
 import Data.List
-import Data.Maybe
-import qualified Data.Text as T
-import qualified Data.Map as Map
-
--- }}}
-
--- {{{ Functions
-
--- Hack to let firefox fullscreen
-setFullscreenSupported :: X ()
-setFullscreenSupported = withDisplay $ \dpy -> do
-    r <- asks theRoot
-    a <- getAtom "_NET_SUPPORTED"
-    c <- getAtom "ATOM"
-    supp <- mapM getAtom ["_NET_WM_STATE_HIDDEN"
-                         ,"_NET_WM_STATE_FULLSCREEN" -- XXX Copy-pasted to add this line
-                         ,"_NET_NUMBER_OF_DESKTOPS"
-                         ,"_NET_CLIENT_LIST"
-                         ,"_NET_CLIENT_LIST_STACKING"
-                         ,"_NET_CURRENT_DESKTOP"
-                         ,"_NET_DESKTOP_NAMES"
-                         ,"_NET_ACTIVE_WINDOW"
-                         ,"_NET_WM_DESKTOP"
-                         ,"_NET_WM_STRUT"
-                         ]
-    io $ changeProperty32 dpy r a c propModeReplace (fmap fromIntegral supp)
-
--- Receives a DISPLAY string and returns one of the items of the 
--- given tuple
-monitorConfig :: String -> (String, String) -> String
-monitorConfig display displayConfigList
-    | lastChars == ":0" = mainMonitorConfig
-    | lastChars == ".0" = mainMonitorConfig
-    | otherwise = sideMonitorConfig
-    where
-        lastChars = drop (length display - 2) display
-        mainMonitorConfig = fst displayConfigList
-        sideMonitorConfig = snd displayConfigList
-
--- Scales pixels with a multiplier
-scalePixels :: Integer -> Integer -> Integer
-scalePixels scale inputPx =
-    scale * inputPx
-
--- Creates a spacing that is scalable
-spacingRawScalable :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
-spacingRawScalable borderPx scalingFactor = 
-    spacingRaw False borderScaled True borderScaled True
-    where
-        borderSizeScaled = scalePixels scalingFactor borderPx
-        borderScaled = Border borderSizeScaled borderSizeScaled borderSizeScaled borderSizeScaled
-
--- Spawn xmobar with input pipe
-spawnMyBar :: LayoutClass l Window => String -> PP -> XConfig l -> IO (XConfig (ModifiedLayout AvoidStruts l))
-spawnMyBar commandString ppIn confIn = do
-    pipe <- spawnPipe commandString
-    return $ docks $ confIn 
-        { layoutHook = avoidStruts (layoutHook confIn)
-        , logHook    = do
-                        logHook confIn
-                        dynamicLogWithPP ppIn { ppOutput = hPutStrLn pipe }
-        }
-
--- Transforms a list of arguments into a command string
-argumentsToString :: [String] -> String
-argumentsToString argsList = 
-    intercalate " " argsList
-
--- Extract tuple of ':' separate data from a line
-extractTupleLine :: String -> (String, String)
-extractTupleLine lineInput =
-    (name, value) 
-    where    
-        fragmented = T.splitOn (T.pack ":") (T.pack lineInput)
-        name = T.unpack $ T.strip $ head fragmented
-        value = T.unpack $ T.strip $ fullString
-            where
-                fullString = T.pack $ intercalate " " $ map T.unpack (tail fragmented)
-
--- Transforms a xresources string into a xresources data
-xrdbParse :: String -> Map.Map String String
-xrdbParse stringInput = 
-    Map.fromList dataList
-    where 
-        dataList = map extractTupleLine listLines
-            where
-                listLines = lines stringInput
-
--- }}}
-
--- {{{ Config vars
-
--- Font
-myFontSize = 10
-myFontFace = "mono"
-
--- My applications
-myTerminal = "APPLICATION_UNICODE=true st -f \"" ++ myFontFace ++ ":size=" ++ (show myFontSize) ++ "\""
-myBrowser = "firefox"
-myLauncher = "neorofi"
-
--- My borders
-myBorderWidth = 2
-myFocusedBorderColour = "#a0a0a0"
-myNormalBorderColour = "#404040"
-
--- Spacing
-myWindowSpacing = 5
-
--- Wokspaces
-myWorkspaces = map show [ 1 .. 9 ]
-
--- Mod key
-myModKey = mod1Mask -- alt
-
--- Spacing between windows
--- myLayoutHook = avoidStruts $
-
--- XMobar config files
-displayVar = "DISPLAY"
-myBar = "xmobar"
-myBarArguments :: Integer -> [String]
-myBarArguments scalingFactor =
-    [ "-f", "xft:" ++ myFontFace ++ ":size=" ++ (show myFontSize)
-    ]
-myBarConfigs = ( myBarConfigFolder ++ "/main.xmobarrc"
-               , myBarConfigFolder ++ "/side.xmobarrc"
-               ) where
-                    myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
-myBarPP = def { ppCurrent         = wrap "[" "]"
-              , ppSep             = " | "
-              , ppHidden          = wrap " " "."
-              , ppHiddenNoWindows = wrap " " " "
-              , ppLayout          = const ""
-              , ppTitle           = shorten 70
-              } 
-
--- Picom config
-myCompositor = "picom"
-myCompositorArguments :: Integer -> [String]
-myCompositorArguments scalingFactor = 
-    [ "--shadow"
-    , "--shadow-opacity" , show 0.5
-    , "--shadow-radius"  , show $ scalingFactor * 10
-    , "--shadow-offset-x", show $ scalingFactor * 10
-    , "--shadow-offset-y", show $ scalingFactor * 10
-    , "--no-dock-shadow"
-    , "--fading"
-    , "--fade-delta"     , show 5
-    ]
-
-
--- Commands that should be run before startup
-myStartupCommands = [ 
-                      -- Cursor setting
-                      "xsetroot -cursor_name left_ptr"
-                    ]
--- }}}
-
--- {{{ Keybindings
-
--- Launching
-myKeyBindings = [ 
-                -- Spawners
-                  ("M-<Return>"   , spawn myTerminal)
-                , ("M-n"          , spawn myBrowser)
-                , ("M-<Space>"    , spawn myLauncher)
-                -- Killer
-                , ("M-<Backspace>", kill)
-                -- Navigation
-                , ("M-["          , windows W.focusUp)
-                , ("M-/"          , windows W.focusDown)
-                , ("M-p"          , windows W.swapMaster)
-                , ("M-S-["        , windows W.swapUp)
-                , ("M-S-/"        , windows W.swapDown)
-                -- Resizing
-                , ("M-'"          , sendMessage Expand)
-                , ("M-;"          , sendMessage Shrink)
-                ] ++ 
-                -- Displays shortcut
-                [ (("M" ++ shift ++ key), screenWorkspace sc >>= flip whenJust (windows . f))
-                    | (key, sc) <- zip (map ("-"++) ["q", "w", "e", "r"]) [0..]
-                    , (f, shift) <- [ (W.view, "")
-                                    , (\f -> W.view f . W.shift f, "-S")
-                                    ]] ++
-                -- Workspaces shortcuts
-                [ (("M" ++ shift ++ key), windows $ f i)
-                    | (i, key) <- zip myWorkspaces (map ("-"++) (map show [1..9]))
-                    , (f, shift) <- [ (W.greedyView, "")
-                                    , (\i -> W.greedyView i . W.shift i, "-S")
-                                    ]]
-
--- Bindings that should be removed
-myRemoveBindings = [ "M-S-<Return>"
-                 , "M-p"
-                 , "M-S-c"
-                 , "M-S-<Space>"
-                 , "M-,"
-                 , "M-."
-                 , "M-q"
-                 , "M-S-q"
-                 , "M-S-/"
-                 , "M-?"
-                 ] ++ 
-                 (map ("M-"++) ["h", "j", "k", "l"]) ++
-                 ["M-" ++ n | n <- ["w", "e", "r"]] ++
-                 ["M-" ++ [n] | n <- ['1'..'9']] ++
-                 ["M-S-" ++ n | n <- ["w", "e", "r"]] ++
-                 ["M-S-" ++ [n] | n <- ['1'..'9']]
 
 -- }}}
 
@@ -238,20 +24,27 @@ myRemoveBindings = [ "M-S-<Return>"
 
 main = do
     -- Get the scaling of the session
-    scalingRaw <- getEnv "GDK_SCALE"
-    let scaling = read scalingRaw::Integer
+    scalingRaw <- getEnv scalingVarName
+    let scaling = mToInteger scalingRaw
 
     -- Get the display and the path for the selected display
     display <- getEnv displayVar 
-    let myBarCommand = myBar ++ " " ++ (monitorConfig display myBarConfigs) ++
-                       " " ++ (argumentsToString $ myBarArguments scaling)
-    let myCompositorCommand = myCompositor ++ " " ++ (argumentsToString $ myCompositorArguments scaling)
+    let myBarCommand = unwords [ myBar
+                               , monitorConfig display myBarConfigs
+                               , argumentsToString $ myBarArguments scaling
+                               ]
+    let myCompositorCommand = unwords [ myCompositor
+                                      , argumentsToString $ myCompositorArguments scaling
+                                      ]
 
     -- Extract all the xresource data
-    xrdbString  <- runProcessWithInput "xrdb" ["-query"] ""
+    xrdbString <- runProcessWithInput (fst xrCommand) (snd xrCommand) ""
     let xrdbData = xrdbParse xrdbString
-    let xrBorder = read (fromMaybe (show myBorderWidth) (Map.lookup "myvars.border" xrdbData))::Integer
-    let xrSpace  = read (fromMaybe (show myWindowSpacing) (Map.lookup "myvars.space-outside" xrdbData))::Integer
+    -- Extract each
+    let xrBorder       = mToInteger $ lookMap xrdbData xrVarBorder (show myBorderWidth)
+    let xrSpace        = mToInteger $ lookMap xrdbData xrVarSpace (show myWindowSpacing)
+    let xrColour       = lookMap xrdbData xrVarBorderColour myNormalBorderColour
+    let xrActiveColour = lookMap xrdbData xrVarBorderColourActive myFocusedBorderColour
 
     -- Run the window composer
     unsafeSpawn myCompositorCommand
@@ -263,8 +56,8 @@ main = do
     let myDefaultConfig = def
             { modMask            = myModKey
             , borderWidth        = fromInteger $ scalePixels scaling xrBorder
-            , focusedBorderColor = myFocusedBorderColour
-            , normalBorderColor  = myNormalBorderColour
+            , normalBorderColor  = xrColour
+            , focusedBorderColor = xrActiveColour
             , layoutHook         = spacingRawScalable xrSpace scaling $ 
                                    layoutHook def
             , manageHook         = manageDocks <+> manageHook def

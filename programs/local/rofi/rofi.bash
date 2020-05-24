@@ -36,13 +36,13 @@ function extract_scaling_factor() {
 }
 
 function extract_border() {
-    border=$(xrdb -query | grep "myvars\.border" | cut -f 2)
+    border=$(xrdb -query | grep "rofi\.border" | cut -f 2)
     [ -z "$border" ] && border=1
     echo -n "$border"
 }
 
 function extract_space() {
-    space=$(xrdb -query | grep "myvars\.space-inside" | cut -f 2)
+    space=$(xrdb -query | grep "rofi\.space" | cut -f 2)
     [ -z "$space" ] && space=5
     echo -n "$space"
 }
