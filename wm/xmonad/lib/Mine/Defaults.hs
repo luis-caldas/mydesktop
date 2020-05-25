@@ -41,6 +41,9 @@ myNormalBorderColour  = "#000000"
 -- Spacing
 myWindowSpacing = 5
 
+-- Steps for changing volume/backlight
+myKeyStep = 5
+
 -- Wokspaces
 myWorkspaces = map show [ 1 .. 9 ]
 
@@ -104,21 +107,28 @@ myStartupCommands = [
 -- Launching
 myKeyBindings = [ 
                 -- Spawners
-                  ("M-<Return>"   , spawn myTerminal)
-                , ("M-n"          , spawn myBrowser)
-                , ("M-<Space>"    , spawn myLauncher)
+                  ("M-<Return>", spawn myTerminal)
+                , ("M-n"       , spawn myBrowser)
+                , ("M-<Space>" , spawn myLauncher)
                 -- Killer
                 , ("M-<Backspace>", kill)
                 -- Navigation
-                , ("M-["          , windows StackSet.focusUp)
-                , ("M-/"          , windows StackSet.focusDown)
-                , ("M-p"          , windows StackSet.swapMaster)
-                , ("M-S-["        , windows StackSet.swapUp)
-                , ("M-S-/"        , windows StackSet.swapDown)
+                , ("M-["  , windows StackSet.focusUp)
+                , ("M-/"  , windows StackSet.focusDown)
+                , ("M-p"  , windows StackSet.swapMaster)
+                , ("M-S-[", windows StackSet.swapUp)
+                , ("M-S-/", windows StackSet.swapDown)
                 -- Resizing
-                , ("M-'"          , sendMessage Expand)
-                , ("M-;"          , sendMessage Shrink)
-                ] ++ 
+                , ("M-'", sendMessage Expand)
+                , ("M-;", sendMessage Shrink)
+                -- Volume
+                , ("<XF86AudioMute>"       , spawn "pactl set-sink-mute   @DEFAULT_SINK@ toggle")
+                , ("<XF86AudioLowerVolume>", spawn ("pactl set-sink-volume @DEFAULT_SINK@ -" ++ (show myKeyStep) ++ "%"))
+                , ("<XF86AudioRaiseVolume>", spawn ("pactl set-sink-volume @DEFAULT_SINK@ +" ++ (show myKeyStep) ++ "%"))
+                -- Backlight
+                , ("<XF86MonBrightnessUp>"  , spawn ("light -A " ++ (show myKeyStep)))
+                , ("<XF86MonBrightnessDown>", spawn ("light -U " ++ (show myKeyStep)))
+                ] ++
                 -- Displays shortcut
                 [ (("M" ++ shift ++ key), screenWorkspace sc >>= flip whenJust (windows . f))
                     | (key, sc) <- zip (map ("-"++) ["q", "w", "e", "r"]) [0..]

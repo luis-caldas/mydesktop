@@ -1,46 +1,46 @@
 -- vim: syntax=haskell
 Config { 
-   -- appearance
+   -- Appearance
      font        = "xft:Mono:size=12:bold"
    , bgColor     = "#0000FF"
    , fgColor     = "#FFFFFF"
    , position    = Top
-   -- layout
+   -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
    , template = " %UnsafeStdinReader% }    %date%    { %bright% | %default:Master% | %dynnetwork% | %EICK% "
-   -- general behavior
+   -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
    , allDesktops      = False
    , overrideRedirect = False
    , pickBroadest     = False
    , persistent       = True
-   -- plugins
+   -- Plugins
    , commands = [
-        -- stdin reader for the workspaces
+        -- Stdin reader for the workspaces
           Run UnsafeStdinReader
-        -- weather monitor
+        -- Weather monitor
         , Run Weather "EICK" [ "--template", "<tempC>°C - <skyCondition>"
                              ] 36000
-        -- network activity monitor (dynamic interface resolution)
+        -- Network activity monitor (dynamic interface resolution)
         , Run DynNetwork [ "--template", "<dev>"
                          ] 10
-        -- backlight
+        -- Backlight
         , Run Brightness [ "--template", "[<bar>]"
                          , "--bback", " "
                          , "--bfore", "="
-                         , "--bwidth", "15"
+                         , "--bwidth", "20"
                          , "--"
                          , "-D", "edp-backlight"
-                         ] 60
-        -- volume
+                         ] 4
+        -- Volume
         , Run Volume "default" "Master" [ "--template", "[<volumebar>]"
                                         , "--bback", " "
                                         , "--bfore", "="
-                                        , "--bwidth", "15"
-                                        ] 10
-        -- time and date indicator
+                                        , "--bwidth", "20"
+                                        ] 4
+        -- Time and date indicator
         , Run Date           "%Y/%m/%d %T %a %Z" "date" 10
         ]
    }
