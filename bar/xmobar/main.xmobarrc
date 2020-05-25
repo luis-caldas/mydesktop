@@ -8,7 +8,7 @@ Config {
    -- layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " %UnsafeStdinReader% }    %date%    { %dynnetwork%%EICK% "
+   , template = " %UnsafeStdinReader% }    %date%    { %bright% | %default:Master% | %dynnetwork% | %EICK% "
    -- general behavior
    , lowerOnStart     = True
    , hideOnStart      = False
@@ -24,12 +24,22 @@ Config {
         , Run Weather "EICK" [ "--template", "<tempC>°C - <skyCondition>"
                              ] 36000
         -- network activity monitor (dynamic interface resolution)
-        , Run DynNetwork     [ "--template", "<dev> | "
-                             ] 10
+        , Run DynNetwork [ "--template", "<dev>"
+                         ] 10
         -- backlight
-        , Run Brightness     [ "--template", "<bar> | "
-                             , "-D", "edp-backlight"
-                             ] 60
+        , Run Brightness [ "--template", "[<bar>]"
+                         , "--bback", " "
+                         , "--bfore", "="
+                         , "--bwidth", "15"
+                         , "--"
+                         , "-D", "edp-backlight"
+                         ] 60
+        -- volume
+        , Run Volume "default" "Master" [ "--template", "[<volumebar>]"
+                                        , "--bback", " "
+                                        , "--bfore", "="
+                                        , "--bwidth", "15"
+                                        ] 10
         -- time and date indicator
         , Run Date           "%Y/%m/%d %T %a %Z" "date" 10
         ]
