@@ -100,21 +100,6 @@ myBarPP = def { ppCurrent         = wrap "[" "]"
               , ppTitle           = shorten 60
               } 
 
--- Picom config
-myCompositor = "picom"
-
-myCompositorArguments :: Integer -> [String]
-myCompositorArguments scalingFactor = 
-    [ "--shadow"
-    , "--shadow-opacity" , show 0.5
-    , "--shadow-radius"  , show $ scalingFactor * 10
-    , "--shadow-offset-x", show $ scalingFactor * 10
-    , "--shadow-offset-y", show $ scalingFactor * 10
-    , "--no-dock-shadow"
-    , "--fading"
-    , "--fade-delta"     , show 5
-    ]
-
 -- Commands that should be run before startup
 myStartupCommands = [ 
                       -- Cursor setting
@@ -293,11 +278,6 @@ main = do
     -- Get the display and the path for the selected display
     display <- getEnv displayVar 
 
-    -- Create the compositor command
-    let myCompositorCommand = unwords [ myCompositor
-                                      , argumentsToString $ myCompositorArguments scaling
-                                      ]
-
     -- Extract all the xresource data
     xrdbString <- runProcessWithInput (fst xrCommand) (snd xrCommand) ""
     let xrdbData = xrdbParse xrdbString
@@ -315,10 +295,7 @@ main = do
                                , argumentsToString $ myBarArguments scaling
                                , argumentsToString $ myBarColourArguments (addQuotes xrBarFore) (addQuotes xrBarBack)
                                ]
-
-    -- Run the window composer
-    unsafeSpawn myCompositorCommand
-
+    
     -- Run all the startup commands
     mapM_ unsafeSpawn myStartupCommands
 
