@@ -30,11 +30,11 @@ Config {
                          , "-w", "3"
                          , "--"
                          , "-D", "edp-backlight"
-                         ] 1
+                         ] 10
         -- Volume
         , Run Volume "default" "Master" [ "--template", "<volume>"
                                         , "-w", "3"
-                                        ] 1
+                                        ] 10
         -- CPU Usage
         , Run Cpu [ "--template", "<total>"
                   , "-w", "3" 
