@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 
 BATTERY_PATH="/sys/class/power_supply/cw2015-battery"
 
