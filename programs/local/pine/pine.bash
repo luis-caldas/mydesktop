@@ -11,7 +11,7 @@ bat_capacity() {
 }
 
 bat_time() {
-    time_file="$BATTERY_PATH""/"
+    time_file="$BATTERY_PATH""/time_to_empty_now"
     if [ ! -e "$time_file" ]; then
         echo " ---"
     else
@@ -20,7 +20,7 @@ bat_time() {
 }
 
 bat_charging() {
-    charge_file="$BATTERY_PATH""/"
+    charge_file="$BATTERY_PATH""/status"
     if [ ! -e "$charge_file" ]; then
         echo " --"
     else
@@ -37,13 +37,13 @@ usage() {
 }
 
 case "$1" in
-    battery_capacity)
+    capacity)
         bat_capacity
         ;;
-    battery_time)
+    time)
         bat_time
         ;;
-    battery_charging)
+    charging)
         bat_charging
         ;;
     -h|--help)
