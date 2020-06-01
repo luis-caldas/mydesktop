@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " %UnsafeStdinReader% }    %date%    { %bright% | %default:Master% | %dynnetwork% | %EICK% "
+   , template = " %UnsafeStdinReader% }    %date%    { $%battm% | *%bright% | ^%default:Master% | %dynnetwork% | %EICK% "
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
@@ -27,20 +27,20 @@ Config {
         , Run DynNetwork [ "--template", "<dev>"
                          ] 10
         -- Backlight
-        , Run Brightness [ "--template", "[<bar>]"
-                         , "--bback", " "
-                         , "--bfore", "="
-                         , "--bwidth", "20"
+        , Run Brightness [ "--template", "<percent>"
+                         , "-w", "3"
                          , "--"
                          , "-D", "edp-backlight"
-                         ] 4
+                         ] 1
         -- Volume
-        , Run Volume "default" "Master" [ "--template", "[<volumebar>]"
-                                        , "--bback", " "
-                                        , "--bfore", "="
-                                        , "--bwidth", "20"
-                                        ] 4
+        , Run Volume "default" "Master" [ "--template", "<volume>"
+                                        , "-w", "3"
+                                        ] 1
+        -- Pine battery
+        , Run ComX "cat" [ "/sys/class/power_supply/cw2015-battery/capacity"
+                         , "-w", "3"
+                         ] " --" "battm" 1
         -- Time and date indicator
-        , Run Date           "%Y/%m/%d %T %a %Z" "date" 10
+        , Run Date "%Y/%m/%d %T %a %Z" "date" 10
         ]
    }
