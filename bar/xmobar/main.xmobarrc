@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " %UnsafeStdinReader% }    %date%    { $%mbatcap% %mbattime% %mbatchar% | *%bright% | ^%default:Master% | %interf% | %EICK% "
+   , template = " [%UnsafeStdinReader%] }{ [$%mbatcap% %mbattime% %mbatchar%] [*%bright%] [^%default:Master%] [%interf%] [%EICK%] [%date%]"
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False

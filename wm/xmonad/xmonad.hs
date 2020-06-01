@@ -133,6 +133,8 @@ myKeyBindings = [
                 -- Backlight
                 , ("<XF86MonBrightnessUp>"  , spawn ("light -A " ++ (show myKeyStep)))
                 , ("<XF86MonBrightnessDown>", spawn ("light -U " ++ (show myKeyStep)))
+                -- Lock
+                , ("M-S-l", spawn "neolock")
                 ] ++
                 -- Displays shortcut
                 [ (("M" ++ shift ++ key), screenWorkspace sc >>= flip whenJust (windows . f))
