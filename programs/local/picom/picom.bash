@@ -42,13 +42,15 @@ new_float_border=$(echo "$scaling_factor""*""$DEFAULT_BORDER" | bc)
 new_border=${new_float_border%.*}
 
 # run picom with custom settings
-picom \
-    --shadow \
-    --shadow-opacity 0.5 \
-    --shadow-radius "$new_border" \
-    --shadow-offset-x "$new_border" \
-    --shadow-offset-y "$new_border" \
-    --no-dock-shadow \
-    --fading \
-    --fade-delta 5
+while true; do 
+    picom \
+        --shadow \
+        --shadow-opacity 0.5 \
+        --shadow-radius "$new_border" \
+        --shadow-offset-x "$new_border" \
+        --shadow-offset-y "$new_border" \
+        --no-dock-shadow \
+        --fading \
+        --fade-delta 5
+done
 
