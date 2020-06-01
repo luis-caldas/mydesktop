@@ -6,10 +6,10 @@ TIMEOUT=10 # seconds
 xset dpms force off
 
 # set dpms timeout to someting fast
-xset s "$TIMEOUT"
+xset dpms "$TIMEOUT" "$TIMEOUT" "$TIMEOUT"
 
 # lock screen
 slock
 
 # restore the timeout to nothing
-xset s off
+xset dpms 0 0 0 

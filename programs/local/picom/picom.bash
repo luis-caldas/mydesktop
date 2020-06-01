@@ -52,5 +52,7 @@ while true; do
         --no-dock-shadow \
         --fading \
         --fade-delta 5
+
+    sleep .1
 done
 
