@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " %UnsafeStdinReader% }    %date%    { $%mbatcap% %mbattime% %mbatchar% | *%bright% | ^%default:Master% | %dynnetwork% | %EICK% "
+   , template = " %UnsafeStdinReader% }    %date%    { $%mbatcap% %mbattime% %mbatchar% | *%bright% | ^%default:Master% | %interf% | %EICK% "
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
@@ -24,9 +24,7 @@ Config {
         , Run Weather "EICK" [ "--template", "<tempC>°C - <skyCondition>"
                              ] 36000
         -- Network activity monitor (dynamic interface resolution)
-        , Run DynNetwork [ "--template", "<dev>"
-                         , "-w", "8"
-                         ] 10
+        , Run ComX "listnmconn" [] "X" "interf" 10
         -- Backlight
         , Run Brightness [ "--template", "<percent>"
                          , "-w", "3"
