@@ -25,6 +25,7 @@ Config {
                              ] 36000
         -- Network activity monitor (dynamic interface resolution)
         , Run DynNetwork [ "--template", "<dev>"
+                         , "-w", "8"
                          ] 10
         -- Backlight
         , Run Brightness [ "--template", "<percent>"
