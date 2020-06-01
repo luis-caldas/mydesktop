@@ -93,11 +93,11 @@ myBarConfigs = ( myBarConfigFolder ++ "/main.xmobarrc"
                     myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
 
 myBarPP = def { ppCurrent         = wrap "[" "]"
-              , ppSep             = " ||| "
+              , ppSep             = "] ["
               , ppHidden          = wrap "|" "|"
               , ppHiddenNoWindows = wrap " " " "
               , ppLayout          = const ""
-              , ppTitle           = shorten 60
+              , ppTitle           = shorten 50
               } 
 
 -- Commands that should be run before startup

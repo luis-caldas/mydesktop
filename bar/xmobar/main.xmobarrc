@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " [%UnsafeStdinReader%] }{ [$%mbatcap% %mbattime% %mbatchar%] [*%bright%] [^%default:Master%] [%interf%] [%EICK%] [%date%]"
+   , template = " [%UnsafeStdinReader%] }{[$%mbatcap% %mbattime% %mbatchar%] [*%bright%] [^%default:Master%] [%EICK%] [%interf%] [#%cpu%] [!%memory%] [%date%]"
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
@@ -35,6 +35,14 @@ Config {
         , Run Volume "default" "Master" [ "--template", "<volume>"
                                         , "-w", "3"
                                         ] 1
+        -- CPU Usage
+        , Run Cpu [ "--template", "<total>"
+                  , "-w", "3" 
+                  ] 10
+        -- Memory Usage
+        , Run Memory [ "--template", "<total>=<used>+<free>"
+                     , "-w", "6"
+                     ] 10
         -- Pine battery
         , Run ComX "pinebatt" [ "capacity"
                               ] "X" "mbatcap" 1
