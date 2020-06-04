@@ -2,6 +2,23 @@
 
 BATTERY_PATH="/sys/class/power_supply/cw2015-battery"
 
+# {{{ Utils
+
+# Transforms minutes to 
+mins_to_time() {
+    # Time divider
+    divider=":"
+
+    # Calculate hours and mins
+    ((hours=${1}/60))
+    ((minutes=${1}%60))
+
+    # Return the formatted hour
+    printf "%2d%c%02d" "$hours" "$divider" "$minutes"
+}
+
+# }}}
+
 bat_capacity() {
     capacity_file="$BATTERY_PATH""/capacity"
     if [ ! -e "$capacity_file" ]; then
@@ -14,9 +31,11 @@ bat_capacity() {
 bat_time() {
     time_file="$BATTERY_PATH""/time_to_empty_now"
     if [ ! -e "$time_file" ]; then
-        echo " ---"
+        echo " ----"
     else
-        xargs printf "%4s" < "$time_file"
+        time_mins=$(cat "$time_file")
+        converted_time=$(mins_to_time "$time_mins")
+        printf "%5s" "$converted_time"
     fi
 }
 
@@ -49,7 +68,6 @@ case "$1" in
         ;;
     -h|--help)
         usage
-        exit 0
         ;;
     *)
         usage
