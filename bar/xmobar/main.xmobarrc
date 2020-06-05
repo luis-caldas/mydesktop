@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " [%UnsafeStdinReader%] }{%pinecmd%[%default:Master%] [%EICK%] [%interf%] [%cpu%] [%memory%] [%date%]"
+   , template = " [%UnsafeStdinReader%] }{[%default:Master%] %pinecmd%[%EICK%] [%interf%] [%cpu%] [%memory%] [%date%]"
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
@@ -24,7 +24,7 @@ Config {
         , Run Weather "EICK" [ "--template", "<tempC>°C - <skyCondition>"
                              ] 36000
         -- Network activity monitor (dynamic interface resolution)
-        , Run ComX "listnmconn" [] "X" "interf" 10
+        , Run ComX "listnmconn" [] "List con not found" "interf" 10
         -- Backlight
         , Run Brightness [ "--template", "<percent>"
                          , "-w", "3"
@@ -32,8 +32,11 @@ Config {
                          , "-D", "edp-backlight"
                          ] 10
         -- Volume
-        , Run Volume "default" "Master" [ "--template", "<volume>"
+        , Run Volume "default" "Master" [ "--template", "<volume><status>"
                                         , "-w", "3"
+                                        , "--"
+                                        , "--on" , "",     "--off",  " M"
+                                        , "--onc", "white", "--offc", "white"
                                         ] 10
         -- CPU Usage
         , Run Cpu [ "--template", "<total>"
