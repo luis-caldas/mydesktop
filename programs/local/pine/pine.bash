@@ -61,7 +61,7 @@ bat_charging() {
 
 backlight() {
     # Check if light throws an error (no backlight found)
-    if ! { light 2>&1 >&3 3>&- | grep '^' >&2; } &>/dev/null ; then
+    if ! { light 2>&1 >&3 3>&- | grep '^' >&2; } 3>&1 3>/dev/null 2>/dev/null; then
         light=$(light)
         printf "%3.0f" "$light"
     else
@@ -79,7 +79,7 @@ all() {
     printf "%s %s \n" "$(power)" "$(clight)"
 }
 all_pine() {
-    if [ -e "$BATTERY_FILE" ]; then
+    if [ -e "$BATTERY_PATH" ]; then
         all
     else
         exit 1
