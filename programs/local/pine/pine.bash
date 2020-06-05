@@ -81,6 +81,8 @@ all() {
 all_pine() {
     if [ -e "$BATTERY_FILE" ]; then
         all
+    else
+        exit 1
     fi
 }
 

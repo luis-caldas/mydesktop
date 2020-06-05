@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " [%UnsafeStdinReader%] }{[$%mbatcap% %mbattime% %mbatchar%] [*%bright%] [^%default:Master%] [%EICK%] [%interf%] [#%cpu%] [!%memory%] [%date%]"
+   , template = " [%UnsafeStdinReader%] }{%pinecmd%[%default:Master%] [%EICK%] [%interf%] [%cpu%] [%memory%] [%date%]"
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
@@ -40,16 +40,11 @@ Config {
                   , "-w", "3" 
                   ] 10
         -- Memory Usage
-        , Run Memory [ "--template", "<total>=<used>+<free>"
+        , Run Memory [ "--template", "<total> = <used> / <free>"
                      , "-w", "6"
                      ] 10
         -- Pine battery
-        , Run ComX "pinebatt" [ "capacity"
-                              ] "X" "mbatcap" 1
-        , Run ComX "pinebatt" [ "time"
-                              ] "X" "mbattime" 1
-        , Run ComX "pinebatt" [ "charging"
-                              ] "X" "mbatchar" 1
+        , Run ComX "pinecmd" [ "pine" ] "" "pinecmd" 1
         -- Time and date indicator
         , Run Date "%Y/%m/%d %T %a %Z" "date" 10
         ]
