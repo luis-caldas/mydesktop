@@ -41,7 +41,7 @@ Config {
                   ] 10
         -- Memory Usage
         , Run Memory [ "--template", "<total> = <used> / <free>"
-                     , "-w", "6"
+                     , "-w", "5"
                      ] 10
         -- Pine battery
         , Run ComX "pinecmd" [ "pine" ] "" "pinecmd" 1
