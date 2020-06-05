@@ -17,6 +17,13 @@ mins_to_time() {
     printf "%2d%c%02d" "$hours" "$divider" "$minutes"
 }
 
+# Covers the string with given chars
+cover() {
+    cleft="["
+    cright="]"
+    printf "%c%s%c" "$cleft" "$*" "$cright"
+}
+
 # }}}
 
 bat_capacity() {
@@ -52,8 +59,33 @@ bat_charging() {
     fi
 }
 
+backlight() {
+    # Check if light throws an error (no backlight found)
+    if ! { light 2>&1 >&3 3>&- | grep '^' >&2; } &>/dev/null ; then
+        light=$(light)
+        printf "%3.0f" "$light"
+    else
+        printf " --"
+    fi
+}
+
+power() {
+    cover "$(bat_capacity)" "$(bat_time)" "$(bat_charging)"
+}
+clight() {
+    cover "$(backlight)"
+}
+all() {
+    printf "%s %s \n" "$(power)" "$(clight)"
+}
+all_pine() {
+    if [ -e "$BATTERY_FILE" ]; then
+        all
+    fi
+}
+
 usage() {
-    echo "Usage: $0 {battery_capacity,battery_time,battery_charging}"
+    echo "Usage: $0 {capacity,time,charging,light,power,backlight,all,pine}"
 }
 
 case "$1" in
@@ -66,8 +98,24 @@ case "$1" in
     charging)
         bat_charging
         ;;
+    light)
+        backlight
+        ;;
+    power)
+        power
+        ;;
+    backlight)
+        clight
+        ;;
+    all)
+        all
+        ;;
+    pine)
+        all_pine
+        ;;
     -h|--help)
         usage
+        exit 64
         ;;
     *)
         usage
