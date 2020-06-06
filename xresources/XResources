@@ -15,7 +15,7 @@
 #define MY_OUTSIDE_SPACING 15
 
 ! Background and foregound
-#define MY_ALPHA_BACK  #E00D0D0D
+#define MY_ALPHA_BACK  #FF0D0D0D
 #define MY_BACKGROUND  #0D0D0D
 #define MY_FOREGROUND  #FFFFFF
 #define MY_TRANSPARENT #00000000
