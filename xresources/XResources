@@ -6,7 +6,7 @@
 #define MY_FONT xft:mono:size=11
 
 ! Alphas
-#define MY_ALPHA 0.94
+#define MY_ALPHA 1
 
 ! Borders and spacing
 #define MY_BORDER 5
