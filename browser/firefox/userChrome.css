@@ -1,8 +1,8 @@
 #navigator-toolbox {
     position: relative;
     z-index: 1;
-    height: 2.5rem;
-    margin-bottom: -2.5rem;
+    height: 1rem;
+    margin-bottom: -1rem;
     opacity: 0;
     overflow: hidden;
 	transition: all 500ms;
