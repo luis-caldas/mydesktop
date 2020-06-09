@@ -51,10 +51,10 @@ myFontFace = "mono"
 myTerminal = "APPLICATION_UNICODE=true st -f \"" ++ myFontFace ++ ":size=" ++ (show myFontSize) ++ "\""
 myBrowser  = "firefox"
 myLauncher = "neorofi"
-myExplorer = "pcmanfm"
+myExplorer = "nautilus"
 myMail     = "thunderbird"
 myPrint    = "scrot -p"
-myPrintSel = "scrot -s"
+myPrintSel = "sleep 1; scrot -s"
 
 -- My borders
 myBorderWidth = 2
@@ -143,7 +143,7 @@ myKeyBindings = [
                 , ("<XF86AudioPrev>"         , spawn "playerctl previous")
                 , ("<XF86AudioStop>"         , spawn "playerctl stop")
                 , ("M-<XF86AudioMute>"       , spawn "playerctl position 0")
-                , ("M-<XF86AudioLowerVolume>", spawn ("playerctl position -" ++ (show myKeyStep))
+                , ("M-<XF86AudioLowerVolume>", spawn ("playerctl position -" ++ (show myKeyStep)))
                 , ("M-<XF86AudioRaiseVolume>", spawn ("playerctl position +" ++ (show myKeyStep)))
                 -- Other Media
                 , ("<XF86Explorer>", spawn myExplorer)
