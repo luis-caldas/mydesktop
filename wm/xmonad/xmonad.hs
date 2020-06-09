@@ -51,6 +51,10 @@ myFontFace = "mono"
 myTerminal = "APPLICATION_UNICODE=true st -f \"" ++ myFontFace ++ ":size=" ++ (show myFontSize) ++ "\""
 myBrowser  = "firefox"
 myLauncher = "neorofi"
+myExplorer = "pcmanfm"
+myMail     = "thunderbird"
+myPrint    = "scrot -p"
+myPrintSel = "scrot -s"
 
 -- My borders
 myBorderWidth = 2
@@ -133,6 +137,19 @@ myKeyBindings = [
                 -- Backlight
                 , ("<XF86MonBrightnessUp>"  , spawn ("light -A " ++ (show myKeyStep)))
                 , ("<XF86MonBrightnessDown>", spawn ("light -U " ++ (show myKeyStep)))
+                -- Audio Media
+                , ("<XF86AudioPlay>"         , spawn "playerctl play-pause")
+                , ("<XF86AudioNext>"         , spawn "playerctl next")
+                , ("<XF86AudioPrev>"         , spawn "playerctl previous")
+                , ("<XF86AudioStop>"         , spawn "playerctl stop")
+                , ("M-<XF86AudioMute>"       , spawn "playerctl position 0")
+                , ("M-<XF86AudioLowerVolume>", spawn ("playerctl position -" ++ (show myKeyStep))
+                , ("M-<XF86AudioRaiseVolume>", spawn ("playerctl position +" ++ (show myKeyStep)))
+                -- Other Media
+                , ("<XF86Explorer>", spawn myExplorer)
+                , ("<XF86Mail>"    , spawn myMail)
+                , ("<Print>"       , spawn myPrint)
+                , ("M-<Print>"     , spawn myPrintSel)
                 -- Lock
                 , ("M-S-l", spawn "loginctl lock-session")
                 ] ++
@@ -156,16 +173,14 @@ myRemoveBindings = [ "M-S-<Return>"
                  , "M-S-<Space>"
                  , "M-,"
                  , "M-."
-                 , "M-q"
-                 , "M-S-q"
                  , "M-S-/"
                  , "M-?"
                  ] ++ 
                  (map ("M-"++) ["h", "j", "k", "l"]) ++
-                 ["M-" ++ n | n <- ["w", "e", "r"]] ++
-                 ["M-" ++ [n] | n <- ['1'..'9']] ++
-                 ["M-S-" ++ n | n <- ["w", "e", "r"]] ++
-                 ["M-S-" ++ [n] | n <- ['1'..'9']]
+                 [ "M-" ++ s ++ [n] 
+                 | s <- ["", "S-"]
+                 , n <- (['q', 'w', 'e', 'r'] ++ ['1' .. '9'])
+                 ]
 
 -- }}}
 
