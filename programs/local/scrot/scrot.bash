@@ -29,7 +29,7 @@ case $1 in
         extra_flags="-s"
         sleep 1
         ;;
-    -h|-help)
+    -h|--help)
         usage
         exit 64
         ;;

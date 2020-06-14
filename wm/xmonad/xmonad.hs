@@ -53,8 +53,8 @@ myBrowser  = "firefox"
 myLauncher = "neorofi"
 myExplorer = "nautilus"
 myMail     = "thunderbird"
-myPrint    = "scrot -p"
-myPrintSel = "sleep 1; scrot -s"
+myPrint    = "neoscrot"
+myPrintSel = "neoscrot select"
 
 -- My borders
 myBorderWidth = 2
