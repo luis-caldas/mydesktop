@@ -55,6 +55,7 @@ myExplorer = "nautilus"
 myMail     = "thunderbird"
 myPrint    = "neoscrot"
 myPrintSel = "neoscrot select"
+myClip     = "neoclip"
 
 -- My borders
 myBorderWidth = 2
@@ -117,6 +118,7 @@ myStartupCommands = [
 myKeyBindings = [ 
                 -- Spawners
                   ("M-<Return>", spawn myTerminal)
+                , ("M-u"       , spawn myClip)
                 , ("M-n"       , spawn myBrowser)
                 , ("M-<Space>" , spawn myLauncher)
                 -- Killer
