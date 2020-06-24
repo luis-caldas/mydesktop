@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " [%UnsafeStdinReader%] }{[%default:Master%] %pinecmd%[%EICK%] [%interf%] [%cpu%] [%memory%] [%date%]"
+   , template = " [%UnsafeStdinReader%] }{ [%default:Master%] %lapcmd%[%EICK%] [%interf%] [%cpu%] [%memory%] [%date%]"
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
@@ -47,7 +47,7 @@ Config {
                      , "-w", "5"
                      ] 10
         -- Pine battery
-        , Run ComX "pinecmd" [ "pine" ] "" "pinecmd" 1
+        , Run ComX "lapcmd" [ "all" ] "" "lapcmd" 1
         -- Time and date indicator
         , Run Date "%Y/%m/%d %T %a %Z" "date" 10
         ]
