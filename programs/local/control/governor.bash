@@ -36,6 +36,12 @@ get_it() {
 	cat "${SAVE_FOLDER}/${1}"
 }
 
+cover() {
+	cleft="["
+	cright="]"
+	printf "%c%s%c" "$cleft" "$*" "$cright"
+}
+
 # }}}
 # {{{ Functions
 # {{{ CPU
@@ -86,7 +92,7 @@ cpu_available_governors() {
 		done
 
 		# If we reached here the file was not found
-		echo "Could not find the file for the CPU governor in \`${each_cpu}\`"
+		>&2 echo "Could not find the file for the CPU governor in \`${each_cpu}\`"
 		exit 1
 
 	done
@@ -98,7 +104,7 @@ cpu_available_governors() {
 	fi
 
 	# If we reached here there was no governor to be found
-	echo "Unable to find a suitable cpu governor"
+	>&2 echo "Unable to find a suitable cpu governor"
 	exit 1
 
 }
@@ -111,7 +117,7 @@ cpu_set_governor() {
 	# Check if the governor is valid
 	if ! echo "$possible_list" | grep -Fxq "${1}"; then
 		# No matching governor to one given
-		echo "The given governor \`${1}\` is not supported by the gpu"
+		>&2 echo "The given governor \`${1}\` is not supported by the gpu"
 		exit 1
 	fi
 
@@ -140,8 +146,8 @@ cpu_set_governor() {
 		done
 
 		# Error
-		echo "Could not find a governor file in \`${each_cpu}\`"
-		echo "Some CPUs may be different"
+		>&2 echo "Could not find a governor file in \`${each_cpu}\`"
+		>&2 echo "Some CPUs may be different"
 		exit 1
 
 	done
@@ -186,8 +192,8 @@ cpu_get_governor() {
 					if [ "$first_governor" != "$gov_now" ]; then
 						
 						# Show error
-						echo "Some governors on the cpu are different"
-						echo "Try setting them again"
+						>&2 echo "Some governors on the cpu are different"
+						>&2 echo "Try setting them again"
 						exit 1
 
 					fi
@@ -218,7 +224,7 @@ gpu_available_device() {
 	done
 
 	# Error
-	echo "No GPU found from the ones given on the list"
+	>&2 echo "No GPU found from the ones given on the list"
 	exit 1
 
 }
@@ -235,7 +241,7 @@ gpu_available_governors() {
 	done
 
 	# If we reached here there was no governor to be found
-	echo "Unable to find a suitable gpu governor"
+	>&2 echo "Unable to find a suitable gpu governor"
 	exit 1
 
 }
@@ -251,7 +257,7 @@ gpu_set_governor() {
 	# Check if the governor is valid
 	if ! echo "$possible_list" | grep -Fxq "${1}"; then
 		# No matching governor to one given
-		echo "The given governor \`${1}\` is not supported by the gpu"
+		>&2 echo "The given governor \`${1}\` is not supported by the gpu"
 		exit 1
 	fi
 
@@ -266,7 +272,7 @@ gpu_set_governor() {
 	done
 
 	# Could not find a possible file
-	echo "Could not find the GPU governor file"
+	>&2 echo "Could not find the GPU governor file"
 	exit 1
 
 }
@@ -290,7 +296,7 @@ gpu_get_governor() {
 	done
 
 	# If we reached here there was no governor to be found
-	echo "Unable to find gpu governor"
+	>&2 echo "Unable to find gpu governor"
 	exit 1
 }
 
@@ -298,7 +304,52 @@ gpu_get_governor() {
 # }}}
 # {{{ Printing
 
+print_cpu() {
+	# Get cpu governor
+	print_data="$(cpu_get_governor)"
 
+	# if it is not empty print it
+	if [ -n "$print_data" ]; then
+		cover "$print_data"
+	else
+		exit 1
+	fi
+}
+
+print_gpu() {
+	# Get cpu governor
+	print_data="$(gpu_get_governor)"
+
+	# if it is not empty print it
+	if [ -n "$print_data" ]; then
+		cover "$print_data"
+	else
+		exit 1
+	fi
+}
+
+print_all() {
+	# Run printing functions
+	prints=( "$(print_cpu)" "$(print_gpu)" )
+
+	# Start array that will contain all prints
+	all_prints=()
+
+	# Add each successful
+	for each in "${prints[@]}"; do
+		if [ -n "$each" ]; then
+			all_prints+=("$each")
+		fi
+	done
+
+	# Add newline if there is anything to print
+	if [ ! "${#all_prints[@]}" -eq 0 ]; then
+		echo "${all_prints[@]} "
+	# If there is nothing to show throw an error
+	else
+		exit 1
+	fi
+}
 
 # }}}
 # {{{ Main
@@ -325,6 +376,9 @@ case "$1" in
 			restore)
 				cpu_restore_governor
 				;;
+			print)
+				print_cpu
+				;;
 			*)
 				usage
 				exit 1
@@ -344,6 +398,9 @@ case "$1" in
 				;;
 			restore)
 				gpu_restore_governor
+				;;
+			print)
+				print_gpu
 				;;
 			*)
 				usage
@@ -366,6 +423,9 @@ case "$1" in
 	restore)
 		cpu_restore_governor
 		gpu_restore_governor
+		;;
+	print)
+		print_all
 		;;
 	*)
 		usage
