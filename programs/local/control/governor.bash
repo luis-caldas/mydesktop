@@ -156,7 +156,7 @@ cpu_set_governor() {
 
 cpu_restore_governor() {
 	govr="$(get_it cpu)"
-	cpu_set_governor "$govr"
+	[ -n "$govr" ] && cpu_set_governor "$govr"
 }
 
 cpu_get_governor() {
@@ -279,7 +279,7 @@ gpu_set_governor() {
 
 gpu_restore_governor() {
 	govr="$(get_it gpu)"
-	gpu_set_governor "$govr"
+	[ -n "$govr" ] && gpu_set_governor "$govr"
 }
 
 gpu_get_governor() {
