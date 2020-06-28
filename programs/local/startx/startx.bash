@@ -14,10 +14,10 @@ function main() {
     fi
 
     # change the working directory to the users home folder
-    cd "${HOME}"
+    cd "${HOME}" || exit 1
 
     # execute xinit with the new files
-    systemd-run --scope --user --unit neox xinit "$init_file" -- "$vtarg" -auth "$authority_file" -logfile "$(mktemp)"
+    xinit "$init_file" -- "$vtarg" -auth "$authority_file" -logfile "$(mktemp)"
 
 }
 
