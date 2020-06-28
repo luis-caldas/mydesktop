@@ -13,8 +13,11 @@ function main() {
         vtarg="vt$tty_num -keeptty"
     fi
 
+    # change the working directory to the users home folder
+    cd "${HOME}"
+
     # execute xinit with the new files
-    exec xinit "$init_file" -- "$vtarg" -auth "$authority_file" -logfile "$(mktemp)" 2>&1 | logger -t "neox"
+    systemd-run --scope --user --unit neox xinit "$init_file" -- "$vtarg" -auth "$authority_file" -logfile "$(mktemp)"
 
 }
 

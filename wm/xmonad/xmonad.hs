@@ -27,7 +27,6 @@ import qualified Data.Map
 import qualified XMonad.StackSet
 
 -- }}}
-
 -- {{{ Configs
 
 -- Scaling
@@ -106,12 +105,12 @@ myBarPP = def { ppCurrent         = wrap "[" "]"
               } 
 
 -- Commands that should be run before startup
-myStartupCommands = [ 
+myStartupCommands = [ -- Lock screen program
+                      "xss-lock·neolock"
                       -- Cursor setting
-                      "xsetroot -cursor_name left_ptr"
+                    , "xsetroot -cursor_name left_ptr"
                     ]
 -- }}}
-
 -- {{{ Keybindings
 
 -- Launching
@@ -185,7 +184,6 @@ myRemoveBindings = [ "M-S-<Return>"
                  ]
 
 -- }}}
-
 -- {{{ Functions
 
 -- Hack to let firefox fullscreen
@@ -286,7 +284,6 @@ mToInteger strIn =
     read strIn::Integer
 
 -- }}}
-
 -- {{{ Main
 
 main = do

@@ -60,13 +60,16 @@ else
     echo "found these monitors:" "${all_monitors[@]}"
 fi
 
+# monitor counter
+monitor_nr=0
+
 # start each monitor session
 for each_monitor in "${all_monitors[@]}"; do
-    bash "$each_monitor" &
+    systemd-run --scope --user --unit "mon-wm-${monitor_nr}" bash "$each_monitor"
+    # increment counter
+    monitor_nr=$(( monitor_nr + 1 ))
 done
 
 # run the services
-bash "$this_init_folder""/services.xinitrc" &
-
-wait
+systemd-run --scope --user --unit services bash "$this_init_folder""/services.xinitrc"
 

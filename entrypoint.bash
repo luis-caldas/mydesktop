@@ -4,8 +4,6 @@
 # this file should be called from your xinit or whatever your system calls
 # after xorg initializes
 
-LOG_TAG="deskutoppu"
-
 function get_folder() {
 
     # get the folder in which the script is located
@@ -41,4 +39,4 @@ export ENTRYPOINT_FOLDER
 set -u
 
 # call init and log it
-exec bash "$folder_now""/init/xinitrc" 2>&1 | logger -t "$LOG_TAG"
+systemd-run --scope --user --unit entrypoint bash "$folder_now""/init/xinitrc"
