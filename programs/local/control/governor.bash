@@ -36,6 +36,13 @@ get_it() {
 	cat "${SAVE_FOLDER}/${1}"
 }
 
+list_saved() {
+	for each in "${SAVE_FOLDER}/"*; do
+		echo "$each":
+		sed 's/^/\t/' < "$each"
+	done
+}
+
 cover() {
 	cleft="["
 	cright="]"
@@ -134,13 +141,24 @@ cpu_set_governor() {
 			if [ -f "$gov_file" ]; then
 
 				# Set governor
-				echo "${1}" > "$gov_file"
+				if echo "${1}" > "$gov_file"; then
 
-				# Save it to the file
-				save_it cpu "${1}"
+					# Save it to the file
+					save_it cpu "${1}"
 
-				# Continue parent loop
-				continue 2
+					# Continue parent loop
+					continue 2
+
+				else
+
+					# We were unable to write to the governor file
+					>&2 echo "Unable to write to the governor file ${gov_file}"
+
+					# Exit the script
+					exit 1
+
+				fi
+
 			fi
 
 		done
@@ -251,23 +269,17 @@ gpu_set_governor() {
 	# Get available device
 	gpu_device="$(gpu_available_device)"
 
-	# Possible governors for the first found gpu
-	possible_list="$(gpu_available_governors "$gpu_device")"
-
-	# Check if the governor is valid
-	if ! echo "$possible_list" | grep -Fxq "${1}"; then
-		# No matching governor to one given
-		>&2 echo "The given governor \`${1}\` is not supported by the gpu"
-		exit 1
-	fi
-
 	# See which governor file the device uses
 	for each_file in "${POSSIBLE_CHANGE_NAMES[@]}"; do
 		gov_file="${GPU_FOLDER}/${gpu_device}/${each_file}"
 		if [ -f "$gov_file" ]; then
-			echo "${1}" > "$gov_file"
-			save_it gpu "${1}"
-			return
+			if echo "${1}" > "$gov_file"; then
+				save_it gpu "${1}"
+				return
+			else
+				>&2 echo "Unable to write to the governor file ${gov_file}"
+				exit 1
+			fi
 		fi
 	done
 
@@ -344,7 +356,7 @@ print_all() {
 
 	# Add newline if there is anything to print
 	if [ ! "${#all_prints[@]}" -eq 0 ]; then
-		echo "${all_prints[@]} "
+		printf "%s " "${all_prints[@]}"
 	# If there is nothing to show throw an error
 	else
 		exit 1
@@ -419,6 +431,9 @@ case "$1" in
 		cpu_available_governors
 		printf ">>> %s\n" GPU
 		gpu_available_governors "$(gpu_available_device)"
+		;;
+	list-saved)
+		list_saved
 		;;
 	restore)
 		cpu_restore_governor
