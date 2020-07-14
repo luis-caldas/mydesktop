@@ -106,7 +106,7 @@ myBarPP = def { ppCurrent         = wrap "[" "]"
 
 -- Commands that should be run before startup
 myStartupCommands = [ -- Cursor setting
-                    , "xsetroot -cursor_name left_ptr"
+                      "xsetroot -cursor_name left_ptr"
                     ]
 -- }}}
 -- {{{ Keybindings
