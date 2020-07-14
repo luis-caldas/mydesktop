@@ -65,11 +65,14 @@ monitor_nr=0
 
 # start each monitor session
 for each_monitor in "${all_monitors[@]}"; do
-    systemd-run --scope --user --unit "mon-wm-${monitor_nr}" bash "$each_monitor"
+    # Initialize each monitor
+    bash "$each_monitor" &
     # increment counter
     monitor_nr=$(( monitor_nr + 1 ))
 done
 
-# run the services
-systemd-run --scope --user --unit services bash "$this_init_folder""/services.xinitrc"
+# run the service
+bash "$this_init_folder""/services.xinitrc" &
+
+wait
 

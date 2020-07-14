@@ -105,9 +105,7 @@ myBarPP = def { ppCurrent         = wrap "[" "]"
               } 
 
 -- Commands that should be run before startup
-myStartupCommands = [ -- Lock screen program
-                      "xss-lock·neolock"
-                      -- Cursor setting
+myStartupCommands = [ -- Cursor setting
                     , "xsetroot -cursor_name left_ptr"
                     ]
 -- }}}

@@ -39,4 +39,4 @@ export ENTRYPOINT_FOLDER
 set -u
 
 # call init and log it
-systemd-run --scope --user --unit entrypoint bash "$folder_now""/init/xinitrc"
+exec bash "$folder_now""/init/xinitrc" 2>&1 | logger -t "desktop"
