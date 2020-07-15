@@ -3,7 +3,7 @@
 
 -- XMonad
 import XMonad
--- import XMonad.Layout.NoBorders -- Still have to figure out how to remove borders on fullscreen
+import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 import XMonad.Layout.LayoutModifier
 import XMonad.Hooks.DynamicLog
@@ -91,8 +91,8 @@ myBarColourArguments :: String -> String -> [String]
 myBarColourArguments foreColour backColour =
     [ "-F", foreColour, "-B", backColour]
 
-myBarConfigs = ( myBarConfigFolder ++ "/main.xmobarrc"
-               , myBarConfigFolder ++ "/side.xmobarrc"
+myBarConfigs = ( myBarConfigFolder ++ "/top.xmobarrc"
+               , myBarConfigFolder ++ "/bottom.xmobarrc"
                ) where
                     myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
 
@@ -304,12 +304,20 @@ main = do
     let xrBarFore      = lookMap xrdbData xrVarBarFore myBarDefaultFore
 
     -- Create the bar command
-    let myBarCommand = unwords [ myBar
-                               , monitorConfig display myBarConfigs
-                               , argumentsToString $ myBarArguments scaling
-                               , argumentsToString $ myBarColourArguments (addQuotes xrBarFore) (addQuotes xrBarBack)
-                               ]
-    
+    let myBarCommandTop = unwords [ myBar
+                                  , fst myBarConfigs
+                                  , argumentsToString $ myBarArguments scaling
+                                  , argumentsToString $ myBarColourArguments (addQuotes xrBarFore) (addQuotes xrBarBack)
+                                  ]
+    let myBarCommandBottom = unwords [ myBar
+                                     , snd myBarConfigs
+                                     , argumentsToString $ myBarArguments scaling
+                                     , argumentsToString $ myBarColourArguments (addQuotes xrBarFore) (addQuotes xrBarBack)
+                                     ]
+
+    -- Unsafe spawn top bar
+    unsafeSpawn myBarCommandTop
+
     -- Run all the startup commands
     mapM_ unsafeSpawn myStartupCommands
 
@@ -319,7 +327,8 @@ main = do
             , borderWidth        = fromInteger $ scalePixels scaling xrBorder
             , normalBorderColor  = xrColour
             , focusedBorderColor = xrActiveColour
-            , layoutHook         = spacingRawScalable xrSpace scaling $ 
+            , layoutHook         = spacingRawScalable xrSpace scaling $
+                                   smartBorders $
                                    layoutHook def
             , manageHook         = manageDocks <+> manageHook def
             , handleEventHook    = handleEventHook def <+> fullscreenEventHook
@@ -328,7 +337,7 @@ main = do
             } 
   
     -- Add my key bindings
-    xmobarSpawner <- spawnMyBar myBarCommand myBarPP $ ewmh $ myDefaultConfig
+    xmobarSpawner <- spawnMyBar myBarCommandBottom myBarPP $ ewmh $ myDefaultConfig
                  `removeKeysP`     myRemoveBindings
                  `additionalKeysP` myKeyBindings
 
