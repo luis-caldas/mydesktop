@@ -1,0 +1,52 @@
+-- vim: syntax=haskell
+Config { 
+   -- Appearance
+     font        = "xft:Mono:size=12:bold"
+   , bgColor     = "#0000FF"
+   , fgColor     = "#FFFFFF"
+   , position    = Top
+   -- Layout
+   , sepChar  = "%"
+   , alignSep = "}{"
+   , template = " [%date%] }{ [%default:Master%] %cmd-bat-light%[%EICK%] [%interf%] [%cpu%] [%memory%] [%date%]"
+   -- General behavior
+   , lowerOnStart     = True
+   , hideOnStart      = False
+   , allDesktops      = False
+   , overrideRedirect = False
+   , pickBroadest     = False
+   , persistent       = True
+   -- Plugins
+   , commands = [
+        -- Weather monitor
+        Run Weather "EICK" [ "--template", "<tempC>°C - <skyCondition>"
+                             ] 36000
+        -- Network activity monitor (dynamic interface resolution)
+        , Run ComX "listnmconn" [] "List con not found" "interf" 10
+        -- Backlight
+        , Run Brightness [ "--template", "<percent>"
+                         , "-w", "3"
+                         , "--"
+                         , "-D", "edp-backlight"
+                         ] 10
+        -- Volume
+        , Run Volume "default" "Master" [ "--template", "<volume><status>"
+                                        , "-w", "3"
+                                        , "--"
+                                        , "--on" , "",     "--off",  " M"
+                                        , "--onc", "white", "--offc", "white"
+                                        ] 10
+        -- CPU Usage
+        , Run Cpu [ "--template", "<total>"
+                  , "-w", "3" 
+                  ] 10
+        -- Memory Usage
+        , Run Memory [ "--template", "<total> = <used> / <free>"
+                     , "-w", "5"
+                     ] 10
+        -- Pine battery
+        , Run ComX "cmd-bat-light" [ "all" ] "" "cmd-bat-light" 1
+        -- Time and date indicator
+        , Run Date "%Y/%m/%d %T %a %Z" "date" 10
+        ]
+   }
