@@ -203,6 +203,16 @@ setFullscreenSupported = withDisplay $ \dpy -> do
                          ]
     io $ changeProperty32 dpy r a c propModeReplace (fmap fromIntegral supp)
 
+-- Border selection ambiguity function
+data MyBorderAmbiguity = MyBorderAmbiguity deriving (Read, Show)
+instance SetsAmbiguous MyBorderAmbiguity where
+    hiddens _ wset lr mst wrs = floating
+        where
+            floating = [ w |
+                        (w, XMonad.StackSet.RationalRect px py wx wy) <- Data.Map.toList . XMonad.StackSet.floating $ wset,
+                        px <= 0, py <= 0,
+                        wx + px >= 1, wy + py >= 1]
+
 -- Receives a DISPLAY string and returns one of the items of the 
 -- given tuple
 monitorConfig :: String -> (String, String) -> String
@@ -327,8 +337,8 @@ main = do
             , borderWidth        = fromInteger $ scalePixels scaling xrBorder
             , normalBorderColor  = xrColour
             , focusedBorderColor = xrActiveColour
-            , layoutHook         = spacingRawScalable xrSpace scaling $
-                                   smartBorders $
+            , layoutHook         = lessBorders MyBorderAmbiguity $
+                                   spacingRawScalable xrSpace scaling $
                                    layoutHook def
             , manageHook         = manageDocks <+> manageHook def
             , handleEventHook    = handleEventHook def <+> fullscreenEventHook
