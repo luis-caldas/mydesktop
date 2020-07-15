@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " [%date%] }{ [%default:Master%] %cmd-bat-light%[%EICK%] [%interf%] [%cpu%] [%memory%] [%date%]"
+   , template = " [%date%] }{ [%default:Master%] %cmd-bat-light%[%EICK%] [%interf%] [%cpu%] %cmd-gov%[%memory%]"
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
@@ -44,8 +44,10 @@ Config {
         , Run Memory [ "--template", "<total> = <used> / <free>"
                      , "-w", "5"
                      ] 10
-        -- Pine battery
+        -- Battery and backlight script
         , Run ComX "cmd-bat-light" [ "all" ] "" "cmd-bat-light" 1
+        -- Governor script
+        , Run ComX "neogov" [ "print" ] "" "cmd-gov" 1
         -- Time and date indicator
         , Run Date "%Y/%m/%d %T %a %Z" "date" 10
         ]
