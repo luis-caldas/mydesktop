@@ -101,7 +101,6 @@ myBarPP = def { ppCurrent         = wrap "[" "]"
               , ppHidden          = wrap "|" "|"
               , ppHiddenNoWindows = wrap " " " "
               , ppLayout          = const ""
-              , ppTitle           = shorten 50
               } 
 
 -- Commands that should be run before startup
