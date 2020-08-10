@@ -66,7 +66,7 @@ myNormalBorderColour  = "#000000"
 myWindowSpacing = 5
 
 -- Steps for changing volume/backlight
-myKeyStep = 5
+myKeyStep = 2
 
 -- Wokspaces
 myWorkspaces = map show [ 1 .. 9 ]
