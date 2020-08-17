@@ -47,14 +47,21 @@ myFontSize = 12
 myFontFace = "mono"
 
 -- My applications
-myTerminal = "APPLICATION_UNICODE=true st -f \"" ++ myFontFace ++ ":size=" ++ (show myFontSize) ++ "\""
-myBrowser  = "firefox"
+myTerminal = "st"
+myBrowser  = "chromium"
 myLauncher = "neorofi"
 myExplorer = "nautilus"
 myMail     = "thunderbird"
 myPrint    = "neoscrot"
 myPrintSel = "neoscrot select"
 myClip     = "neoclip"
+
+myTerminalArgs :: String -> [String]
+myTerminalArgs programName =
+    [ "APPLICATION_UNICODE=true",
+      programName,
+      "-f" ++ myFontFace ++ ":size=" ++ (show myFontSize)
+    ]
 
 -- My borders
 myBorderWidth = 2
@@ -82,8 +89,8 @@ myBar = "xmobar"
 myBarDefaultBack = "#FFFFFF"
 myBarDefaultFore = "#000000"
 
-myBarArguments :: Integer -> [String]
-myBarArguments scalingFactor =
+myBarArguments :: [String]
+myBarArguments =
     [ "-f", "xft:" ++ myFontFace ++ ":size=" ++ (show myFontSize)
     ]
 
@@ -113,7 +120,7 @@ myStartupCommands = [ -- Cursor setting
 -- Launching
 myKeyBindings = [ 
                 -- Spawners
-                  ("M-<Return>", spawn myTerminal)
+                  ("M-<Return>", spawn $ argumentsToString $ myTerminalArgs $ myTerminal)
                 , ("M-u"       , spawn myClip)
                 , ("M-n"       , spawn myBrowser)
                 , ("M-<Space>" , spawn myLauncher)
@@ -315,12 +322,12 @@ main = do
     -- Create the bar command
     let myBarCommandTop = unwords [ myBar
                                   , fst myBarConfigs
-                                  , argumentsToString $ myBarArguments scaling
+                                  , argumentsToString $ myBarArguments
                                   , argumentsToString $ myBarColourArguments (addQuotes xrBarFore) (addQuotes xrBarBack)
                                   ]
     let myBarCommandBottom = unwords [ myBar
                                      , snd myBarConfigs
-                                     , argumentsToString $ myBarArguments scaling
+                                     , argumentsToString $ myBarArguments
                                      , argumentsToString $ myBarColourArguments (addQuotes xrBarFore) (addQuotes xrBarBack)
                                      ]
 
