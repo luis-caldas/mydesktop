@@ -48,7 +48,7 @@ myFontFace = "mono"
 
 -- My applications
 myTerminal = "st"
-myBrowser  = "chromium"
+myBrowser  = "firefox"
 myLauncher = "neorofi"
 myExplorer = "nautilus"
 myMail     = "thunderbird"
