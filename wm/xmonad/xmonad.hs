@@ -9,6 +9,7 @@ import XMonad.Layout.LayoutModifier
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.ManageHelpers
 import XMonad.Util.EZConfig
 import XMonad.Util.Run
 
@@ -55,6 +56,11 @@ myMail     = "thunderbird"
 myPrint    = "neoscrot"
 myPrintSel = "neoscrot select"
 myClip     = "neoclip"
+
+-- Floating programs and how they should float
+myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
+                     , ("glxgears", doCenterFloat)
+                     ]
 
 myTerminalArgs :: String -> [String]
 myTerminalArgs programName =
@@ -186,6 +192,14 @@ myRemoveBindings = [ "M-S-<Return>"
                  | s <- ["", "S-"]
                  , n <- (['q', 'w', 'e', 'r'] ++ ['1' .. '9'])
                  ]
+
+-- Floating windows of name when launched
+myManageHook = composeAll $
+               [
+                 title =? (fst programTuple) --> (snd programTuple) |
+                 programTuple <- myFloatingPrograms
+               ]
+               ++ [ manageDocks ]
 
 -- }}}
 -- {{{ Functions
@@ -346,7 +360,7 @@ main = do
             , layoutHook         = lessBorders MyBorderAmbiguity $
                                    spacingRawScalable xrSpace scaling $
                                    layoutHook def
-            , manageHook         = manageDocks <+> manageHook def
+            , manageHook         = myManageHook <+> manageHook def
             , handleEventHook    = handleEventHook def <+> fullscreenEventHook
             , startupHook        = startupHook def <+> setFullscreenSupported
             , workspaces         = myWorkspaces
