@@ -76,10 +76,12 @@ char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 char *vtiden = "\033[?6c";
 static float cwscale = 1.0;
 static float chscale = 1.0;
-char *worddelimiters = " ";
+wchar_t *worddelimiters = L" ";
 static unsigned int doubleclicktimeout = 300;
 static unsigned int tripleclicktimeout = 600;
 int allowaltscreen = 1;
+static double minlatency = 8;
+static double maxlatency = 33;
 static unsigned int blinktimeout = 800;
 static unsigned int cursorthickness = 2;
 static int bellvolume = 0;
@@ -92,9 +94,12 @@ static unsigned int cols = 80;
 static unsigned int rows = 24;
 static unsigned int defaultattr = 11;
 static MouseShortcut mshortcuts[] = {
-	
-	{ Button4,              XK_ANY_MOD,     "\031" },
-	{ Button5,              XK_ANY_MOD,     "\005" },
+
+	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
+	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
+	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
+	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
+	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
 };
 #define MODKEY Mod1Mask
 #define TERMMOD (ControlMask|ShiftMask)
@@ -116,6 +121,7 @@ static Shortcut shortcuts[] = {
 static KeySym mappedkeys[] = { -1 };
 static uint ignoremod = Mod2Mask|XK_SWITCH_MOD;
 static uint forceselmod = ShiftMask;
+static uint forcemousemod = ShiftMask;
 static Key key[] = {
 	
 	{ XK_KP_Home,       ShiftMask,      "\033[2J",       0,   -1},
