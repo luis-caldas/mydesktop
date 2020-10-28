@@ -72,6 +72,7 @@ ResourcePref resources[] = {
 
 static char *shell = "/bin/sh";
 char *utmp = NULL;
+char *scroll = NULL;
 char *stty_args = "stty raw pass8 nl -echo -iexten -cstopb 38400";
 char *vtiden = "\033[?6c";
 static float cwscale = 1.0;
@@ -80,6 +81,7 @@ wchar_t *worddelimiters = L" ";
 static unsigned int doubleclicktimeout = 300;
 static unsigned int tripleclicktimeout = 600;
 int allowaltscreen = 1;
+int allowwindowops = 0;
 static double minlatency = 8;
 static double maxlatency = 33;
 static unsigned int blinktimeout = 800;
