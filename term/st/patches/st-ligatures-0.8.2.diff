@@ -187,9 +187,9 @@ index 3e48410..e5064d6 100644
 -			term.ocx, term.ocy, term.line[term.ocy][term.ocx]);
 +			term.ocx, term.ocy, term.line[term.ocy][term.ocx],
 +			term.line[term.ocy], term.col);
- 	term.ocx = cx, term.ocy = term.c.y;
+ 	term.ocx = cd;
+ 	term.ocy = term.c.y;
  	xfinishdraw();
- 	xximspot(term.ocx, term.ocy);
 diff --git a/st.h b/st.h
 index a1928ca..07ba678 100644
 --- a/st.h
