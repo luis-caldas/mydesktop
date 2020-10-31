@@ -1,8 +1,10 @@
+-- vim: set tabstop=8 softtabstop=0 expandtab shiftwidth=8 smarttab:
 {-# LANGUAGE FlexibleContexts #-}
 -- {{{ Imports
 
 -- XMonad
 import XMonad
+import XMonad.Actions.SpawnOn
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 import XMonad.Layout.LayoutModifier
@@ -56,6 +58,9 @@ myMail     = "thunderbird"
 myPrint    = "neoscrot"
 myPrintSel = "neoscrot select"
 myClip     = "neoclip"
+
+-- Browser persistent flags
+myBrowserPersistentFlags = "-P persistent"
 
 -- Floating programs and how they should float
 myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
@@ -120,6 +125,22 @@ myBarPP = def { ppCurrent         = wrap "[" "]"
 myStartupCommands = [ -- Cursor setting
                       "xsetroot -cursor_name left_ptr"
                     ]
+
+-- Application starting layout
+myApplicationStartLayouts = [ ( "M-o", do
+                                         spawnOn (myWorkspaces!!0) $ argumentsToString $ myTerminalArgs $ myTerminal
+                                         spawnOn (myWorkspaces!!1) myBrowser
+                                         spawnOn (myWorkspaces!!2) myMail
+                                         spawnOn (myWorkspaces!!7) $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ]
+                                         spawnOn (myWorkspaces!!8) $ argumentsToString $ myTerminalArgs $ myTerminal
+                              )
+                            , ( "M-i", do
+                                         spawnOn (myWorkspaces!!1) myBrowser
+                                         spawnOn (myWorkspaces!!2) myMail
+                                         spawnOn (myWorkspaces!!7) $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ]
+                              )
+                            ]
+
 -- }}}
 -- {{{ Keybindings
 
@@ -129,6 +150,7 @@ myKeyBindings = [
                   ("M-<Return>", spawn $ argumentsToString $ myTerminalArgs $ myTerminal)
                 , ("M-u"       , spawn myClip)
                 , ("M-n"       , spawn myBrowser)
+                , ("M-m"       , spawn $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ])
                 , ("M-<Space>" , spawn myLauncher)
                 -- Killer
                 , ("M-<Backspace>", kill)
@@ -175,7 +197,9 @@ myKeyBindings = [
                     | (i, key) <- zip myWorkspaces (map ("-"++) (map show [1..9]))
                     , (f, shift) <- [ (XMonad.StackSet.greedyView, "")
                                     , (\i -> XMonad.StackSet.greedyView i . XMonad.StackSet.shift i, "-S")
-                                    ]]
+                                    ]] ++
+                -- Multiple applications start shortcuts
+                myApplicationStartLayouts
 
 -- Bindings that should be removed
 myRemoveBindings = [ "M-S-<Return>"
@@ -199,7 +223,7 @@ myManageHook = composeAll $
                  title =? (fst programTuple) --> (snd programTuple) |
                  programTuple <- myFloatingPrograms
                ]
-               ++ [ manageDocks ]
+               ++ [ manageDocks, manageSpawn ]
 
 -- }}}
 -- {{{ Functions
