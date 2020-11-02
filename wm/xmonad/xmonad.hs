@@ -32,6 +32,11 @@ import qualified XMonad.StackSet
 -- }}}
 -- {{{ Configs
 
+-- Env
+-- Environment vars that should be set
+envVarsSet = [ ("APPLICATION_UNICODE", "true")
+             ]
+
 -- Scaling
 scalingVarName = "GDK_SCALE"
 
@@ -69,7 +74,7 @@ myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
 
 myTerminalArgs :: String -> [String]
 myTerminalArgs programName =
-    [ "APPLICATION_UNICODE=true",
+    [
       programName,
       "-f" ++ myFontFace ++ ":size=" ++ (show myFontSize)
     ]
@@ -128,11 +133,11 @@ myStartupCommands = [ -- Cursor setting
 
 -- Application starting layout
 myApplicationStartLayouts = [ ( "M-o", do
-                                         spawnOn (myWorkspaces!!0) $ argumentsToString $ myTerminalArgs $ myTerminal
+                                         spawnOn (myWorkspaces!!0) $ argumentsToString $ myTerminalArgs myTerminal
                                          spawnOn (myWorkspaces!!1) myBrowser
                                          spawnOn (myWorkspaces!!2) myMail
                                          spawnOn (myWorkspaces!!7) $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ]
-                                         spawnOn (myWorkspaces!!8) $ argumentsToString $ myTerminalArgs $ myTerminal
+                                         spawnOn (myWorkspaces!!8) $ argumentsToString $ myTerminalArgs myTerminal
                               )
                             , ( "M-i", do
                                          spawnOn (myWorkspaces!!1) myBrowser
@@ -339,6 +344,10 @@ mToInteger strIn =
 -- {{{ Main
 
 main = do
+
+    -- Set all needed environment variables
+    mapM_ (\each -> setEnv (fst each) (snd each)) envVarsSet
+
     -- Get the scaling of the session
     scalingRaw <- getEnv scalingVarName
     let scaling = mToInteger scalingRaw
