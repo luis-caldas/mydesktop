@@ -12,11 +12,21 @@ import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.EwmhDesktops
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.ManageHelpers
+import XMonad.Hooks.UrgencyHook
+import XMonad.Util.WorkspaceCompare
+import XMonad.Util.NamedWindows
 import XMonad.Util.EZConfig
 import XMonad.Util.Run
 
 -- System
 import System.Environment
+
+-- Codec
+import Codec.Binary.UTF8.String (encodeString)
+
+-- Monad
+import Control.Monad (liftM2)
+
 
 -- Data
 import Data.List
@@ -119,10 +129,10 @@ myBarConfigs = ( myBarConfigFolder ++ "/top.xmobarrc"
                ) where
                     myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
 
-myBarPP = def { ppCurrent         = wrap "[" "]"
+myBarPP = def { ppCurrent         = wrap ">" ""
               , ppSep             = "] ["
-              , ppHidden          = wrap "|" "|"
-              , ppHiddenNoWindows = wrap " " " "
+              , ppHidden          = wrap " " ""
+              , ppHiddenNoWindows = wrap " " ""
               , ppLayout          = const ""
               } 
 
@@ -233,6 +243,64 @@ myManageHook = composeAll $
 -- }}}
 -- {{{ Functions
 
+-- {{{ My PP functions
+
+-- My reimplementation of XMonad.Hooks.DynamicLog
+
+
+-- | Output a list of strings, ignoring empty ones and separating the
+--   rest with the given separator.
+mySepBy :: String   -- ^ separator
+      -> [String] -- ^ fields to output
+      -> String
+mySepBy sep = concat . intersperse sep . filter (not . null)
+
+-- My dynamic log
+myDynamicLog :: X ()
+myDynamicLog = myDynamicLogWithPP def
+
+myDynamicLogWithPP :: PP -> X ()
+myDynamicLogWithPP pp = myDynamicLogString pp >>= io . ppOutput pp
+
+myDynamicLogString :: PP -> X String
+myDynamicLogString pp = do
+
+    winset <- gets windowset
+    urgents <- readUrgents
+    sort' <- ppSort pp
+
+    let ld = description . XMonad.StackSet.layout . XMonad.StackSet.workspace . XMonad.StackSet.current $ winset
+
+    let ws = myPprWindowSet sort' urgents pp winset
+
+    wt <- maybe (return "") (fmap show . getName) . XMonad.StackSet.peek $ winset
+
+    extras <- mapM (flip catchX (return Nothing)) $ ppExtras pp
+
+    return $ encodeString . mySepBy (ppSep pp) . ppOrder pp $
+                        [ ws
+                        , ppLayout pp ld
+                        , ppTitle  pp $ ppTitleSanitize pp wt
+                        ]
+                        ++ catMaybes extras
+
+myPprWindowSet :: WorkspaceSort -> [Window] -> PP -> WindowSet -> String
+myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
+            map XMonad.StackSet.workspace (XMonad.StackSet.current s : XMonad.StackSet.visible s) ++ XMonad.StackSet.hidden s
+   where this     = XMonad.StackSet.currentTag s
+         visibles = map (XMonad.StackSet.tag . XMonad.StackSet.workspace) (XMonad.StackSet.visible s)
+
+         fmt w = printer pp $ (windower w)
+          where printer | any (\x -> maybe False (== XMonad.StackSet.tag w) (XMonad.StackSet.findTag x s)) urgents  = ppUrgent
+                        | XMonad.StackSet.tag w == this                                                             = ppCurrent
+                        | XMonad.StackSet.tag w `elem` visibles && isJust (XMonad.StackSet.stack w)                 = ppVisible
+                        | XMonad.StackSet.tag w `elem` visibles                                                     = liftM2 fromMaybe ppVisible ppVisibleNoWindows
+                        | isJust (XMonad.StackSet.stack w)                                                          = ppHidden
+                        | otherwise                                                                                 = ppHiddenNoWindows
+                windower = (\tag -> XMonad.StackSet.tag tag ++ (superScripsNumbers (show $ (length . XMonad.StackSet.integrate' . XMonad.StackSet.stack) tag) True))
+
+-- }}}
+
 -- Hack to let firefox fullscreen
 setFullscreenSupported :: X ()
 setFullscreenSupported = withDisplay $ \dpy -> do
@@ -274,6 +342,24 @@ monitorConfig display displayConfigList
         mainMonitorConfig = fst displayConfigList
         sideMonitorConfig = snd displayConfigList
 
+-- Replace with lists
+replaceLists :: [Char] -> [Char] -> Char -> Char
+replaceLists listSrc listDest subsNow
+        | (isNothing fc) = subsNow
+        | otherwise      = listDest !! (fromJust fc)
+        where
+                fc = elemIndex subsNow listSrc
+
+-- List of superscripts and subscrips
+superScripsNumbers :: String -> Bool -> String
+superScripsNumbers numberString isSup =
+        map (replaceLists listAgainst listNow) numberString
+        where
+                listNow
+                        | (isSup == True) = "⁰¹²³⁴⁵⁶⁷⁸⁹"
+                        | otherwise       = "₀₁₂₃₄₅₆₇₈₉"
+                listAgainst = "0123456789"
+
 -- Scales pixels with a multiplier
 scalePixels :: Integer -> Integer -> Integer
 scalePixels scale inputPx =
@@ -295,7 +381,7 @@ spawnMyBar commandString ppIn confIn = do
         { layoutHook = avoidStruts (layoutHook confIn)
         , logHook    = do
                         logHook confIn
-                        dynamicLogWithPP ppIn { ppOutput = hPutStrLn pipe }
+                        myDynamicLogWithPP ppIn { ppOutput = hPutStrLn pipe }
         }
 
 -- Transforms a list of arguments into a command string
