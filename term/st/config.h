@@ -28,7 +28,7 @@ static const char *colorname[] = {
     "#202020",
 };
 
-static char *font = "Monospace:pixelsize=12:antialias=true:autohint=true";
+static char *font = "Monospace:size=12:antialias=true:autohint=true";
 
 unsigned int defaultfg = 257;
 unsigned int defaultbg = 256;
