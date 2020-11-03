@@ -41,7 +41,7 @@ Config {
                   , "-w", "3" 
                   ] 10
         -- Memory Usage
-        , Run Memory [ "--template", "<total> = <used> / <free>"
+        , Run Memory [ "--template", "<used> / <total>"
                      , "-w", "5"
                      ] 10
         -- Battery and backlight script
