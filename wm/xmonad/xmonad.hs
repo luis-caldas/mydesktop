@@ -79,6 +79,7 @@ myBrowserPersistentFlags = "-P persistent"
 
 -- Floating programs and how they should float
 myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
+                     , ("neoweather", doFloatAt 0.05 0.05)
                      , ("glxgears", doCenterFloat)
                      ]
 
