@@ -74,8 +74,9 @@ myPrint    = "neoscrot"
 myPrintSel = "neoscrot select"
 myClip     = "neoclip"
 
--- Browser persistent flags
+-- Browser flags
 myBrowserPersistentFlags = "-P persistent"
+myBrowserBasicFlags      = "-P basic"
 
 -- Floating programs and how they should float
 myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
@@ -167,6 +168,7 @@ myKeyBindings = [
                 , ("M-u"       , spawn myClip)
                 , ("M-n"       , spawn myBrowser)
                 , ("M-m"       , spawn $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ])
+                , ("M-b"       , spawn $ argumentsToString $ [ myBrowser, myBrowserBasicFlags ])
                 , ("M-<Space>" , spawn myLauncher)
                 -- Killer
                 , ("M-<Backspace>", kill)
