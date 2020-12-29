@@ -47,9 +47,11 @@
 	animation: none !important;
 }
 
+/* Border firefox
 html#main-window:not([inFullscreen]) #browser {
 	margin: 2.5rem !important;
 }
+*/
 
 #fullscr-toggler {
 	display:none !important;
