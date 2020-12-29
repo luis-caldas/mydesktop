@@ -142,7 +142,7 @@ all() {
 
 	# Add newline if there is anything to print
 	if [ ! "${#all_prints[@]}" -eq 0 ]; then
-		echo "${all_prints[@]} "
+		echo "${all_prints[*]}"" "
 	# If there is nothing to show throw an error
 	else
 		exit 1
