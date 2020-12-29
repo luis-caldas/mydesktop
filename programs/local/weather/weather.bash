@@ -7,6 +7,6 @@ AIRPORT="EICK"
 st \
 	-T "neoweather" \
 	-g 150x43\
-	-f mono:size=8 \
+	-f mono:size=12 \
 	-e sh \
 	-c 'curl wttr.in/'"${AIRPORT}"'?3 -s | head -n-3 && read'
