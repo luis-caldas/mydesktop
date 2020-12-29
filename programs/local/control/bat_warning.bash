@@ -44,9 +44,9 @@ show_message() {
 	batt_colour="$COLOUR_GREEN"
 
 	# Check input percentage for battery colour
-	if (( batt_percentage < BAT_COLOUR_PERCENTAGE_RED )); then
+	if (( batt_percentage <= BAT_COLOUR_PERCENTAGE_RED )); then
 		batt_colour="$COLOUR_RED"
-	elif (( batt_percentage < BAT_COLOUR_PERCENTAGE_YELLOW )); then
+	elif (( batt_percentage <= BAT_COLOUR_PERCENTAGE_YELLOW )); then
 		batt_colour="$COLOUR_YELLOW"
 	fi
 

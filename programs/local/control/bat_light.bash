@@ -2,11 +2,42 @@
 
 # {{{ Globals
 
+# Warning popup variables
+BATT_WARNING_PERCENTAGE=25
+BATT_POP_COOLDOWN_TIME=60  # Seconds
+BATT_POPED_CHECK="${HOME}/.cache/batt-pop"
+
+# Battery paths
 BATTERY_PATH="/sys/class/power_supply"
 BATTERY_LIST=( "BAT" "BAT0" "BAT1" "cw2015-battery" )
 
 # }}}
 # {{{ Utils
+
+# Function to get real script dir
+function get_folder() {
+
+    # get the folder in which the script is located
+    SOURCE="${BASH_SOURCE[0]}"
+
+    # resolve $SOURCE until the file is no longer a symlink
+    while [ -h "$SOURCE" ]; do
+
+      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+      SOURCE="$(readlink "$SOURCE")"
+
+      # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+
+    done
+
+    # the final assignment of the directory
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+    # return the directory
+    echo "$DIR"
+}
 
 # Transforms minutes to 
 mins_to_time() {
@@ -91,6 +122,39 @@ backlight() {
 }
 
 # }}}
+# {{{ Warning
+
+warning() {
+
+	# Get the timestamp now
+	timestamp_now="$(date +%s)"
+
+	# Get previous timestamp
+	# If it exists and is within time dont pop anything
+	if [ -f "$BATT_POPED_CHECK" ]; then
+
+		# Extract before time with the file
+		time_before="$(cat "$BATT_POPED_CHECK")"
+
+		# Check if time has not expired
+		if (( timestamp_now < (time_before + BATT_POP_COOLDOWN_TIME) )); then
+			return
+		fi
+
+	fi
+
+	# If we reached here the popup needs to be shown
+	folder_local="$(get_folder)"
+
+	# Update the timer it has been shown
+	echo "$timestamp_now" > "$BATT_POPED_CHECK"
+
+	# Show the popup
+	"${folder_local}/bat_popup.bash"
+
+}
+
+# }}}
 # {{{ Printing
 
 power() {
@@ -99,6 +163,15 @@ power() {
 
 		# Extract all possible battery information
 		var_bat_array=( "$(bat_capacity)" "$(bat_time)" "$(bat_charging)" )
+
+		# Check specific condition to trigger a battery warning
+		# Battery must be discharging and less than a given number
+		if (( "${var_bat_array[0]}" <= "$BATT_WARNING_PERCENTAGE" )); then
+			if [ "${var_bat_array[2]}" = "\\/" ]; then
+				# Show warning in a thread
+				warning &
+			fi
+		fi
 
 		# Create the array that will contain the existing vars
 		var_bat_real=()
