@@ -133,9 +133,11 @@ myBarConfigs = ( myBarConfigFolder ++ "/top.xmobarrc"
                     myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
 
 myBarPP = def { ppCurrent         = wrap ">" ""
+              , ppHidden          = wrap "-" ""
               , ppSep             = "] ["
               , ppHidden          = wrap " " ""
               , ppHiddenNoWindows = wrap " " ""
+              , ppUrgent          = wrap "*" ""
               , ppLayout          = const ""
               } 
 
