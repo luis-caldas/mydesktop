@@ -134,7 +134,6 @@ myBarConfigs = ( myBarConfigFolder ++ "/top.xmobarrc"
 
 myBarPP = def { ppCurrent          = wrap ">" ""
               , ppVisible          = wrap "-" ""
-              , ppVisibleNoWindows = wrap "-" ""
               , ppHidden           = wrap " " ""
               , ppHiddenNoWindows  = wrap " " ""
               , ppUrgent           = wrap "*" ""
