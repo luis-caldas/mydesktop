@@ -132,13 +132,14 @@ myBarConfigs = ( myBarConfigFolder ++ "/top.xmobarrc"
                ) where
                     myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
 
-myBarPP = def { ppCurrent         = wrap ">" ""
-              , ppHidden          = wrap "-" ""
-              , ppSep             = "] ["
-              , ppHidden          = wrap " " ""
-              , ppHiddenNoWindows = wrap " " ""
-              , ppUrgent          = wrap "*" ""
-              , ppLayout          = const ""
+myBarPP = def { ppCurrent          = wrap ">" ""
+              , ppVisible          = wrap "-" ""
+              , ppVisibleNoWindows = wrap "-" ""
+              , ppHidden           = wrap " " ""
+              , ppHiddenNoWindows  = wrap " " ""
+              , ppUrgent           = wrap "*" ""
+              , ppSep              = "] ["
+              , ppLayout           = const ""
               } 
 
 -- Commands that should be run before startup
