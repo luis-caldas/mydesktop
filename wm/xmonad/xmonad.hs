@@ -27,7 +27,6 @@ import Codec.Binary.UTF8.String (encodeString)
 -- Monad
 import Control.Monad (liftM2)
 
-
 -- Data
 import Data.List
 
@@ -133,7 +132,6 @@ myBarConfigs = ( myBarConfigFolder ++ "/top.xmobarrc"
                     myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
 
 myBarPP = def { ppCurrent          = wrap ">" ""
-              , ppVisible          = wrap "-" ""
               , ppHidden           = wrap " " ""
               , ppHiddenNoWindows  = wrap " " ""
               , ppUrgent           = wrap "*" ""
@@ -293,14 +291,14 @@ myDynamicLogString pp = do
 myPprWindowSet :: WorkspaceSort -> [Window] -> PP -> WindowSet -> String
 myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
             map XMonad.StackSet.workspace (XMonad.StackSet.current s : XMonad.StackSet.visible s) ++ XMonad.StackSet.hidden s
-   where this     = XMonad.StackSet.currentTag s
-         visibles = map (XMonad.StackSet.tag . XMonad.StackSet.workspace) (XMonad.StackSet.visible s)
+   where this            = XMonad.StackSet.currentTag s
+         visibles        = map (XMonad.StackSet.tag . XMonad.StackSet.workspace) (XMonad.StackSet.visible s)
+         screenShow      = (\w -> (\_ -> wrap (superScripsNumbers (show $ fromJust $ ((XMonad.StackSet.tag w) `elemIndex` visibles)) False) ""))
 
          fmt w = printer pp $ (windower w)
           where printer | any (\x -> maybe False (== XMonad.StackSet.tag w) (XMonad.StackSet.findTag x s)) urgents  = ppUrgent
                         | XMonad.StackSet.tag w == this                                                             = ppCurrent
-                        | XMonad.StackSet.tag w `elem` visibles && isJust (XMonad.StackSet.stack w)                 = ppVisible
-                        | XMonad.StackSet.tag w `elem` visibles                                                     = liftM2 fromMaybe ppVisible ppVisibleNoWindows
+                        | XMonad.StackSet.tag w `elem` visibles                                                     = screenShow w
                         | isJust (XMonad.StackSet.stack w)                                                          = ppHidden
                         | otherwise                                                                                 = ppHiddenNoWindows
                 windower = (\tag -> XMonad.StackSet.tag tag ++ (superScripsNumbers (show $ (length . XMonad.StackSet.integrate' . XMonad.StackSet.stack) tag) True))
