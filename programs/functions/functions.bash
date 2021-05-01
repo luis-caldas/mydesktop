@@ -7,3 +7,7 @@ function will {
 		sleep 1
 	done
 }
+
+function memdisk {
+	watch -d -c -n1 grep -A1 Dirty /proc/meminfo
+}
