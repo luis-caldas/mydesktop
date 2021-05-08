@@ -80,6 +80,7 @@ myBrowserBasicFlags      = "-P basic"
 -- Floating programs and how they should float
 myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
                      , ("neoweather", doFloatAt 0.05 0.05)
+                     , ("neosysinfo", doFloatAt 0.05 0.05)
                      , ("neobatt", doFloatAt 0.05 0.05)
                      , ("glxgears", doCenterFloat)
                      ]
