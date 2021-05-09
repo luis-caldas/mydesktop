@@ -17,7 +17,23 @@ get_monitors_nitro_file() {
 
 start_nitro_for_head() {
 	head="${1}"
-	nitrogen --set-zoom-fill --head="$head" --random "$PAPE_PATH"
+	main_file_name="${2}"
+	set_type="${3}"
+
+	# check if we are setting random papes
+	if [ "$set_type" == "random" ]; then
+		# set random with fill
+		nitrogen --set-zoom-fill --head="$head" --random "$PAPE_PATH"
+	else
+		# set with given type
+		nitrogen --set-"$set_type" --head="$head" "$PAPE_PATH""/""$main_file_name"
+	fi
+}
+
+start_nitro_for_full() {
+	main_file_name="${1}"
+	set_type="${2}"
+	nitrogen --set-"$set_type" "$PAPE_PATH""/""$main_file_name"
 }
 
 # }}}
@@ -43,13 +59,25 @@ restore() {
 		fi
 	done
 
-	# if no -1 monitor is found, set each missing monitor
+	# try to find any main file
+	main_file="$(find "$PAPE_PATH" -name "main-*.png" -print -quit | head -n1)"
+
+	# extract type of set for nitrogen
+	scale_type="$(basename "$main_file" | sed -n 's/main-\(.*\).png/\1/p')"
+
+	# if it is tiled set fullscreen
+	if [ "$scale_type" == "tiled" ]; then
+		start_nitro_for_full "$head" "main_file" "scale_type"
+	fi
+
+	# if no -1 monitor is found, and it is not tiled
+	# set each missing monitor
 
 	# iterate all the monitors
 	for each_monitor in $(seq 1 "${number_monitors}"); do
 		head=$(( each_monitor - 1 )) # fix xinerama offset
 		if ! echo "$set_monitors" | grep -qE '^'"$head"'$'; then
-			start_nitro_for_head "$head"
+			start_nitro_for_head "$head" "$main_file" "$scale_type"
 		fi
 	done
 }
