@@ -26,14 +26,14 @@ start_nitro_for_head() {
 		nitrogen --set-zoom-fill --head="$head" --random "$PAPE_PATH"
 	else
 		# set with given type
-		nitrogen --set-"$set_type" --head="$head" "$PAPE_PATH""/""$main_file_name"
+		nitrogen --set-"$set_type" --head="$head" "$main_file_name"
 	fi
 }
 
 start_nitro_for_full() {
 	main_file_name="${1}"
 	set_type="${2}"
-	nitrogen --set-"$set_type" "$PAPE_PATH""/""$main_file_name"
+	nitrogen --set-"$set_type" "$main_file_name"
 }
 
 # }}}
@@ -60,14 +60,15 @@ restore() {
 	done
 
 	# try to find any main file
-	main_file="$(find "$PAPE_PATH" -name "main-*.png" -print -quit | head -n1)"
+	main_file="$(find "$PAPE_PATH/papes/" -name "main-*.png" -print -quit)"
 
 	# extract type of set for nitrogen
 	scale_type="$(basename "$main_file" | sed -n 's/main-\(.*\).png/\1/p')"
 
 	# if it is tiled set fullscreen
 	if [ "$scale_type" == "tiled" ]; then
-		start_nitro_for_full "$head" "main_file" "scale_type"
+		start_nitro_for_full "$main_file" "$scale_type"
+		return 0
 	fi
 
 	# if no -1 monitor is found, and it is not tiled
