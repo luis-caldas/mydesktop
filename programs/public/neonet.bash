@@ -1,0 +1,1 @@
+../local/netmag/netmag.bash

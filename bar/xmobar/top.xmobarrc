@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " <action=`neocalendar`>[%date%]</action> }{ [%default:Master%] <action=`neobatt`>%cmd-bat-light%</action><action=`neoweather`>[%EICK%]</action> [%interf%] <action=`neosysinfo`>[%cpu%] %cmd-gov%[%memory%]</action>"
+   , template = " <action=`neocalendar`>[%date%]</action> }{ <action=`pavucontrol`>[%default:Master%]</action> <action=`neobatt`>%cmd-bat-light%</action><action=`neoweather`>[%EICK%]</action> <action=`neonet`>[%interf%]</action> <action=`neosysinfo`>[%cpu%] %cmd-gov%[%memory%]</action>"
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
