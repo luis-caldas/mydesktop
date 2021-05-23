@@ -83,7 +83,7 @@ myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
                      , ("neosysinfo", doFloatAt 0.05 0.05)
                      , ("neobatt", doFloatAt 0.05 0.05)
                      , ("neonet", doFloatAt 0.05 0.05)
-                     , ("gnome-calculator", doCenterFloat)
+                     , ("Gnome-calculator", doFloat)
                      , ("glxgears", doCenterFloat)
                      ]
 
