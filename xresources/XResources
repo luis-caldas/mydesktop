@@ -24,12 +24,12 @@
 #define MY_UNACTIVE_BORDER_COLOUR   #404040
 
 ! General colours
-#define MY_COLOUR_0 #680B0B
-#define MY_COLOUR_1 #0A6219
-#define MY_COLOUR_2 #897106
-#define MY_COLOUR_3 #132C6B
-#define MY_COLOUR_4 #6F249D
-#define MY_COLOUR_5 #155E6D
+#define MY_COLOUR_0 #6B8699
+#define MY_COLOUR_1 #525E6C
+#define MY_COLOUR_2 #A5BBC9
+#define MY_COLOUR_3 #3E3E45
+#define MY_COLOUR_4 #525E6C
+#define MY_COLOUR_5 #A5BBC9
 
 ! Shades
 #define MY_SHADE_0 #000000
