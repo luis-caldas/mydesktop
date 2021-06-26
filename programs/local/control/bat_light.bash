@@ -3,8 +3,8 @@
 # {{{ Globals
 
 # Warning popup variables
-BATT_WARNING_PERCENTAGE=100
-BATT_POP_COOLDOWN_TIME=0  # Seconds
+BATT_WARNING_PERCENTAGE=25
+BATT_POP_COOLDOWN_TIME=60  # Seconds
 BATT_POPED_CHECK="${HOME}/.cache/batt-pop"
 
 # Battery paths
