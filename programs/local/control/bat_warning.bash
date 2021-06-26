@@ -30,6 +30,7 @@ multiply_line() {
 
 show_message() {
 
+	# Get the battery percentage from argument
 	batt_percentage="$1"
 
 	# Conform the percentage to be between 0 and 100
@@ -86,7 +87,11 @@ show_message() {
 }
 
 column_message() {
-	show_message "$1" | pr -2 -t -i" 1"
+	# Iterate battery percentages
+	for percentage in "$@"; do
+		show_message "$percentage" | pr -2 -t -i" 1"
+		echo
+	done
 }
 
 # }}}
@@ -96,14 +101,24 @@ usage() {
 	echo "Usage: $0 {battery-percentage}"
 }
 
-case "$1" in
-	''|*[!0-9]*)
-		usage
-		;;
-	*)
-		column_message "$1"
-		;;
-esac
+# Variable to check if all arguments are ok
+ok_args="yes"
+
+# Iterate arguments
+for each in "$@"; do
+	case "$each" in
+		''|*[!0-9]*)
+			ok_args="no"
+			;;
+	esac
+done
+
+# If all arguments are ok
+if [ "$ok_args" == "yes" ]; then
+	column_message "$@"
+else
+	usage
+fi
 
 # }}}
 

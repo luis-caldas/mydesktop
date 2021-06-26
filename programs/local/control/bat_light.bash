@@ -3,8 +3,8 @@
 # {{{ Globals
 
 # Warning popup variables
-BATT_WARNING_PERCENTAGE=25
-BATT_POP_COOLDOWN_TIME=60  # Seconds
+BATT_WARNING_PERCENTAGE=100
+BATT_POP_COOLDOWN_TIME=0  # Seconds
 BATT_POPED_CHECK="${HOME}/.cache/batt-pop"
 
 # Battery paths
@@ -65,7 +65,6 @@ which_battery() {
 		full_bat_path="${BATTERY_PATH}/${each}"
 		if [ -d "$full_bat_path" ]; then
 			echo "$full_bat_path"
-			break
 		fi
 	done
 }
@@ -77,9 +76,11 @@ battery_present=$(which_battery)
 # {{{ Battery
 
 bat_capacity() {
-	# Check the battery present
-	if [ -n "$battery_present" ]; then 
-		capacity_file="$battery_present""/capacity"
+	battery_now="$1"
+	# Check battery present
+	if [ -n "$battery_now" ]; then
+		# Iterate through the list of the batteries
+		capacity_file="$battery_now""/capacity"
 		if [ -e "$capacity_file" ]; then
 			xargs printf "%3s" < "$capacity_file"
 		fi
@@ -87,8 +88,9 @@ bat_capacity() {
 }
 
 bat_time() {
-	if [ -n "$battery_present" ]; then
-		time_file="$battery_present""/time_to_empty_now"
+	battery_now="$1"
+	if [ -n "$battery_now" ]; then
+		time_file="$battery_now""/time_to_empty_now"
 		if [ -e "$time_file" ]; then
 			time_mins=$(cat "$time_file")
 			converted_time=$(mins_to_time "$time_mins")
@@ -98,13 +100,18 @@ bat_time() {
 }
 
 bat_charging() {
-	if [ -n "$battery_present" ]; then
-		charge_file="$battery_present""/status"
+	battery_now="$1"
+	if [ -n "$battery_now" ]; then
+		charge_file="$battery_now""/status"
 		if [ -e "$charge_file" ]; then
 			if grep -Fxq "Charging" "$charge_file"; then
 				printf "%s" "/\\"
-			else
+			elif grep -Fxq "Full" "$charge_file"; then
+				printf "%s" "##"
+			elif grep -Fxq "Discharging" "$charge_file"; then
 				printf "%s" "\\/"
+			else
+				printf "%s" "??"
 			fi
 		fi
 	fi
@@ -155,37 +162,89 @@ warning() {
 }
 
 # }}}
+# {{{ Envelope
+
+fn_all_bats() {
+	if [ -n "$battery_present" ]; then
+
+		# Get the function name
+		fn_name="$1"
+
+		# Iterate the batteries
+		while IFS= read -r line; do
+
+			# Execute the function for each battery
+			"$fn_name" "$line"
+
+			# Separate with new lines
+			echo
+
+		done <<< "$battery_present"
+
+	fi
+}
+
+# }}}
 # {{{ Printing
 
 power() {
 
 	if [ -n "$battery_present" ]; then
 
-		# Extract all possible battery information
-		var_bat_array=( "$(bat_capacity)" "$(bat_time)" "$(bat_charging)" )
+		# Get all the batteries
+		all_bats=$battery_present
 
-		# Check specific condition to trigger a battery warning
-		# Battery must be discharging and less than a given number
-		if (( "${var_bat_array[0]}" <= "$BATT_WARNING_PERCENTAGE" )); then
-			if [ "${var_bat_array[2]}" = "\\/" ]; then
-				# Show warning in a thread
-				warning &
+		# Variable for warning popup
+		is_under="yes"
+
+		# Iterate the batteries
+		while IFS= read -r each_bat; do
+
+			# Extract all possible battery information
+			var_bat_capacity="$(bat_capacity "$each_bat")"
+			var_bat_time="$(bat_time "$each_bat")"
+			var_bat_charging="$(bat_charging "$each_bat")"
+
+			# Create the array with each data
+			var_bat_array=( "$var_bat_capacity" "$var_bat_time" "$var_bat_charging" )
+
+			# Create the array that will contain the existing vars
+			var_bat_real=()
+
+			# Check if each exist
+			for each in "${var_bat_array[@]}"; do
+				if [ -n "$each" ]; then
+					var_bat_real+=("$each")
+				fi
+			done
+
+			# Check if the array is not empty (no battery info found)
+			if [ ! "${#var_bat_real[@]}" -eq 0 ]; then
+				cover "${var_bat_real[@]}"
 			fi
-		fi
 
-		# Create the array that will contain the existing vars
-		var_bat_real=()
+			# Add new line at the end
+			echo
 
-		# Check if each exist
-		for each in "${var_bat_array[@]}"; do
-			if [ -n "$each" ]; then
-				var_bat_real+=("$each")
+			# Check if all batteries are under a certain level
+			# if so raise the battery warning
+
+			# Check specific condition to trigger a battery warning
+			# Battery must be discharging and less than a given number
+			if (( "${var_bat_capacity}" <= "$BATT_WARNING_PERCENTAGE" )); then
+				if [ "${var_bat_charging}" = "/\\" ]; then
+					is_under="no"
+				fi
+			else
+				is_under="no"
 			fi
-		done
-		
-		# Check if the array is not empty (no battery info found)
-		if [ ! "${#var_bat_real[@]}" -eq 0 ]; then
-			cover "${var_bat_real[@]}"
+
+		done <<< "$all_bats"
+
+		# Check if battery is under the given amount and trigger
+		# warning if it is
+		if [ "$is_under" == "yes" ]; then
+			warning &
 		fi
 
 	fi
@@ -201,17 +260,23 @@ clight() {
 
 all() {
 	# Run printing functions
-	prints=( "$(power)" "$(clight)" )
+	powers="$(power)"
+	light="$(clight)"
 
 	# Start array that will contain all prints
 	all_prints=()
 
 	# Add each successful
-	for each in "${prints[@]}"; do
+	while IFS= read -r each; do
 		if [ -n "$each" ]; then
 			all_prints+=("$each")
 		fi
-	done
+	done <<< "$powers"
+
+	# Add clight if preset
+	if [ -n "$light" ]; then
+		all_prints+=("$light")
+	fi
 
 	# Add newline if there is anything to print
 	if [ ! "${#all_prints[@]}" -eq 0 ]; then
@@ -231,13 +296,13 @@ usage() {
 
 case "$1" in
 	capacity)
-		bat_capacity
+		fn_all_bats bat_capacity
 		;;
 	time)
-		bat_time
+		fn_all_bats bat_time
 		;;
 	charging)
-		bat_charging
+		fn_all_bats bat_charging
 		;;
 	light)
 		backlight

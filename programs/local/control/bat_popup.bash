@@ -29,7 +29,7 @@ function get_folder() {
 folder_now="$(get_folder)"
 
 # Get battery now
-batt_now="$("$folder_now""/bat_light.bash" capacity)"
+batt_now="$("$folder_now""/bat_light.bash" capacity | xargs)"
 
 # Launches a st with given size and the command inside
 st \
