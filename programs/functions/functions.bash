@@ -11,3 +11,7 @@ function will {
 function memdisk {
 	watch -d -c -n1 grep -A1 Dirty /proc/meminfo
 }
+
+function nk {
+	pkill xinit
+}
