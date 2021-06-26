@@ -30,11 +30,21 @@ folder_now="$(get_folder)"
 
 # Get battery now
 batt_now="$("$folder_now""/bat_light.bash" capacity | xargs)"
+read -ra arg_array <<< "$batt_now"
+
+# Run the command for the batteries
+result="$("$folder_now""/bat_warning.bash" "${arg_array[@]}")"
+
+# Count number of lines
+lines_total="$(wc -l <<< "$result")"
+
+# Add extra lines for cursor
+full_lines=$(( lines_total + 3 + 3 ))
 
 # Launches a st with given size and the command inside
 st \
 	-T "neobatt" \
-	-g 70x19 \
+	-g 70x"$full_lines" \
 	-f mono:size=12 \
 	-e sh \
-	-c "$folder_now""/bat_warning.bash"' '"$batt_now"' && read'
+	-c "echo \"${result}\" && read"

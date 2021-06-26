@@ -9,7 +9,7 @@ BATT_POPED_CHECK="${HOME}/.cache/batt-pop"
 
 # Battery paths
 BATTERY_PATH="/sys/class/power_supply"
-BATTERY_LIST=( "BAT" "BAT0" "BAT1" "cw2015-battery" )
+BATTERY_LIST=( "BAT" "BAT0" "BAT1" "BAT2" "cw2015-battery" )
 
 # }}}
 # {{{ Utils
