@@ -1,3 +1,8 @@
+/* Hiding tabs due to new extension Tree Style Tabs */
+#TabsToolbar {
+	visibility: collapse;
+}
+
 #navigator-toolbox {
 	position: relative;
 	z-index: 1;
