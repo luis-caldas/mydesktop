@@ -9,7 +9,7 @@ xset dpms force off
 xset dpms "$TIMEOUT" "$TIMEOUT" "$TIMEOUT"
 
 # lock screen
-slock
+alock -auth pam -bg shade:mono,blur=50,shade=50 -cursor none
 
 # restore the timeout to nothing
 xset dpms 0 0 0 
