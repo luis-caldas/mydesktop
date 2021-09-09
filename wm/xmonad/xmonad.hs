@@ -107,6 +107,10 @@ myWindowSpacing = 5
 -- Steps for changing volume/backlight
 myKeyStep = 2
 
+-- Vomule markers
+myVolJumpLow = 5
+myVolJumpHigh = 100
+
 -- Wokspaces
 myWorkspaces = map show [ 1 .. 9 ]
 
@@ -193,6 +197,8 @@ myKeyBindings = [
                 -- Backlight
                 , ("<XF86MonBrightnessUp>"  , spawn ("light -A " ++ (show myKeyStep)))
                 , ("<XF86MonBrightnessDown>", spawn ("light -U " ++ (show myKeyStep)))
+                , ("M-<XF86MonBrightnessUp>"  , spawn ("light -S " ++ (show myVolJumpHigh)))
+                , ("M-<XF86MonBrightnessDown>", spawn ("light -S " ++ (show myVolJumpLow)))
                 -- Audio Media
                 , ("<XF86AudioPlay>"         , spawn "playerctl play-pause")
                 , ("<XF86AudioNext>"         , spawn "playerctl next")
