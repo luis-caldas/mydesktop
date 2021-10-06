@@ -71,6 +71,9 @@ rofi.color-active: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_0, M
 rofi.color-urgent: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_0, MY_BACKGROUND
 rofi.border: MY_BORDER
 rofi.space: MY_INSIDE_SPACING
+rofi.lines: 10
+rofi.line-margin: 2
+rofi.line-padding: 8
 
 ! XMonad
 xmonad.border: MY_BORDER
