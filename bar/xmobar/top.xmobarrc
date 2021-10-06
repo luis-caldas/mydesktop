@@ -8,7 +8,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " <action=`neocalendar`>[%date%]</action> }{ %lock-show%<action=`neovol`>[%default:Master%]</action> <action=`neobatt`>%cmd-bat-light%</action><action=`neoweather`>[%EICK%]</action> <action=`neonet`>[%interf%]</action> <action=`neosysinfo`>[%cpu%] %cmd-gov%[%memory%]</action>"
+   , template = " <action=`neocalendar`>[%date%]</action> }{ %lock-show%<action=`neovol`>[%default:Master%]</action> <action=`neobatt`>%cmd-bat-light%</action><action=`neoweather`>[%EICK%]</action> <action=`neonet`>[%interf%]</action> <action=`neosysinfo`>[%cpu%] %cmd-gov%[%memory%]</action> "
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
