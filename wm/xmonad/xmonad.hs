@@ -65,7 +65,7 @@ myFontFace = "mono"
 
 -- My applications
 myTerminal = "st"
-myBrowser  = "firefox"
+myBrowser  = "chromium"
 myLauncher = "neorofi"
 myExplorer = "nautilus"
 myMail     = "thunderbird"
@@ -74,8 +74,7 @@ myPrintSel = "neoscrot select"
 myClip     = "neoclip"
 
 -- Browser flags
-myBrowserPersistentFlags = "-P persistent"
-myBrowserBasicFlags      = "-P basic"
+myBrowserPersistentFlags = ""
 
 -- Floating programs and how they should float
 myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
@@ -177,7 +176,6 @@ myKeyBindings = [
                 , ("M-u"       , spawn myClip)
                 , ("M-n"       , spawn myBrowser)
                 , ("M-m"       , spawn $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ])
-                , ("M-b"       , spawn $ argumentsToString $ [ myBrowser, myBrowserBasicFlags ])
                 , ("M-<Space>" , spawn myLauncher)
                 -- Killer
                 , ("M-<Backspace>", kill)
