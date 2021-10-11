@@ -74,7 +74,7 @@ myPrintSel = "neoscrot select"
 myClip     = "neoclip"
 
 -- Browser flags
-myBrowserPersistentFlags = ""
+myBrowserPersistentFlags = "--user-data-dir=$HOME/.config/chromium-persistent/"
 
 -- Floating programs and how they should float
 myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
