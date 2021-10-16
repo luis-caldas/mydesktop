@@ -25,14 +25,14 @@
 
 ! General colours
 #define MY_COLOUR_0  #F25E7A
-#define MY_COLOUR_1  #3C4022
-#define MY_COLOUR_2  #D9D05B
+#define MY_COLOUR_1  #25552D
+#define MY_COLOUR_2  #CEB561
 #define MY_COLOUR_3  #242E30
 #define MY_COLOUR_4  #4A362B
-#define MY_COLOUR_5  #1B1F28
+#define MY_COLOUR_5  #A58495
 ! General colours lighter
 #define MY_COLOUR_6  #F2B6C6
-#define MY_COLOUR_7  #A3A64E
+#define MY_COLOUR_7  #3FA357
 #define MY_COLOUR_8  #E9EA6B
 #define MY_COLOUR_9  #BBF2F2
 #define MY_COLOUR_10 #81755B
