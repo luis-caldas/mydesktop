@@ -24,12 +24,19 @@
 #define MY_UNACTIVE_BORDER_COLOUR   #404040
 
 ! General colours
-#define MY_COLOUR_0 #67646F
-#define MY_COLOUR_1 #838387
-#define MY_COLOUR_2 #ADAAB1
-#define MY_COLOUR_3 #494240
-#define MY_COLOUR_4 #838387
-#define MY_COLOUR_5 #ADAAB1
+#define MY_COLOUR_0  #F25E7A
+#define MY_COLOUR_1  #3C4022
+#define MY_COLOUR_2  #D9D05B
+#define MY_COLOUR_3  #242E30
+#define MY_COLOUR_4  #4A362B
+#define MY_COLOUR_5  #1B1F28
+! General colours lighter
+#define MY_COLOUR_6  #F2B6C6
+#define MY_COLOUR_7  #A3A64E
+#define MY_COLOUR_8  #E9EA6B
+#define MY_COLOUR_9  #BBF2F2
+#define MY_COLOUR_10 #81755B
+#define MY_COLOUR_11 #E3BEAC
 
 ! Shades
 #define MY_SHADE_0 #000000
@@ -56,12 +63,12 @@
 *.color6:  MY_COLOUR_5
 *.color7:  MY_SHADE_1
 *.color8:  MY_SHADE_2
-*.color9:  MY_COLOUR_0
-*.color10: MY_COLOUR_1
-*.color11: MY_COLOUR_2
-*.color12: MY_COLOUR_3
-*.color13: MY_COLOUR_4
-*.color14: MY_COLOUR_5
+*.color9:  MY_COLOUR_6
+*.color10: MY_COLOUR_7
+*.color11: MY_COLOUR_8
+*.color12: MY_COLOUR_9
+*.color13: MY_COLOUR_10
+*.color14: MY_COLOUR_11
 *.color15: MY_SHADE_3
 
 ! Rofi
