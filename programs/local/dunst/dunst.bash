@@ -71,7 +71,6 @@ dunst \
 	-word_wrap \
 	-padding "${new_padding}" \
 	-horizontal_padding "${new_padding}" \
-	-startup_notification \
 	-stack_duplicates \
 	-frame_width "${new_border}" \
 	-frame_color "${colour_border}" \
