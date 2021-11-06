@@ -5,6 +5,7 @@
 -- XMonad
 import XMonad
 import XMonad.Actions.SpawnOn
+import XMonad.Actions.Warp
 import XMonad.Layout.NoBorders
 import XMonad.Layout.Spacing
 import XMonad.Layout.LayoutModifier
@@ -55,7 +56,7 @@ xrCommand               = ("xrdb", ["-query"])
 xrVarBorder             = "xmonad.border"
 xrVarSpace              = "xmonad.space"
 xrVarBorderColour       = "xmonad.border-colour"
-xrVarBorderColourActive = "xmonad.border-colour-active" 
+xrVarBorderColourActive = "xmonad.border-colour-active"
 xrVarBarBack            = "xmobar.background"
 xrVarBarFore            = "xmobar.foreground"
 
@@ -144,7 +145,7 @@ myBarPP = def { ppCurrent          = wrap ">" ""
               , ppUrgent           = wrap "*" ""
               , ppSep              = "] ["
               , ppLayout           = const ""
-              } 
+              }
 
 -- Commands that should be run before startup
 myStartupCommands = [ -- Cursor setting
@@ -170,7 +171,7 @@ myApplicationStartLayouts = [ ( "M-o", do
 -- {{{ Keybindings
 
 -- Launching
-myKeyBindings = [ 
+myKeyBindings = [
                 -- Spawners
                   ("M-<Return>", spawn $ argumentsToString $ myTerminalArgs $ myTerminal)
                 , ("M-u"       , spawn myClip)
@@ -214,7 +215,9 @@ myKeyBindings = [
                 , ("M-S-l", spawn "loginctl lock-session")
                 ] ++
                 -- Displays shortcut
-                [ (("M" ++ shift ++ key), screenWorkspace sc >>= flip whenJust (windows . f))
+                [ (("M" ++ shift ++ key), do
+                                screenWorkspace sc >>= flip whenJust (windows . f)
+                                XMonad.Actions.Warp.warpToScreen sc (1/2) (1/2))
                     | (key, sc) <- zip (map ("-"++) ["q", "w", "e", "r"]) [0..]
                     , (f, shift) <- [ (XMonad.StackSet.view, "")
                                     , (\f -> XMonad.StackSet.view f . XMonad.StackSet.shift f, "-S")
@@ -237,9 +240,9 @@ myRemoveBindings = [ "M-S-<Return>"
                  , "M-."
                  , "M-S-/"
                  , "M-?"
-                 ] ++ 
+                 ] ++
                  (map ("M-"++) ["h", "j", "k", "l"]) ++
-                 [ "M-" ++ s ++ [n] 
+                 [ "M-" ++ s ++ [n]
                  | s <- ["", "S-"]
                  , n <- (['q', 'w', 'e', 'r'] ++ ['1' .. '9'])
                  ]
@@ -342,7 +345,7 @@ instance SetsAmbiguous MyBorderAmbiguity where
                         px <= 0, py <= 0,
                         wx + px >= 1, wy + py >= 1]
 
--- Receives a DISPLAY string and returns one of the items of the 
+-- Receives a DISPLAY string and returns one of the items of the
 -- given tuple
 monitorConfig :: String -> (String, String) -> String
 monitorConfig display displayConfigList
@@ -379,7 +382,7 @@ scalePixels scale inputPx =
 
 -- Creates a spacing that is scalable
 spacingRawScalable :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
-spacingRawScalable borderPx scalingFactor = 
+spacingRawScalable borderPx scalingFactor =
     spacingRaw False borderScaled True borderScaled True
     where
         borderSizeScaled = scalePixels scalingFactor borderPx
@@ -389,7 +392,7 @@ spacingRawScalable borderPx scalingFactor =
 spawnMyBar :: LayoutClass l Window => String -> PP -> XConfig l -> IO (XConfig (ModifiedLayout AvoidStruts l))
 spawnMyBar commandString ppIn confIn = do
     pipe <- spawnPipe commandString
-    return $ docks $ confIn 
+    return $ docks $ confIn
         { layoutHook = avoidStruts (layoutHook confIn)
         , logHook    = do
                         logHook confIn
@@ -398,7 +401,7 @@ spawnMyBar commandString ppIn confIn = do
 
 -- Transforms a list of arguments into a command string
 argumentsToString :: [String] -> String
-argumentsToString argsList = 
+argumentsToString argsList =
     intercalate " " argsList
 
 -- Adds double quotes to the beginning and end of a string
@@ -409,8 +412,8 @@ addQuotes stringIn =
 -- Extract tuple of ':' separate data from a line
 extractTupleLine :: String -> (String, String)
 extractTupleLine lineInput =
-    (name, value) 
-    where    
+    (name, value)
+    where
         fragmented = Data.Text.splitOn (Data.Text.pack ":") (Data.Text.pack lineInput)
         name = Data.Text.unpack $ Data.Text.strip $ head fragmented
         value = Data.Text.unpack $ Data.Text.strip $ fullString
@@ -419,9 +422,9 @@ extractTupleLine lineInput =
 
 -- Transforms a xresources string into a xresources data
 xrdbParse :: String -> Data.Map.Map String String
-xrdbParse stringInput = 
+xrdbParse stringInput =
     Data.Map.fromList dataList
-    where 
+    where
         dataList = map extractTupleLine listLines
             where
                 listLines = lines stringInput
@@ -430,12 +433,12 @@ xrdbParse stringInput =
 lookMap :: Data.Map.Map String String -> String -> String -> String
 lookMap mapInput mapSearch defaultVal =
     fromMaybe defaultVal lookedVar
-    where 
+    where
         lookedVar = Data.Map.lookup mapSearch mapInput
 
 -- Transforms string to integer
 mToInteger :: String -> Integer
-mToInteger strIn = 
+mToInteger strIn =
     read strIn::Integer
 
 -- }}}
@@ -451,7 +454,7 @@ main = do
     let scaling = mToInteger scalingRaw
 
     -- Get the display and the path for the selected display
-    display <- getEnv displayVar 
+    display <- getEnv displayVar
 
     -- Extract all the xresource data
     xrdbString <- runProcessWithInput (fst xrCommand) (snd xrCommand) ""
@@ -495,8 +498,8 @@ main = do
             , handleEventHook    = handleEventHook def <+> fullscreenEventHook
             , startupHook        = startupHook def <+> setFullscreenSupported
             , workspaces         = myWorkspaces
-            } 
-  
+            }
+
     -- Add my key bindings
     xmobarSpawner <- spawnMyBar myBarCommandBottom myBarPP $ ewmh $ myDefaultConfig
                  `removeKeysP`     myRemoveBindings
