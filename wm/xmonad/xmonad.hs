@@ -112,7 +112,9 @@ myVolJumpLow = 5
 myVolJumpHigh = 100
 
 -- Wokspaces
+myRawWorkspaces = [ 1 .. 9 ]
 myWorkspaces = map show [ 1 .. 9 ]
+myDisplays = [ "q", "w", "e", "r" ]
 
 -- Mod key
 myModKey = mod1Mask -- alt
@@ -218,13 +220,13 @@ myKeyBindings = [
                 [ (("M" ++ shift ++ key), do
                                 screenWorkspace sc >>= flip whenJust (windows . f)
                                 XMonad.Actions.Warp.warpToScreen sc (1/2) (1/2))
-                    | (key, sc) <- zip (map ("-"++) ["q", "w", "e", "r"]) [0..]
+                    | (key, sc) <- zip (map ("-"++) myDisplays) [ 0 .. ]
                     , (f, shift) <- [ (XMonad.StackSet.view, "")
                                     , (\f -> XMonad.StackSet.view f . XMonad.StackSet.shift f, "-S")
                                     ]] ++
                 -- Workspaces shortcuts
                 [ (("M" ++ shift ++ key), windows $ f i)
-                    | (i, key) <- zip myWorkspaces (map ("-"++) (map show [1..9]))
+                    | (i, key) <- zip myWorkspaces (map ("-"++) myWorkspaces)
                     , (f, shift) <- [ (XMonad.StackSet.greedyView, "")
                                     , (\i -> XMonad.StackSet.greedyView i . XMonad.StackSet.shift i, "-S")
                                     ]] ++
@@ -242,9 +244,9 @@ myRemoveBindings = [ "M-S-<Return>"
                  , "M-?"
                  ] ++
                  (map ("M-"++) ["h", "j", "k", "l"]) ++
-                 [ "M-" ++ s ++ [n]
+                 [ "M-" ++ s ++ n
                  | s <- ["", "S-"]
-                 , n <- (['q', 'w', 'e', 'r'] ++ ['1' .. '9'])
+                 , n <- (myDisplays ++ myWorkspaces)
                  ]
 
 -- Floating windows of name when launched
@@ -303,13 +305,22 @@ myPprWindowSet :: WorkspaceSort -> [Window] -> PP -> WindowSet -> String
 myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
             map XMonad.StackSet.workspace (XMonad.StackSet.current s : XMonad.StackSet.visible s) ++ XMonad.StackSet.hidden s
    where this            = XMonad.StackSet.currentTag s
-         visibles        = map (XMonad.StackSet.tag . XMonad.StackSet.workspace) (XMonad.StackSet.visible s)
-         screenShow      = (\w -> (\_ -> wrap (superScripsNumbers (show $ fromJust $ ((XMonad.StackSet.tag w) `elemIndex` visibles)) False) ""))
+         currentScreen   = XMonad.StackSet.current s
+         allVisible      = XMonad.StackSet.visible s
+         visibleIDs      = map (XMonad.StackSet.tag . XMonad.StackSet.workspace) allVisible
+         allScreens      = [currentScreen] ++ allVisible
+         allScreenIDs    = map (XMonad.StackSet.tag . XMonad.StackSet.workspace) allScreens
+         screenNrs       = map (XMonad.StackSet.screen) allScreens
+
+         screenShow      = \w -> \_ -> wrap (underScript w) ""
+                 where tagIndex       = \w -> fromMaybe (0) $ elemIndex (XMonad.StackSet.tag w) allScreenIDs
+                       relativeScreen = \w -> toInteger $ screenNrs!!(tagIndex w)
+                       underScript    = \w -> superScripsNumbers (show $ relativeScreen w) False
 
          fmt w = printer pp $ (windower w)
           where printer | any (\x -> maybe False (== XMonad.StackSet.tag w) (XMonad.StackSet.findTag x s)) urgents  = ppUrgent
                         | XMonad.StackSet.tag w == this                                                             = ppCurrent
-                        | XMonad.StackSet.tag w `elem` visibles                                                     = screenShow w
+                        | XMonad.StackSet.tag w `elem` visibleIDs                                                   = screenShow w
                         | isJust (XMonad.StackSet.stack w)                                                          = ppHidden
                         | otherwise                                                                                 = ppHiddenNoWindows
                 windower = (\tag -> XMonad.StackSet.tag tag ++ (superScripsNumbers (show $ (length . XMonad.StackSet.integrate' . XMonad.StackSet.stack) tag) True))
