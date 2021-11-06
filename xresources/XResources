@@ -75,6 +75,16 @@ rofi.lines: 10
 rofi.line-margin: 2
 rofi.line-padding: 8
 
+! Dunst
+dunst.border: MY_BORDER
+dunst.space: MY_OUTSIDE_SPACING
+dunst.padding: MY_INSIDE_SPACING
+dunst.border-colour: MY_UNACTIVE_BORDER_COLOUR
+dunst.lbackground: MY_BACKGROUND
+dunst.nbackground: MY_SHADE_0
+dunst.cbackground: MY_SHADE_1
+dunst.foreground: MY_FOREGROUND
+
 ! XMonad
 xmonad.border: MY_BORDER
 xmonad.space: MY_OUTSIDE_SPACING
