@@ -77,5 +77,6 @@ dunst \
 	-lb "${colour_lbackground}" -lf "${colour_foreground}" \
 	-nb "${colour_nbackground}" -nf "${colour_foreground}" \
 	-cb "${colour_cbackground}" -cf "${colour_foreground}" \
+	-lto "3s" -nto "5s" -cto "5s" \
 	-sep_height "${new_border}"
 
