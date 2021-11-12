@@ -76,6 +76,7 @@ myClip     = "neoclip"
 
 -- Browser flags
 myBrowserPersistentFlags = "--user-data-dir=$HOME/.config/chromium-persistent/"
+myBrowserBasicFlags = "--user-data-dir=$HOME/.config/chromium-basic/"
 
 -- Floating programs and how they should float
 myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
@@ -179,6 +180,7 @@ myKeyBindings = [
                 , ("M-u"       , spawn myClip)
                 , ("M-n"       , spawn myBrowser)
                 , ("M-m"       , spawn $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ])
+                , ("M-b"       , spawn $ argumentsToString $ [ myBrowser, myBrowserBasicFlags ])
                 , ("M-<Space>" , spawn myLauncher)
                 -- Killer
                 , ("M-<Backspace>", kill)
