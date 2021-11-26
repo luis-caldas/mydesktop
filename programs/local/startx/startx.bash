@@ -3,8 +3,8 @@
 function main() {
 
     # set proper files
-    authority_file="${HOME}/.Xauthority"
-    init_file="${HOME}/.xinitrc"
+    authority_file="${HOME}""/.config/xorg/XAuthority"
+    init_file="${HOME}""/.xinitrc"
 
     # get the current tty
     tty=$(tty)
