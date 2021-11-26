@@ -51,7 +51,7 @@ envVarsSet = [ ("APPLICATION_UNICODE", "true")
 scalingVarName = "GDK_SCALE"
 
 -- XResources
-xrCommand               = ("/usr/bin/env xrdb", ["-query"])
+xrCommand               = ("xrdb", ["-query"])
 
 xrVarBorder             = "xmonad.border"
 xrVarSpace              = "xmonad.space"
@@ -65,10 +65,10 @@ myFontSize = 12
 myFontFace = "mono"
 
 -- My applications
-myTerminal = "/usr/bin/env st"
-myBrowser  = "/usr/bin/env chromium"
+myTerminal = "st"
+myBrowser  = "chromium"
 myLauncher = "neorofi"
-myExplorer = "/usr/bin/env nautilus"
+myExplorer = "nautilus"
 myMail     = "thunderbird"
 myPrint    = "neoscrot"
 myPrintSel = "neoscrot select"
