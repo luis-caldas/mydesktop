@@ -51,7 +51,7 @@ envVarsSet = [ ("APPLICATION_UNICODE", "true")
 scalingVarName = "GDK_SCALE"
 
 -- XResources
-xrCommand               = ("/usr/bin/env/xrdb", ["-query"])
+xrCommand               = ("/usr/bin/env xrdb", ["-query"])
 
 xrVarBorder             = "xmonad.border"
 xrVarSpace              = "xmonad.space"
