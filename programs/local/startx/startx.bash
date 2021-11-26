@@ -17,7 +17,7 @@ function main() {
     cd "${HOME}" || exit 1
 
     # execute xinit with the new files
-    exec xinit "$init_file" -- "$vtarg" -auth "$authority_file" -logfile "$(mktemp)" 2>&1 | logger -t "neox"
+    exec xinit "$init_file" -- "$vtarg" -auth "$authority_file" -logfile "/dev/null" 2>&1 | logger -t "neox"
 
 }
 
