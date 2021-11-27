@@ -79,6 +79,7 @@ rofi.line-padding: 8
 dunst.border: MY_BORDER
 dunst.space: MY_OUTSIDE_SPACING
 dunst.padding: MY_INSIDE_SPACING
+dunst.min-icon-size: 48
 dunst.border-colour: MY_UNACTIVE_BORDER_COLOUR
 dunst.lbackground: MY_BACKGROUND
 dunst.nbackground: MY_SHADE_0

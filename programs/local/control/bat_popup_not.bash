@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+THEME="light"
+
 # Function to get current folder
 function get_folder() {
 
@@ -42,7 +44,7 @@ function get_icon() {
 	if [ "$battery_ratio" -ge 100 ]; then battery_ratio=90; fi
 
 	# Get the filename of icon
-	filename="battery-level-${battery_ratio}-symbolic.png"
+	filename="battery-level-${battery_ratio}-symbolic-${THEME}.svg"
 
 	# Echo the full path of the icon
 	echo "${ICONS_PATH}/${filename}"

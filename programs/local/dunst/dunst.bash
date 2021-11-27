@@ -45,6 +45,7 @@ scaling_factor=$(extract_scaling_factor)
 border=$(extract "border")
 spacing=$(extract "space")
 padding=$(extract "padding")
+min_icon_size=$(extract "min-icon-size")
 colour_border=$(extract "border-colour")
 colour_foreground=$(extract "foreground")
 colour_lbackground=$(extract "lbackground")
@@ -56,11 +57,13 @@ new_float_width=$(echo "$scaling_factor""*""$SIZE" | bc)
 new_float_border=$(echo "$scaling_factor""*""$border" | bc)
 new_float_space=$(echo "$scaling_factor""*""$spacing" | bc)
 new_float_padding=$(echo "$scaling_factor""*""$padding" | bc)
+new_float_min_icon_size=$(echo "$scaling_factor""*""$min_icon_size" | bc)
 
 new_width=${new_float_width%.*}
 new_border=${new_float_border%.*}
 new_space=${new_float_space%.*}
 new_padding=${new_float_padding%.*}
+new_min_icon_size=${new_float_min_icon_size%.*}
 
 # run dunst with my custom config
 dunst \
@@ -78,6 +81,7 @@ dunst \
 	-nb "${colour_nbackground}" -nf "${colour_foreground}" \
 	-cb "${colour_cbackground}" -cf "${colour_foreground}" \
 	-lto "3s" -nto "5s" -cto "5s" \
+	-min_icon_size "${new_min_icon_size}" \
 	-sep_height "${new_border}" \
 	"$@"
 
