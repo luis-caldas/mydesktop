@@ -3,7 +3,7 @@
 function main() {
 
 	# Variable reasignment
-	newScale="$1"
+	[ -n "$1" ] && newScale="$1"
 
 	# Set proper files
 	authority_file="${HOME}""/.config/xorg/XAuthority"
@@ -23,7 +23,7 @@ function main() {
 	if [ -n "$newScale" ]; then
 		systemctl --user set-environment NEW_SCALE="$newScale"
 	else
-		systemctl --user unset-environment
+		systemctl --user unset-environment NEW_SCALE
 	fi
 
 	# Execute xinit with the new files
