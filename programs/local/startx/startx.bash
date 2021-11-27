@@ -22,6 +22,8 @@ function main() {
 	# Export variable if it exists
 	if [ -n "$newScale" ]; then
 		systemctl --user set-environment NEW_SCALE="$newScale"
+	else
+		systemctl --user unset-environment
 	fi
 
 	# Execute xinit with the new files
