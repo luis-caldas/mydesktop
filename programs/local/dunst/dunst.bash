@@ -51,7 +51,7 @@ colour_lbackground=$(extract "lbackground")
 colour_nbackground=$(extract "nbackground")
 colour_cbackground=$(extract "cbackground")
 
-# calculate the width and dpi with the scaling factor
+# Calculate the width and dpi with the scaling factor
 new_float_width=$(echo "$scaling_factor""*""$SIZE" | bc)
 new_float_border=$(echo "$scaling_factor""*""$border" | bc)
 new_float_space=$(echo "$scaling_factor""*""$spacing" | bc)
@@ -78,5 +78,6 @@ dunst \
 	-nb "${colour_nbackground}" -nf "${colour_foreground}" \
 	-cb "${colour_cbackground}" -cf "${colour_foreground}" \
 	-lto "3s" -nto "5s" -cto "5s" \
-	-sep_height "${new_border}"
+	-sep_height "${new_border}" \
+	"$@"
 

@@ -80,9 +80,9 @@ dunst.border: MY_BORDER
 dunst.space: MY_OUTSIDE_SPACING
 dunst.padding: MY_INSIDE_SPACING
 dunst.border-colour: MY_UNACTIVE_BORDER_COLOUR
-dunst.lbackground: MY_COLOUR_4
-dunst.nbackground: MY_COLOUR_2
-dunst.cbackground: MY_COLOUR_1
+dunst.lbackground: MY_BACKGROUND
+dunst.nbackground: MY_SHADE_0
+dunst.cbackground: MY_SHADE_1
 dunst.foreground: MY_FOREGROUND
 
 ! XMonad

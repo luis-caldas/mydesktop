@@ -39,7 +39,7 @@ function get_folder() {
     echo "$DIR"
 }
 
-# Transforms minutes to 
+# Transforms minutes to
 mins_to_time() {
 	# Time divider
 	divider=":"
@@ -157,7 +157,8 @@ warning() {
 	echo "$timestamp_now" > "$BATT_POPED_CHECK"
 
 	# Show the popup
-	"${folder_local}/bat_popup.bash"
+	#"${folder_local}/bat_popup.bash"
+	"${folder_local}/bat_popup_not.bash"
 
 }
 
