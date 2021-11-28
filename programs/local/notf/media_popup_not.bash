@@ -54,11 +54,11 @@ function main() {
 	icon="stop"
 	message="Stopped"
 	if [ "${1}" == "pp" ]; then
-		icon="pause"
-		message="Paused"
-		if [ "$status_now" == "Paused" ]; then
-			icon="start"
-			message="Playing"
+		icon="start"
+		message="Playing"
+		if [ "$status_now" == "Playing" ]; then
+			icon="pause"
+			message="Paused"
 		fi
 	fi
 
