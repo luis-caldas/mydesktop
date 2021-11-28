@@ -32,21 +32,21 @@ folder_now="$(get_folder)"
 
 # Get the default sink from pulseaudio
 function get_sink() {
-    pacmd stat | awk -F": " '/^Default sink name: /{print $2}'
+	pacmd stat | awk -F": " '/^Default sink name: /{print $2}'
 }
 
 # Get volume from a given sink
 function get_sink_vol() {
-    pacmd list-sinks |
-        awk '/^\s+name: /{indefault = $2 == "<'"$1"'>"}
-            /^\s+volume: / && indefault {print $5; exit}' | tr -d '%'
+	pacmd list-sinks |
+		awk '/^\s+name: /{indefault = $2 == "<'"$1"'>"}
+		     /^\s+volume: / && indefault {print $5; exit}' | tr -d '%'
 }
 
 # Get muted state from a given sink
 function get_sink_muted() {
-    pacmd list-sinks |
-        awk '/^\s+name: /{indefault = $2 == "<'"$1"'>"}
-            /^\s+muted: / && indefault {print $2; exit}' | tr -d '%'
+	pacmd list-sinks |
+		awk '/^\s+name: /{indefault = $2 == "<'"$1"'>"}
+		     /^\s+muted: / && indefault {print $2; exit}' | tr -d '%'
 }
 
 # Create icon name

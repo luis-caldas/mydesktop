@@ -192,26 +192,71 @@ myKeyBindings = [
                 , ("M-'", sendMessage Expand)
                 , ("M-;", sendMessage Shrink)
                 -- Volume
-                , ("<XF86AudioMute>"       , spawn ("pactl set-sink-mute @DEFAULT_SINK@ toggle" ++ " && " ++ "volumeshow"))
-                , ("<XF86AudioLowerVolume>", spawn ("pactl set-sink-volume @DEFAULT_SINK@ -" ++ (show myKeyStep) ++ "%"))
-                , ("<XF86AudioRaiseVolume>", spawn ("pactl set-sink-volume @DEFAULT_SINK@ +" ++ (show myKeyStep) ++ "%"))
+                , ("<XF86AudioMute>", do
+                        spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+                        spawn "volume-show"
+                  )
+                , ("<XF86AudioLowerVolume>", do
+                        spawn ("pactl set-sink-volume @DEFAULT_SINK@ -" ++ (show myKeyStep) ++ "%")
+                        spawn "volume-show"
+                  )
+                , ("<XF86AudioRaiseVolume>", do
+                        spawn ("pactl set-sink-volume @DEFAULT_SINK@ +" ++ (show myKeyStep) ++ "%")
+                        spawn "volume-show"
+                  )
                 -- Backlight
-                , ("<XF86MonBrightnessUp>"  , spawn ("light -A " ++ (show myKeyStep)))
-                , ("<XF86MonBrightnessDown>", spawn ("light -U " ++ (show myKeyStep)))
-                , ("M-<XF86MonBrightnessUp>"  , spawn ("light -S " ++ (show myVolJumpHigh)))
-                , ("M-<XF86MonBrightnessDown>", spawn ("light -S " ++ (show myVolJumpLow)))
+                , ("<XF86MonBrightnessUp>", do
+                        spawn ("light -A " ++ (show myKeyStep))
+                        spawn "light-show"
+                  )
+                , ("<XF86MonBrightnessDown>", do
+                        spawn ("light -U " ++ (show myKeyStep))
+                        spawn "light-show"
+                  )
+                , ("M-<XF86MonBrightnessUp>", do
+                        spawn ("light -S " ++ (show myVolJumpHigh))
+                        spawn "light-show"
+                  )
+                , ("M-<XF86MonBrightnessDown>", do
+                        spawn ("light -S " ++ (show myVolJumpLow))
+                        spawn "light-show"
+                  )
                 -- Audio Media
-                , ("<XF86AudioPlay>"         , spawn "playerctl play-pause")
-                , ("<XF86AudioNext>"         , spawn "playerctl next")
-                , ("<XF86AudioPrev>"         , spawn "playerctl previous")
-                , ("<XF86AudioStop>"         , spawn "playerctl stop")
-                , ("M-<XF86AudioMute>"       , spawn "playerctl position 0")
-                , ("M-<XF86AudioLowerVolume>", spawn ("playerctl position -" ++ (show myKeyStep)))
-                , ("M-<XF86AudioRaiseVolume>", spawn ("playerctl position +" ++ (show myKeyStep)))
+                , ("<XF86AudioPlay>", do
+                        spawn "playerctl play-pause"
+                        spawn "media-show"
+                  )
+                , ("<XF86AudioStop>", do
+                        spawn "playerctl stop"
+                        spawn "media-show"
+                  )
+                , ("<XF86AudioNext>", do
+                        spawn "playerctl next"
+                        spawn "icon-show media-skip-forward.svg"
+                  )
+                , ("<XF86AudioPrev>", do
+                        spawn "playerctl previous"
+                        spawn "icon-show media-skip-backward.svg"
+                  )
+                , ("M-<XF86AudioMute>", do
+                        spawn "playerctl position 0"
+                        spawn "icon-show media-seek-backward.svg"
+                  )
+                , ("M-<XF86AudioLowerVolume>", do
+                        spawn ("playerctl position -" ++ (show myKeyStep))
+                        spawn "icon-show media-seek-backward.svg"
+                  )
+                , ("M-<XF86AudioRaiseVolume>", do
+                        spawn ("playerctl position +" ++ (show myKeyStep))
+                        spawn "icon-show media-seek-forward.svg"
+                  )
                 -- Other Media
                 , ("<XF86Explorer>", spawn myExplorer)
                 , ("<XF86Mail>"    , spawn myMail)
-                , ("<Print>"       , spawn myPrint)
+                , ("<Print>"       , do
+                        spawn myPrint
+                        spawn "icon-show camera-photo.svg Screenshot"
+                  )
                 , ("M-<Print>"     , spawn myPrintSel)
                 -- Lock
                 , ("M-S-l", spawn "loginctl lock-session")
