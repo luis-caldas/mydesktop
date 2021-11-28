@@ -20,6 +20,7 @@ import XMonad.Util.EZConfig
 import XMonad.Util.Run
 
 -- System
+import System.Exit
 import System.Environment
 
 -- Codec
@@ -84,7 +85,7 @@ myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
                      , ("neobatt", doFloatAt 0.05 0.05)
                      , ("neonet", doFloatAt 0.05 0.05)
                      , ("neovol", doFloatAt 0.05 0.05)
-                     , ("Calculator", doFloat)
+                     , ("Calculator", doCenterFloat)
                      , ("glxgears", doCenterFloat)
                      ]
 
@@ -260,6 +261,8 @@ myKeyBindings = [
                 , ("M-<Print>"     , spawn myPrintSel)
                 -- Lock
                 , ("M-S-l", spawn "loginctl lock-session")
+                -- Suicide
+                , ("M-S-C-k", io (exitWith ExitSuccess))
                 ] ++
                 -- Displays shortcut
                 [ (("M" ++ shift ++ key), do
