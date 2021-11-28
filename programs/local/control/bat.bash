@@ -118,17 +118,6 @@ bat_charging() {
 }
 
 # }}}
-# {{{ Backlight
-
-backlight() {
-	# Check if light throws an error (no backlight found)
-	if ! { light 2>&1 >&3 3>&- | grep '^' >&2; } 3>&1 3>/dev/null 2>/dev/null; then
-		light=$(light)
-		printf "%3.0f" "$light"
-	fi
-}
-
-# }}}
 # {{{ Warning
 
 warning() {
@@ -158,7 +147,7 @@ warning() {
 
 	# Show the popup
 	#"${folder_local}/bat_popup.bash"
-	"${folder_local}/bat_popup_not.bash"
+	"${folder_local}/../notf/bat_popup_not.bash"
 
 }
 
@@ -252,17 +241,9 @@ power() {
 
 }
 
-clight() {
-	backlight_result="$(backlight)"
-	if [ -n "$backlight_result" ]; then
-		cover "$backlight_result"
-	fi
-}
-
 all() {
 	# Run printing functions
 	powers="$(power)"
-	light="$(clight)"
 
 	# Start array that will contain all prints
 	all_prints=()
@@ -273,11 +254,6 @@ all() {
 			all_prints+=("$each")
 		fi
 	done <<< "$powers"
-
-	# Add clight if preset
-	if [ -n "$light" ]; then
-		all_prints+=("$light")
-	fi
 
 	# Add newline if there is anything to print
 	if [ ! "${#all_prints[@]}" -eq 0 ]; then
@@ -292,7 +268,7 @@ all() {
 # {{{ Main
 
 usage() {
-	echo "Usage: $0 {capacity,time,charging,light,power,backlight,all}"
+	echo "Usage: $0 {capacity,time,charging,power,all}"
 }
 
 case "$1" in
@@ -305,14 +281,8 @@ case "$1" in
 	charging)
 		fn_all_bats bat_charging
 		;;
-	light)
-		backlight
-		;;
 	power)
 		power
-		;;
-	backlight)
-		clight
 		;;
 	all)
 		all

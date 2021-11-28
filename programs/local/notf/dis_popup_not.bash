@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+ICON_NAME="display-brightness.svg"
+POPUP_ID="30081"
+
 # Function to get current folder
 function get_folder() {
 
@@ -28,23 +31,24 @@ function get_folder() {
 # Get our folder
 folder_now="$(get_folder)"
 
-# Get battery now
-batt_now="$("$folder_now""/bat.bash" capacity | xargs)"
-read -ra arg_array <<< "$batt_now"
+function main() {
 
-# Run the command for the batteries
-result="$("$folder_now""/bat_warning.bash" "${arg_array[@]}")"
+	# Get light
+	light_now=$("${folder_now}/../control/light.bash" light)
 
-# Count number of lines
-lines_total="$(wc -l <<< "$result")"
+	# Check if not empty
+	if [ -n "$light_now" ]; then
 
-# Add extra lines for cursor
-full_lines=$(( lines_total + 3 + 3 ))
+		# Get correct colour of icon
+		icon=$("${folder_now}/colour_icon.bash" "${ICON_NAME}")
 
-# Launches a st with given size and the command inside
-st \
-	-T "neobatt" \
-	-g 70x"$full_lines" \
-	-f mono:size=12 \
-	-e sh \
-	-c "echo \"${result}\" && read"
+		# If not empty send notification
+		dunstify -i "${icon}" "Brightness - ${light_now} %" -r "${POPUP_ID}" -t 1500
+
+	else
+		exit 1
+	fi
+
+}
+
+main "$@"

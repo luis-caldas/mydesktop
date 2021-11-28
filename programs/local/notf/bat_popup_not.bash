@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-THEME="light"
-
 # Function to get current folder
 function get_folder() {
 
@@ -44,10 +42,10 @@ function get_icon() {
 	if [ "$battery_ratio" -ge 100 ]; then battery_ratio=90; fi
 
 	# Get the filename of icon
-	filename="battery-level-${battery_ratio}-symbolic-${THEME}.svg"
+	filename="battery-level-${battery_ratio}.svg"
 
-	# Echo the full path of the icon
-	echo "${ICONS_PATH}/${filename}"
+	# Get filename from colour changed
+	"${folder_now}/colour_icon.bash" "${filename}"
 
 }
 
@@ -55,7 +53,7 @@ function get_icon() {
 folder_now="$(get_folder)"
 
 # Get battery now
-batt_now="$("$folder_now""/bat_light.bash" capacity | xargs)"
+batt_now="$("$folder_now""/../control/bat.bash" capacity | xargs)"
 read -ra arg_array <<< "$batt_now"
 
 # Battery counter
@@ -63,7 +61,7 @@ batt_count=1
 
 # Iterate the array of batteries
 for each_batt in "${arg_array[@]}"; do
-	icon_name=$(get_icon "$each_batt")
-	notify-send -i "${folder_now}/${icon_name}" "Battery - ${batt_count} @ ${each_batt}%"
+	icon_path=$(get_icon "$each_batt")
+	dunstify -i "${icon_path}" "Battery - ${batt_count} @ ${each_batt}%"
 	batt_count=$(( batt_count + 1 ))
 done

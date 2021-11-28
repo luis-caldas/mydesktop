@@ -192,7 +192,7 @@ myKeyBindings = [
                 , ("M-'", sendMessage Expand)
                 , ("M-;", sendMessage Shrink)
                 -- Volume
-                , ("<XF86AudioMute>"       , spawn "pactl set-sink-mute   @DEFAULT_SINK@ toggle")
+                , ("<XF86AudioMute>"       , spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle" ++ " && " ++ "volumeshow")
                 , ("<XF86AudioLowerVolume>", spawn ("pactl set-sink-volume @DEFAULT_SINK@ -" ++ (show myKeyStep) ++ "%"))
                 , ("<XF86AudioRaiseVolume>", spawn ("pactl set-sink-volume @DEFAULT_SINK@ +" ++ (show myKeyStep) ++ "%"))
                 -- Backlight
