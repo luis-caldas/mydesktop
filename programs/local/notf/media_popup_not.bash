@@ -52,13 +52,18 @@ function main() {
 
 	# Check which status it is and set icon
 	icon="stop"
+	message="Stopped"
 	if [ "${1}" == "pp" ]; then
 		icon="pause"
-		[ "$status_now" == "Paused" ] && icon="start"
+		message="Paused"
+		if [ "$status_now" == "Paused" ]; then
+			icon="start"
+			message="Playing"
+		fi
 	fi
 
 	# Send the notification
-	notfy "${icon}" "${status_now}"
+	notfy "${icon}" "${message}"
 
 }
 
