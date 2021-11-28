@@ -51,9 +51,11 @@ function main() {
 	status_now=$(get_status)
 
 	# Check which status it is and set icon
-	icon="start"
-	[ "$status_now" == "Stopped" ] && icon="stop"
-	[ "$status_now" == "Paused" ] && icon="pause"
+	icon="stop"
+	if [ "${1}" == "pp" ]; then
+		icon="pause"
+		[ "$status_now" == "Paused" ] && icon="start"
+	fi
 
 	# Send the notification
 	notfy "${icon}" "${status_now}"

@@ -224,31 +224,31 @@ myKeyBindings = [
                 -- Audio Media
                 , ("<XF86AudioPlay>", do
                         spawn "playerctl play-pause"
-                        spawn "media-show"
+                        spawn "media-show pp"
                   )
                 , ("<XF86AudioStop>", do
                         spawn "playerctl stop"
-                        spawn "media-show"
+                        spawn "media-show s"
                   )
                 , ("<XF86AudioNext>", do
                         spawn "playerctl next"
-                        spawn "icon-show media-skip-forward.svg"
+                        spawn "icon-show media-skip-forward.svg Next"
                   )
                 , ("<XF86AudioPrev>", do
                         spawn "playerctl previous"
-                        spawn "icon-show media-skip-backward.svg"
+                        spawn "icon-show media-skip-backward.svg Previous"
                   )
                 , ("M-<XF86AudioMute>", do
                         spawn "playerctl position 0"
-                        spawn "icon-show media-seek-backward.svg"
+                        spawn "icon-show media-seek-backward.svg Restart"
                   )
                 , ("M-<XF86AudioLowerVolume>", do
                         spawn ("playerctl position -" ++ (show myKeyStep))
-                        spawn "icon-show media-seek-backward.svg"
+                        spawn "icon-show media-seek-backward.svg Seek"
                   )
                 , ("M-<XF86AudioRaiseVolume>", do
                         spawn ("playerctl position +" ++ (show myKeyStep))
-                        spawn "icon-show media-seek-forward.svg"
+                        spawn "icon-show media-seek-forward.svg Seek"
                   )
                 -- Other Media
                 , ("<XF86Explorer>", spawn myExplorer)
