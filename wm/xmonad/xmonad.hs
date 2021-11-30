@@ -225,11 +225,11 @@ myKeyBindings = [
                 -- Audio Media
                 , ("<XF86AudioPlay>", do
                         spawn "playerctl play-pause"
-                        spawn "media-show pp"
+                        spawn "icon-show media-playback-pp.svg \"Play / Pause\""
                   )
                 , ("<XF86AudioStop>", do
                         spawn "playerctl stop"
-                        spawn "media-show s"
+                        spawn "icon-show media-playback-stop.svg Stop"
                   )
                 , ("<XF86AudioNext>", do
                         spawn "playerctl next"
