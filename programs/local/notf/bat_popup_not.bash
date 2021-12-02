@@ -62,6 +62,6 @@ batt_count=1
 # Iterate the array of batteries
 for each_batt in "${arg_array[@]}"; do
 	icon_path=$(get_icon "$each_batt")
-	dunstify -i "${icon_path}" "Battery - ${batt_count} @ ${each_batt}%"
+	dunstify -i "${icon_path}" -h "int:value:${each_batt}" "Battery - ${batt_count} @ ${each_batt}%"
 	batt_count=$(( batt_count + 1 ))
 done
