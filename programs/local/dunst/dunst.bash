@@ -72,6 +72,8 @@ spacing=$(extract "space")
 padding=$(extract "padding")
 alpha=$(extract "alpha")
 min_icon_size=$(extract "min-icon-size")
+bar_height=$(extract "bar-size")
+bar_frame=$(extract "bar-frame")
 colour_border=$(extract "border-colour")
 colour_foreground=$(extract "foreground")
 colour_lbackground=$(extract "lbackground")
@@ -84,6 +86,8 @@ new_float_border=$(echo "$scaling_factor""*""$border" | bc)
 new_float_space=$(echo "$scaling_factor""*""$spacing" | bc)
 new_float_padding=$(echo "$scaling_factor""*""$padding" | bc)
 new_float_min_icon_size=$(echo "$scaling_factor""*""$min_icon_size" | bc)
+new_float_bar_height=$(echo "$scaling_factor""*""$bar_height" | bc)
+new_float_bar_frame=$(echo "$scaling_factor""*""$bar_frame" | bc)
 
 # Defloat variables
 new_width=${new_float_width%.*}
@@ -91,12 +95,15 @@ new_border=${new_float_border%.*}
 new_space=${new_float_space%.*}
 new_padding=${new_float_padding%.*}
 new_min_icon_size=${new_float_min_icon_size%.*}
+new_bar_height=${new_float_bar_height%.*}
+new_bar_frame=${new_float_bar_frame%.*}
 
 # Get local folder
 local_folder="$(get_folder)"
 
 # Export variables that are going to be used in envsubst
 export new_width new_border new_space new_padding new_min_icon_size \
+	new_bar_height new_bar_frame \
 	alpha colour_border colour_foreground \
 	colour_lbackground colour_nbackground colour_cbackground
 

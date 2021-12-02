@@ -87,6 +87,8 @@ dunst.nbackground: MY_SHADE_0
 dunst.cbackground: MY_SHADE_1
 dunst.foreground: MY_FOREGROUND
 dunst.alpha: MY_DEC_ALPHA
+dunst.bar-frame: MY_BORDER
+dunst.bar-size: 20
 
 ! XMonad
 xmonad.border: MY_BORDER

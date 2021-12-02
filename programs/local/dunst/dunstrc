@@ -14,6 +14,11 @@
 	frame_width = "${new_border}"
 	frame_color = "${colour_border}"
 	min_icon_size = "${new_min_icon_size}"
+	progress_bar_height = "${new_bar_height}"
+	progress_bar_min_width = "${new_width}"
+	progress_bar_max_width = "${new_width}"
+	progress_bar_frame_width = "${new_bar_frame}"
+	highlight = "${colour_foreground}"
 
 [urgency_low]
 	background = "${colour_lbackground}"
