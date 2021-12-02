@@ -1,23 +1,23 @@
 [global]
 	follow = mouse
 	font = "monospace 12"
-	width = "${new_width}"
-	height = "${new_width}"
-	offset = "${new_space}x${new_space}"
+	width = "${width}"
+	height = "${width}"
+	offset = "${space}x${space}"
 	transparency = "${alpha}"
 	sort = true
 	indicate_hidden = true
 	word_wrap = true
-	padding = "${new_padding}"
-	horizontal_padding = "${new_padding}"
+	padding = "${padding}"
+	horizontal_padding = "${padding}"
 	stack_duplicates = true
-	frame_width = "${new_border}"
+	frame_width = "${border}"
 	frame_color = "${colour_border}"
-	min_icon_size = "${new_min_icon_size}"
-	progress_bar_height = "${new_bar_height}"
-	progress_bar_min_width = "${new_width}"
-	progress_bar_max_width = "${new_width}"
-	progress_bar_frame_width = "${new_bar_frame}"
+	min_icon_size = "${min_icon_size}"
+	progress_bar_height = "${bar_height}"
+	progress_bar_min_width = "${width}"
+	progress_bar_max_width = "${width}"
+	progress_bar_frame_width = "${bar_frame}"
 	highlight = "${colour_foreground}"
 
 [urgency_low]

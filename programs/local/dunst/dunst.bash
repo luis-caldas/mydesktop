@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 SIZE=500
+XRESOURCE_NAME="dunst"
 
 #############
 # Functions #
@@ -56,54 +57,47 @@ function extract_scaling_factor() {
 }
 
 function extract() {
-	data=$(xrdb -query | grep "dunst\.${1}" | cut -f 2)
+	data=$(xrdb -query | grep "${XRESOURCE_NAME}\.${1}" | cut -f 2)
 	[ -z "$data" ] && data="0"
 	echo -n "$data"
+}
+
+scaling_factor=$(extract_scaling_factor)
+
+function scale_defloat() {
+	scaled=$(echo "$scaling_factor""*""${1}" | bc)
+	echo "${scaled%.*}"
+}
+
+function x_scale_defloat() {
+	extracted="$(extract "${1}")"
+	scale_defloat "$extracted"
 }
 
 ########
 # Main #
 ########
 
-scaling_factor=$(extract_scaling_factor)
-
-border=$(extract "border-size")
-spacing=$(extract "space")
-padding=$(extract "padding")
+width=$(scale_defloat "${SIZE}")
+border=$(x_scale_defloat "border-size")
+space=$(x_scale_defloat "space")
+padding=$(x_scale_defloat "padding")
 alpha=$(extract "alpha")
-min_icon_size=$(extract "min-icon-size")
-bar_height=$(extract "bar-size")
-bar_frame=$(extract "bar-frame")
+min_icon_size=$(x_scale_defloat "min-icon-size")
+bar_height=$(x_scale_defloat "bar-size")
+bar_frame=$(x_scale_defloat "bar-frame")
 colour_border=$(extract "border-colour")
 colour_foreground=$(extract "foreground")
 colour_lbackground=$(extract "lbackground")
 colour_nbackground=$(extract "nbackground")
 colour_cbackground=$(extract "cbackground")
 
-# Calculate the width and dpi with the scaling factor
-new_float_width=$(echo "$scaling_factor""*""$SIZE" | bc)
-new_float_border=$(echo "$scaling_factor""*""$border" | bc)
-new_float_space=$(echo "$scaling_factor""*""$spacing" | bc)
-new_float_padding=$(echo "$scaling_factor""*""$padding" | bc)
-new_float_min_icon_size=$(echo "$scaling_factor""*""$min_icon_size" | bc)
-new_float_bar_height=$(echo "$scaling_factor""*""$bar_height" | bc)
-new_float_bar_frame=$(echo "$scaling_factor""*""$bar_frame" | bc)
-
-# Defloat variables
-new_width=${new_float_width%.*}
-new_border=${new_float_border%.*}
-new_space=${new_float_space%.*}
-new_padding=${new_float_padding%.*}
-new_min_icon_size=${new_float_min_icon_size%.*}
-new_bar_height=${new_float_bar_height%.*}
-new_bar_frame=${new_float_bar_frame%.*}
-
 # Get local folder
 local_folder="$(get_folder)"
 
 # Export variables that are going to be used in envsubst
-export new_width new_border new_space new_padding new_min_icon_size \
-	new_bar_height new_bar_frame \
+export width border space padding min_icon_size \
+	bar_height bar_frame \
 	alpha colour_border colour_foreground \
 	colour_lbackground colour_nbackground colour_cbackground
 
