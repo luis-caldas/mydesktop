@@ -14,6 +14,7 @@
 	frame_width = "${border}"
 	frame_color = "${colour_border}"
 	min_icon_size = "${min_icon_size}"
+	separator_height = "${border}"
 	progress_bar_height = "${bar_height}"
 	progress_bar_min_width = "${width}"
 	progress_bar_max_width = "${width}"
