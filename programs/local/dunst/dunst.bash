@@ -6,6 +6,31 @@ SIZE=500
 # Functions #
 #############
 
+# Function to get real script dir
+function get_folder() {
+
+    # get the folder in which the script is located
+    SOURCE="${BASH_SOURCE[0]}"
+
+    # resolve $SOURCE until the file is no longer a symlink
+    while [ -h "$SOURCE" ]; do
+
+      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+      SOURCE="$(readlink "$SOURCE")"
+
+      # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+
+    done
+
+    # the final assignment of the directory
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+    # return the directory
+    echo "$DIR"
+}
+
 function extract_scaling_factor() {
 
 	# run the gsettings command to get the scaling factor
@@ -42,9 +67,10 @@ function extract() {
 
 scaling_factor=$(extract_scaling_factor)
 
-border=$(extract "border")
+border=$(extract "border-size")
 spacing=$(extract "space")
 padding=$(extract "padding")
+alpha=$(extract "alpha")
 min_icon_size=$(extract "min-icon-size")
 colour_border=$(extract "border-colour")
 colour_foreground=$(extract "foreground")
@@ -59,29 +85,20 @@ new_float_space=$(echo "$scaling_factor""*""$spacing" | bc)
 new_float_padding=$(echo "$scaling_factor""*""$padding" | bc)
 new_float_min_icon_size=$(echo "$scaling_factor""*""$min_icon_size" | bc)
 
+# Defloat variables
 new_width=${new_float_width%.*}
 new_border=${new_float_border%.*}
 new_space=${new_float_space%.*}
 new_padding=${new_float_padding%.*}
 new_min_icon_size=${new_float_min_icon_size%.*}
 
-# run dunst with my custom config
-dunst \
-	-follow mouse \
-	-geometry "${new_width}x${new_width}-${new_space}+${new_space}" \
-	-sort \
-	-indicate_hidden \
-	-word_wrap \
-	-padding "${new_padding}" \
-	-horizontal_padding "${new_padding}" \
-	-stack_duplicates \
-	-frame_width "${new_border}" \
-	-frame_color "${colour_border}" \
-	-lb "${colour_lbackground}" -lf "${colour_foreground}" \
-	-nb "${colour_nbackground}" -nf "${colour_foreground}" \
-	-cb "${colour_cbackground}" -cf "${colour_foreground}" \
-	-lto "3s" -nto "5s" -cto "5s" \
-	-min_icon_size "${new_min_icon_size}" \
-	-sep_height "${new_border}" \
-	"$@"
+# Get local folder
+local_folder="$(get_folder)"
 
+# Export variables that are going to be used in envsubst
+export new_width new_border new_space new_padding new_min_icon_size \
+	alpha colour_border colour_foreground \
+	colour_lbackground colour_nbackground colour_cbackground
+
+# Start the program with custom rc file
+envsubst < "${local_folder}/dunstrc" | dunst -config -

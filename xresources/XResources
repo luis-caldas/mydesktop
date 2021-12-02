@@ -7,6 +7,7 @@
 
 ! Alphas
 #define MY_ALPHA 0.94
+#define MY_DEC_ALPHA 6
 
 ! Borders and spacing
 #define MY_BORDER 5
@@ -76,7 +77,7 @@ rofi.line-margin: 2
 rofi.line-padding: 8
 
 ! Dunst
-dunst.border: MY_BORDER
+dunst.border-size: MY_BORDER
 dunst.space: MY_OUTSIDE_SPACING
 dunst.padding: MY_INSIDE_SPACING
 dunst.min-icon-size: 48
@@ -85,6 +86,7 @@ dunst.lbackground: MY_BACKGROUND
 dunst.nbackground: MY_SHADE_0
 dunst.cbackground: MY_SHADE_1
 dunst.foreground: MY_FOREGROUND
+dunst.alpha: MY_DEC_ALPHA
 
 ! XMonad
 xmonad.border: MY_BORDER

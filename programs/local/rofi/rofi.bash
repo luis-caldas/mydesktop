@@ -95,12 +95,14 @@ new_line_padding=${new_float_linepadding%.*}
 [ "$EUID" -ne 0 ] && user_char="$" || user_char="#"
 
 # run rofi with our configs
-rofi -show run -display-run "$user_char " --location 0 \
+rofi -show run -display-run "$user_char " \
+	-location 0 \
 	-padding "$new_space" \
 	-width "$new_width" \
 	-lines "$lines" \
 	-line-margin "$new_line_margin" -line-padding "$new_line_padding" \
-	-separator-style none -columns 1 \
+	-separator-style none \
+	-columns 1 \
 	-bw "$new_border" \
 	-dpi "$new_dpi" \
 	-no-click-to-exit \

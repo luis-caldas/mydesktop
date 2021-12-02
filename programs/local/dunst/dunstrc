@@ -1,0 +1,31 @@
+[global]
+	follow = mouse
+	font = "monospace 12"
+	width = "${new_width}"
+	height = "${new_width}"
+	offset = "${new_space}x${new_space}"
+	transparency = "${alpha}"
+	sort = true
+	indicate_hidden = true
+	word_wrap = true
+	padding = "${new_padding}"
+	horizontal_padding = "${new_padding}"
+	stack_duplicates = true
+	frame_width = "${new_border}"
+	frame_color = "${colour_border}"
+	min_icon_size = "${new_min_icon_size}"
+
+[urgency_low]
+	background = "${colour_lbackground}"
+	foreground = "${colour_foreground}"
+	timeout = "3s"
+
+[urgency_normal]
+	background = "${colour_nbackground}"
+	foreground = "${colour_foreground}"
+	timeout = "4s"
+
+[urgency_critical]
+	background = "${colour_cbackground}"
+	foreground = "${colour_foreground}"
+	timeout = "5s"
