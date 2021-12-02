@@ -6,6 +6,7 @@
 
 DEFAULT_WIDTH=750
 DEFAULT_DPI=100
+XRESOURCE_NAME="rofi"
 
 #############
 # Functions #
@@ -35,77 +36,61 @@ function extract_scaling_factor() {
 
 }
 
-function extract_border() {
-	border=$(xrdb -query | grep "rofi\.border" | cut -f 2)
-	[ -z "$border" ] && border=1
-	echo -n "$border"
+function extract() {
+	data=$(xrdb -query | grep "${XRESOURCE_NAME}\.${1}" | cut -f 2)
+	[ -z "$data" ] && data="0"
+	echo -n "$data"
 }
 
-function extract_space() {
-	space=$(xrdb -query | grep "rofi\.space" | cut -f 2)
-	[ -z "$space" ] && space=5
-	echo -n "$space"
+scaling_factor=$(extract_scaling_factor)
+
+function scale_defloat() {
+	scaled=$(echo "$scaling_factor""*""${1}" | bc)
+	echo "${scaled%.*}"
 }
 
-function extract_linemargin() {
-	line_marging=$(xrdb -query | grep "rofi\.line-margin" | cut -f 2)
-	[ -z "$line_marging" ] && line_marging=2
-	echo -n "$line_marging"
-}
-
-function extract_linepadding() {
-	line_padding=$(xrdb -query | grep "rofi\.line-padding" | cut -f 2)
-	[ -z "$line_padding" ] && line_padding=8
-	echo -n "$line_padding"
-}
-
-function extract_lines() {
-	lines=$(xrdb -query | grep "rofi\.lines" | cut -f 2)
-	[ -z "$lines" ] && lines=10
-	echo -n "$lines"
+function x_scale_defloat() {
+	extracted="$(extract "${1}")"
+	scale_defloat "$extracted"
 }
 
 ########
 # Main #
 ########
 
-# get the gnomes scaling factor if possible
-scaling_factor=$(extract_scaling_factor)
-border=$(extract_border)
-spacing=$(extract_space)
-line_marging=$(extract_linemargin)
-line_padding=$(extract_linepadding)
-lines=$(extract_lines)
-
-# calculate the width and dpi with the scaling factor
-new_float_width=$(echo "$scaling_factor""*""$DEFAULT_WIDTH" | bc)
-new_float_dpi=$(echo "$scaling_factor""*""$DEFAULT_DPI" | bc)
-new_float_border=$(echo "$scaling_factor""*""$border" | bc)
-new_float_space=$(echo "$scaling_factor""*""$spacing" | bc)
-new_float_linemargin=$(echo "$scaling_factor""*""$line_marging" | bc)
-new_float_linepadding=$(echo "$scaling_factor""*""$line_padding" | bc)
-new_width=${new_float_width%.*}
-new_dpi=${new_float_dpi%.*}
-new_border=${new_float_border%.*}
-new_space=${new_float_space%.*}
-new_line_margin=${new_float_linemargin%.*}
-new_line_padding=${new_float_linepadding%.*}
+# Extract all from xresources
+width=$(scale_defloat "$DEFAULT_WIDTH")
+dpi=$(scale_defloat "$DEFAULT_DPI")
+border=$(x_scale_defloat "border")
+space=$(x_scale_defloat "space")
+line_margin=$(x_scale_defloat "line-margin")
+line_padding=$(x_scale_defloat "line-padding")
+lines=$(extract "lines")
+colour_w=$(extract "color-window")
+colour_n=$(extract "color-normal")
+colour_a=$(extract "color-active")
+colour_u=$(extract "color-urgent")
 
 # get the proper char for the user running
 [ "$EUID" -ne 0 ] && user_char="$" || user_char="#"
 
 # run rofi with our configs
-rofi -show run -display-run "$user_char " \
+echo rofi -show run -display-run "$user_char " \
 	-location 0 \
-	-padding "$new_space" \
-	-width "$new_width" \
+	-padding "$space" \
+	-width "$width" \
 	-lines "$lines" \
-	-line-margin "$new_line_margin" -line-padding "$new_line_padding" \
+	-line-margin "$line_margin" -line-padding "$line_padding" \
 	-separator-style none \
 	-columns 1 \
-	-bw "$new_border" \
-	-dpi "$new_dpi" \
+	-bw "$border" \
+	-dpi "$dpi" \
 	-no-click-to-exit \
 	-disable-history \
 	-hide-scrollbar \
-	-kb-row-select "Tab" -kb-row-tab ""
+	-kb-row-select "Tab" -kb-row-tab "" \
+	-color-window "$colour_w" \
+	-color-normal "$colour_n" \
+	-color-active "$colour_a" \
+	-color-urgent "$colour_u" \
+	"$@"
