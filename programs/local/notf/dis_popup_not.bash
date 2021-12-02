@@ -43,7 +43,7 @@ function main() {
 		icon=$("${folder_now}/colour_icon.bash" "${ICON_NAME}")
 
 		# If not empty send notification
-		dunstify -i "${icon}" "Brightness - ${light_now} %" -r "${POPUP_ID}" -t 1500
+		dunstify -i "${icon}" -h "int:value:${light_now}" "Brightness - ${light_now} %" -r "${POPUP_ID}" -t 1500
 
 	else
 		exit 1
