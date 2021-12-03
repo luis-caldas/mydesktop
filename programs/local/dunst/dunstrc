@@ -36,3 +36,7 @@
 	background = "${colour_cbackground}"
 	foreground = "${colour_foreground}"
 	timeout = "5s"
+
+[ncspot]
+	appname = *ncspot*
+	format = "<b>  Now Playing:</b>\n%s\n%b"
