@@ -123,4 +123,5 @@ rofi -show run -display-run "$user_char " \
 	-location 0 \
 	-dpi "$dpi" \
 	-no-click-to-exit \
+	-disable-history \
 	"$@"
