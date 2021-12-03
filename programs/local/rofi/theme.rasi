@@ -94,6 +94,7 @@ element-icon {
 }
 
 window {
+	width: var(my-width);
 	padding: var(my-space);
 	background-color: var(my-alpha-back);
 	border: var(my-border);

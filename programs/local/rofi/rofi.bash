@@ -68,7 +68,6 @@ function extract() {
 }
 
 scaling_factor=$(extract_scaling_factor)
-#scaling_factor=2
 
 function scale_defloat() {
 	scaled=$(echo "$scaling_factor""*""${1}" | bc)
