@@ -14,6 +14,7 @@
 #define MY_INSIDE_SPACING 25
 #define MY_INSIDE_SPACING_REM 500
 #define MY_OUTSIDE_SPACING 15
+#define MY_OUTSIDE_SPACING_DB 30
 
 ! Background and foregound
 #define MY_ALPHA_BACK  #E00D0D0D
@@ -78,7 +79,7 @@ rofi.line-padding: 8
 
 ! Dunst
 dunst.border-size: MY_BORDER
-dunst.space: MY_OUTSIDE_SPACING
+dunst.space: MY_OUTSIDE_SPACING_DB
 dunst.padding: MY_INSIDE_SPACING
 dunst.min-icon-size: 48
 dunst.border-colour: MY_UNACTIVE_BORDER_COLOUR

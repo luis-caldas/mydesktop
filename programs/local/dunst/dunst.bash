@@ -78,14 +78,15 @@ function x_scale_defloat() {
 # Main #
 ########
 
-width=$(scale_defloat "${SIZE}")
-border=$(x_scale_defloat "border-size")
+width="${SIZE}"
+border=$(extract "border-size")
+scale="${scaling_factor}"
 space=$(x_scale_defloat "space")
-padding=$(x_scale_defloat "padding")
+padding=$(extract "padding")
 alpha=$(extract "alpha")
-min_icon_size=$(x_scale_defloat "min-icon-size")
-bar_height=$(x_scale_defloat "bar-size")
-bar_frame=$(x_scale_defloat "bar-frame")
+min_icon_size=$(extract "min-icon-size")
+bar_height=$(extract "bar-size")
+bar_frame=$(extract "bar-frame")
 colour_border=$(extract "border-colour")
 colour_foreground=$(extract "foreground")
 colour_lbackground=$(extract "lbackground")
@@ -96,7 +97,8 @@ colour_cbackground=$(extract "cbackground")
 local_folder="$(get_folder)"
 
 # Export variables that are going to be used in envsubst
-export width border space padding min_icon_size \
+export scale \
+	width border space padding min_icon_size \
 	bar_height bar_frame \
 	alpha colour_border colour_foreground \
 	colour_lbackground colour_nbackground colour_cbackground

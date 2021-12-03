@@ -1,5 +1,6 @@
 [global]
 	follow = mouse
+	scale = "${scale}"
 	font = "monospace 12"
 	width = "${width}"
 	height = "${width}"
