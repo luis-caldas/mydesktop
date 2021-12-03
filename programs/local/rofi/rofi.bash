@@ -12,6 +12,31 @@ XRESOURCE_NAME="rofi"
 # Functions #
 #############
 
+# Function to get real script dir
+function get_folder() {
+
+    # get the folder in which the script is located
+    SOURCE="${BASH_SOURCE[0]}"
+
+    # resolve $SOURCE until the file is no longer a symlink
+    while [ -h "$SOURCE" ]; do
+
+      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+      SOURCE="$(readlink "$SOURCE")"
+
+      # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+
+    done
+
+    # the final assignment of the directory
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+    # return the directory
+    echo "$DIR"
+}
+
 function extract_scaling_factor() {
 
 	# run the gsettings command to get the scaling factor
@@ -43,6 +68,7 @@ function extract() {
 }
 
 scaling_factor=$(extract_scaling_factor)
+#scaling_factor=2
 
 function scale_defloat() {
 	scaled=$(echo "$scaling_factor""*""${1}" | bc)
@@ -58,6 +84,9 @@ function x_scale_defloat() {
 # Main #
 ########
 
+# Get local folder
+folder_now="$(get_folder)"
+
 # Extract all from xresources
 width=$(scale_defloat "$DEFAULT_WIDTH")
 dpi=$(scale_defloat "$DEFAULT_DPI")
@@ -66,31 +95,33 @@ space=$(x_scale_defloat "space")
 line_margin=$(x_scale_defloat "line-margin")
 line_padding=$(x_scale_defloat "line-padding")
 lines=$(extract "lines")
-colour_w=$(extract "color-window")
-colour_n=$(extract "color-normal")
-colour_a=$(extract "color-active")
-colour_u=$(extract "color-urgent")
+
+# Extract colours xresource
+alpha_back=$(extract "alpha-back")
+border_colour=$(extract "border-colour")
+transparent=$(extract "transparent")
+background=$(extract "background")
+foreground=$(extract "foreground")
+colour0=$(extract "colour0")
+colour1=$(extract "colour1")
+colour2=$(extract "colour2")
 
 # get the proper char for the user running
 [ "$EUID" -ne 0 ] && user_char="$" || user_char="#"
 
-# run rofi with our configs
-echo rofi -show run -display-run "$user_char " \
+# Export needed variables
+export -- \
+	width dpi \
+	border space \
+	lines line_margin line_padding \
+	alpha_back border_colour transparent \
+	background foreground \
+	colour0 colour1 colour2
+
+# Run rofi with exported theme file
+rofi -show run -display-run "$user_char " \
+	-theme <(envsubst < "${folder_now}/theme.rasi") \
 	-location 0 \
-	-padding "$space" \
-	-width "$width" \
-	-lines "$lines" \
-	-line-margin "$line_margin" -line-padding "$line_padding" \
-	-separator-style none \
-	-columns 1 \
-	-bw "$border" \
 	-dpi "$dpi" \
 	-no-click-to-exit \
-	-disable-history \
-	-hide-scrollbar \
-	-kb-row-select "Tab" -kb-row-tab "" \
-	-color-window "$colour_w" \
-	-color-normal "$colour_n" \
-	-color-active "$colour_a" \
-	-color-urgent "$colour_u" \
 	"$@"

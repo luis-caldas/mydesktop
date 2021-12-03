@@ -12,12 +12,13 @@
 ! Borders and spacing
 #define MY_BORDER 5
 #define MY_INSIDE_SPACING 25
+#define MY_INSIDE_SPACING_DB 50
 #define MY_INSIDE_SPACING_REM 500
 #define MY_OUTSIDE_SPACING 15
 #define MY_OUTSIDE_SPACING_DB 30
 
 ! Background and foregound
-#define MY_ALPHA_BACK  #E00D0D0D
+#define MY_ALPHA_BACK  #0D0D0DE0
 #define MY_BACKGROUND  #0D0D0D
 #define MY_FOREGROUND  #FFFFFF
 #define MY_TRANSPARENT #00000000
@@ -67,20 +68,23 @@
 *.color15: MY_SHADE_3
 
 ! Rofi
-rofi.color-window: MY_ALPHA_BACK , MY_BORDER_COLOUR, MY_TRANSPARENT
-rofi.color-normal: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_0, MY_FOREGROUND
-rofi.color-active: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_1, MY_BACKGROUND
-rofi.color-urgent: MY_TRANSPARENT, MY_FOREGROUND, MY_TRANSPARENT, MY_COLOUR_2, MY_BACKGROUND
+rofi.alpha-back: MY_ALPHA_BACK
+rofi.border-colour: MY_BORDER_COLOUR
+rofi.transparent: MY_TRANSPARENT
+rofi.background: MY_BACKGROUND
+rofi.foreground: MY_FOREGROUND
+rofi.colour0: MY_COLOUR_0
+rofi.colour1: MY_COLOUR_1
+rofi.colour2: MY_COLOUR_2
 rofi.border: MY_BORDER
 rofi.space: MY_INSIDE_SPACING
-rofi.lines: 10
-rofi.line-margin: 2
-rofi.line-padding: 8
+rofi.lines: 6
+rofi.line-padding: 15
 
 ! Dunst
 dunst.border-size: MY_BORDER
 dunst.space: MY_OUTSIDE_SPACING_DB
-dunst.padding: MY_INSIDE_SPACING
+dunst.padding: MY_INSIDE_SPACING_DB
 dunst.min-icon-size: 48
 dunst.border-colour: MY_UNACTIVE_BORDER_COLOUR
 dunst.lbackground: MY_BACKGROUND
