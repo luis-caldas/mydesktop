@@ -97,7 +97,7 @@ colour_cbackground=$(extract "cbackground")
 local_folder="$(get_folder)"
 
 # Export variables that are going to be used in envsubst
-export scale \
+export -- scale \
 	width border space padding min_icon_size \
 	bar_height bar_frame \
 	alpha colour_border colour_foreground \
