@@ -79,7 +79,7 @@ rofi.colour2: MY_COLOUR_2
 rofi.border: MY_BORDER
 rofi.space: MY_INSIDE_SPACING
 rofi.lines: 6
-rofi.line-padding: 15
+rofi.line-padding: 10
 
 ! Dunst
 dunst.border-size: MY_BORDER
