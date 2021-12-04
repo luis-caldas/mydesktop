@@ -356,7 +356,7 @@ myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
                  where tagIndex       = \w -> fromMaybe (0) $ elemIndex (XMonad.StackSet.tag w) allScreenIDs
                        relativeScreen = \w -> 1 + (toInteger $ screenNrs!!(tagIndex w))
                        underScript    = \w -> superScripsNumbers (show $ relativeScreen w) False
-/
+
          fmt w = printer pp $ (windower w)
           where printer | any (\x -> maybe False (== XMonad.StackSet.tag w) (XMonad.StackSet.findTag x s)) urgents  = ppUrgent
                         | XMonad.StackSet.tag w == this                                                             = ppCurrent
