@@ -355,6 +355,13 @@ myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
                         | otherwise                                                                                 = ppHiddenNoWindows
                 windower = (\tag -> XMonad.StackSet.tag tag ++ (superScripsNumbers (show $ (length . XMonad.StackSet.integrate' . XMonad.StackSet.stack) tag) True))
 
+myXmobarStrip :: String -> String
+myXmobarStrip = converge (xmobarStripTags ["fc","icon","action","box"])
+
+converge :: (Eq a) => (a -> a) -> a -> a
+converge f a = let xs = iterate f a
+    in fst $ head $ dropWhile (uncurry (/=)) $ zip xs $ tail xs
+
 -- }}}
 
 -- Hack to let firefox fullscreen
@@ -528,19 +535,20 @@ main = do
                                                  ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
                                                   )
                       , ppHidden           = wrap
-                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
-                                             " </fc>"
+                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0>  ")
+                                             "  </fc>"
                       , ppHiddenNoWindows  = wrap
-                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
-                                             " </fc>"
+                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0>  ")
+                                             "  </fc>"
                       , ppUrgent           = wrap "*" ""
                       , ppWsSep            = ""
-                      , ppTitle           = shorten 160
-                      , ppTitleSanitize   = wrap
-                                            ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
-                                            (" </fc>" ++ (createArrow rightArrow xrBarColour2 xrBarColourBack))
+                      , ppTitle            = shorten 160 . wrap
+                                           ("<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0> ")
+                                           ( " </fc>" ++ (createArrow rightArrow xrBarColour1 xrBarColour2))
+                      , ppTitleSanitize    = myXmobarStrip
                       , ppSep              = (createArrow rightArrow xrBarColour2 xrBarColour1)
                                           ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
+                                          ++ (createArrow rightArrow xrBarColour2 xrBarColour1)
                       , ppLayout           = const ""
                       }
 

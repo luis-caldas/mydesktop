@@ -125,7 +125,7 @@ top_bar+="$(build_block "neosysinfo" "%memory% " "" "e")"
 
 echo "$top_bar"
 
-bottom_bar=" %UnsafeStdinReader% }{"
+bottom_bar="%UnsafeStdinReader%$(colour_arrow r "${colour2},${background}")}{"
 
 # Export needed variables
 export -- \
