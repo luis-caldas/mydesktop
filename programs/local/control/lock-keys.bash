@@ -83,7 +83,7 @@ main() {
 
 	# Build whole block prettily
 	folder_now="$(get_folder)"
-	source "${folder_now}/../xmobar/style.bash"
+	source "${folder_now}/../visual/xmobar-style.bash"
 
 	# Print block
 	build_block "" "${inside_data}" ""

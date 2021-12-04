@@ -63,7 +63,7 @@ plight() {
 
 		# Import styling tools
 		folder_now="$(get_folder)"
-		source "${folder_now}/../xmobar/style.bash"
+		source "${folder_now}/../visual/xmobar-style.bash"
 
 		# Build the full block
 		build_block "light-show" "${backlight_result}" ""

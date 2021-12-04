@@ -33,7 +33,7 @@ function get_folder() {
 folder_now="$(get_folder)"
 
 # Source the styling funcitons
-source "${folder_now}/style.bash"
+source "${folder_now}/../../visual/xmobar-style.bash"
 
 # Create line for top bar
 top_bar="<action=\`wneocalendar\`><fc=${background},${colour1}:0> %date% </fc></action>"
