@@ -130,7 +130,7 @@ myModKey = mod1Mask -- alt
 -- XMobar config files
 displayVar = "DISPLAY"
 
-myBar = "/home/majora/home/docs/sources/mydesktop/programs/public/neomobar"
+myBar = "neomobar"
 
 myBarArguments :: [String]
 myBarArguments =

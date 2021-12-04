@@ -18,6 +18,31 @@ SAVE_FOLDER="${HOME}/.config/neogovernor"
 # }}}
 # {{{ Utils
 
+# Function to get real script dir
+function get_folder() {
+
+    # get the folder in which the script is located
+    SOURCE="${BASH_SOURCE[0]}"
+
+    # resolve $SOURCE until the file is no longer a symlink
+    while [ -h "$SOURCE" ]; do
+
+      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+      SOURCE="$(readlink "$SOURCE")"
+
+      # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+
+    done
+
+    # the final assignment of the directory
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+    # return the directory
+    echo "$DIR"
+}
+
 good_list() {
 	tr ' ' '\n' <<< "$@"
 }
@@ -208,7 +233,7 @@ cpu_get_governor() {
 					# Compare to see if governors are the
 					# same
 					if [ "$first_governor" != "$gov_now" ]; then
-						
+
 						# Show error
 						>&2 echo "Some governors on the cpu are different"
 						>&2 echo "Try setting them again"
@@ -328,6 +353,25 @@ print_cpu() {
 	fi
 }
 
+pretty_cpu() {
+
+	# Get cpu governor
+	print_data="$(cpu_get_governor)"
+
+	# if it is not empty print it
+	if [ -n "$print_data" ]; then
+		# Import styling tools
+		folder_now="$(get_folder)"
+		source "${folder_now}/../xmobar/style.bash"
+
+		# Build the full block
+		build_block "neosysinfo" "${print_data}" ""
+	else
+		exit 1
+	fi
+
+}
+
 print_gpu() {
 	# Get cpu governor
 	print_data="$(gpu_get_governor)"
@@ -338,6 +382,25 @@ print_gpu() {
 	else
 		exit 1
 	fi
+}
+
+pretty_gpu() {
+
+	# Get cpu governor
+	print_data="$(gpu_get_governor)"
+
+	# if it is not empty print it
+	if [ -n "$print_data" ]; then
+		# Import styling tools
+		folder_now="$(get_folder)"
+		source "${folder_now}/../xmobar/style.bash"
+
+		# Build the full block
+		build_block "neosysinfo" "${print_data}" ""
+	else
+		exit 1
+	fi
+
 }
 
 print_all() {
@@ -357,6 +420,29 @@ print_all() {
 	# Add newline if there is anything to print
 	if [ ! "${#all_prints[@]}" -eq 0 ]; then
 		printf "%s " "${all_prints[@]}"
+	# If there is nothing to show throw an error
+	else
+		exit 1
+	fi
+}
+
+pretty_all() {
+	# Run printing functions
+	prints=( "$(pretty_cpu)" "$(pretty_gpu)" )
+
+	# Start array that will contain all prints
+	all_prints=()
+
+	# Add each successful
+	for each in "${prints[@]}"; do
+		if [ -n "$each" ]; then
+			all_prints+=("$each")
+		fi
+	done
+
+	# Add newline if there is anything to print
+	if [ ! "${#all_prints[@]}" -eq 0 ]; then
+		echo -n "${all_prints[@]}"
 	# If there is nothing to show throw an error
 	else
 		exit 1
@@ -391,6 +477,9 @@ case "$1" in
 			print)
 				print_cpu
 				;;
+			pretty)
+				pretty_cpu
+				;;
 			*)
 				usage
 				exit 1
@@ -413,6 +502,9 @@ case "$1" in
 				;;
 			print)
 				print_gpu
+				;;
+			pretty)
+				pretty_gpu
 				;;
 			*)
 				usage
@@ -441,6 +533,9 @@ case "$1" in
 		;;
 	print)
 		print_all
+		;;
+	pretty)
+		pretty_all
 		;;
 	*)
 		usage

@@ -56,6 +56,20 @@ clight() {
 	fi
 }
 
+# Pretty print for bar
+plight() {
+	backlight_result="$(backlight)"
+	if [ -n "$backlight_result" ]; then
+
+		# Import styling tools
+		folder_now="$(get_folder)"
+		source "${folder_now}/../xmobar/style.bash"
+
+		# Build the full block
+		build_block "light-show" "${backlight_result}" ""
+	fi
+}
+
 all() {
 	# Run printing functions
 	light="$(clight)"
@@ -81,7 +95,7 @@ all() {
 # {{{ Main
 
 usage() {
-	echo "Usage: $0 {light,backlight,all}"
+	echo "Usage: $0 {light,backlight,pretty,all}"
 }
 
 case "$1" in
@@ -90,6 +104,9 @@ case "$1" in
 		;;
 	backlight)
 		clight
+		;;
+	pretty)
+		plight
 		;;
 	all)
 		all
