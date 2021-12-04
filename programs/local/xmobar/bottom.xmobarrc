@@ -1,0 +1,28 @@
+-- vim: syntax=haskell
+Config {
+   -- Appearance
+     font            = "xft:Mono:size=12"
+   , additionalFonts = [ "xft:Font Awesome 5 Free Solid:size=11"
+                       , "xft:Mono:size=18"
+                       ]
+   , bgColor         = "${background}"
+   , fgColor         = "${foreground}"
+   , alpha	     = ${alpha}
+   , position        = Bottom
+   -- General behavior
+   , lowerOnStart     = True
+   , hideOnStart      = False
+   , allDesktops      = False
+   , overrideRedirect = False
+   , pickBroadest     = False
+   , persistent       = True
+   -- Layout
+   , sepChar  = "%"
+   , alignSep = "}{"
+   , template = " [%UnsafeStdinReader%] }{"
+   -- Plugins
+   , commands = [
+        -- Stdin reader for the workspaces
+          Run UnsafeStdinReader
+   ]
+   }

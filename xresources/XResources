@@ -8,6 +8,7 @@
 ! Alphas
 #define MY_ALPHA 0.94
 #define MY_DEC_ALPHA 6
+#define MY_ALPHA_TRASNPARENT 0
 
 ! Borders and spacing
 #define MY_BORDER 5
@@ -39,6 +40,11 @@
 #define MY_SHADE_1 #AAAAAA
 #define MY_SHADE_2 #555555
 #define MY_SHADE_3 #FFFFFF
+
+! Greys
+#define MY_GREY_0 #BCBCBC
+#define MY_GREY_1 #8A8A8A
+#define MY_GREY_2 #262626
 
 ! }}}
 
@@ -102,8 +108,12 @@ xmonad.border-colour: MY_UNACTIVE_BORDER_COLOUR
 xmonad.border-colour-active: MY_BORDER_COLOUR
 
 ! XMobar
+xmobar.alpha: MY_ALPHA_TRASNPARENT
 xmobar.background: MY_BACKGROUND
 xmobar.foreground: MY_FOREGROUND
+xmobar.colour0: MY_GREY_0
+xmobar.colour1: MY_GREY_1
+xmobar.colour2: MY_GREY_2
 
 ! St
 st.alpha:  MY_ALPHA
