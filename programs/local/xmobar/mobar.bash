@@ -135,7 +135,7 @@ export -- \
 
 # Run both xmobar instances
 xmobar "$@" <(envsubst < "${folder_now}/top.xmobarrc") &
-# xmobar "$@" <(envsubst < "${folder_now}/bottom.xmobarrc") < /dev/stdin &
+xmobar "$@" <(envsubst < "${folder_now}/bottom.xmobarrc") < /dev/stdin &
 
 # Wait for both xmobar instances
 wait

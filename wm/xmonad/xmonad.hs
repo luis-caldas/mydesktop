@@ -123,24 +123,12 @@ myModKey = mod1Mask -- alt
 -- XMobar config files
 displayVar = "DISPLAY"
 
-myBar = "xmobar"
-
-myBarDefaultBack = "#FFFFFF"
-myBarDefaultFore = "#000000"
+myBar = "neomobar"
 
 myBarArguments :: [String]
 myBarArguments =
     [ "-f", "xft:" ++ myFontFace ++ ":size=" ++ (show myFontSize)
     ]
-
-myBarColourArguments :: String -> String -> [String]
-myBarColourArguments foreColour backColour =
-    [ "-F", foreColour, "-B", backColour]
-
-myBarConfigs = ( myBarConfigFolder ++ "/top.xmobarrc"
-               , myBarConfigFolder ++ "/bottom.xmobarrc"
-               ) where
-                    myBarConfigFolder = "\"${HOME}\"/.config/xmobar"
 
 myBarPP = def { ppCurrent          = wrap ">" ""
               , ppHidden           = wrap " " ""
@@ -523,23 +511,11 @@ main = do
     let xrSpace        = mToInteger $ lookMap xrdbData xrVarSpace (show myWindowSpacing)
     let xrColour       = lookMap xrdbData xrVarBorderColour myNormalBorderColour
     let xrActiveColour = lookMap xrdbData xrVarBorderColourActive myFocusedBorderColour
-    let xrBarBack      = lookMap xrdbData xrVarBarBack myBarDefaultBack
-    let xrBarFore      = lookMap xrdbData xrVarBarFore myBarDefaultFore
 
     -- Create the bar command
-    let myBarCommandTop = unwords [ myBar
-                                  , fst myBarConfigs
-                                  , argumentsToString $ myBarArguments
-                                  , argumentsToString $ myBarColourArguments (addQuotes xrBarFore) (addQuotes xrBarBack)
-                                  ]
-    let myBarCommandBottom = unwords [ myBar
-                                     , snd myBarConfigs
-                                     , argumentsToString $ myBarArguments
-                                     , argumentsToString $ myBarColourArguments (addQuotes xrBarFore) (addQuotes xrBarBack)
-                                     ]
-
-    -- Unsafe spawn top bar
-    unsafeSpawn myBarCommandTop
+    let myBarCommand = unwords [ myBar
+                               , argumentsToString $ myBarArguments
+                               ]
 
     -- Run all the startup commands
     mapM_ unsafeSpawn myStartupCommands
@@ -560,7 +536,7 @@ main = do
             }
 
     -- Add my key bindings
-    xmobarSpawner <- spawnMyBar myBarCommandBottom myBarPP $ ewmh $ myDefaultConfig
+    xmobarSpawner <- spawnMyBar myBarCommand myBarPP $ ewmh $ myDefaultConfig
                  `removeKeysP`     myRemoveBindings
                  `additionalKeysP` myKeyBindings
 
