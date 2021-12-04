@@ -115,9 +115,14 @@ myVolJumpLow = 5
 myVolJumpHigh = 100
 
 -- Wokspaces
-myRawWorkspaces = [ 1 .. 9 ]
-myWorkspaces = map show [ 1 .. 9 ]
+myWorkspaces = map cover oglist
+        where
+                cover = \each -> "<fn=1>" ++ each ++ " " ++ "</fn>"
+                oglist = [ "\xf120", "\xf06e", "\xf0e0", "\xf15b", "\xf11b", "\xf53f", "\xf0ac", "\xf0c1", "\xf001" ]
+myWorkspacesKeys = map show [ 1 .. (length myWorkspaces) ]
 myDisplays = [ "q", "w", "e", "r" ]
+myDisplaysKeys = take (length myDisplays) localKeys
+        where localKeys = [ "q", "w", "e", "r" ]
 
 -- Mod key
 myModKey = mod1Mask -- alt
@@ -256,7 +261,7 @@ myKeyBindings = [
                                     ]] ++
                 -- Workspaces shortcuts
                 [ (("M" ++ shift ++ key), windows $ f i)
-                    | (i, key) <- zip myWorkspaces (map ("-"++) myWorkspaces)
+                    | (i, key) <- zip myWorkspaces (map ("-"++) myWorkspacesKeys)
                     , (f, shift) <- [ (XMonad.StackSet.greedyView, "")
                                     , (\i -> XMonad.StackSet.greedyView i . XMonad.StackSet.shift i, "-S")
                                     ]] ++
@@ -276,7 +281,7 @@ myRemoveBindings = [ "M-S-<Return>"
                  (map ("M-"++) ["h", "j", "k", "l"]) ++
                  [ "M-" ++ s ++ n
                  | s <- ["", "S-"]
-                 , n <- (myDisplays ++ myWorkspaces)
+                 , n <- (myDisplays ++ myWorkspacesKeys)
                  ]
 
 -- Floating windows of name when launched
@@ -535,11 +540,11 @@ main = do
                                                  ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
                                                   )
                       , ppHidden           = wrap
-                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0>  ")
-                                             "  </fc>"
+                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
+                                             " </fc>"
                       , ppHiddenNoWindows  = wrap
-                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0>  ")
-                                             "  </fc>"
+                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
+                                             " </fc>"
                       , ppUrgent           = wrap "*" ""
                       , ppWsSep            = ""
                       , ppTitle            = shorten 160 . wrap
