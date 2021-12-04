@@ -540,10 +540,10 @@ main = do
                                                  ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
                                                   )
                       , ppHidden           = wrap
-                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
+                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0>  ")
                                              " </fc>"
                       , ppHiddenNoWindows  = wrap
-                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
+                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0>  ")
                                              " </fc>"
                       , ppUrgent           = wrap "*" ""
                       , ppWsSep            = ""
