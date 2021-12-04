@@ -103,10 +103,10 @@ colour_arrow() {
 }
 
 build_block () {
-	[ "${4}" == "e" ] && init_arrow="<fc=${foreground},${colour2}> </fc>" || init_arrow="$(colour_arrow r "${colour2},${colour1}")"
+	[ "${4}" == "e" ] && init_arrow="" || init_arrow="$(colour_arrow r "${colour2},${colour1}")"
 	block="<action=\`${1}\`><fc=${background},${colour1}:0><fn=1> ${3} </fn></fc>"
 	block+="$(colour_arrow r "${colour1},${colour2}")<fc=${foreground},${colour2}:0> ${2} </fc></action>${init_arrow}"
-	echo "${block}"
+	echo -n "${block}"
 }
 
 # Create line for top bar
@@ -121,7 +121,7 @@ top_bar+="$(build_block "neoweather" "%EICK%" "")"
 top_bar+="$(build_block "neonet" "%interf%" "")"
 top_bar+="$(build_block "neosysinfo" "%cpu%" "")"
 top_bar+="$(build_block "neosysinfo" "%cmd-gov%" "")"
-top_bar+="$(build_block "neosysinfo" "%memory% " "" "e")"
+top_bar+="$(build_block "neosysinfo" "%memory%" "" "e")"
 
 echo "$top_bar"
 
