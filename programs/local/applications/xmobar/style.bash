@@ -19,12 +19,24 @@ colour_arrow() {
 }
 
 build_block () {
+
+	# Wether we should include an arrow at the start
 	[ "${4}" == "e" ] && init_arrow="" || init_arrow="$(colour_arrow r "${colour2},${colour1}")"
+
+	# Do we want actions for this block
 	[ -n "${1}" ] && block="<action=\`${1}\`>"
+
+	# Start block with the given icon and create the rest
 	block="${block}<fc=${background},${colour1}:0><fn=1> ${3} </fn></fc>"
 	block+="$(colour_arrow r "${colour1},${colour2}")<fc=${foreground},${colour2}:0> ${2} </fc>"
+
+	# If action required add closing tag
 	[ -n "${1}" ] && block+="</action>"
+
+	# Finish block with the init arrow if chosen
 	block+="${init_arrow}"
+
+	# Echo the whole block
 	echo -n "${block}"
 }
 

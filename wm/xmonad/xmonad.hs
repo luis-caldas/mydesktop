@@ -187,68 +187,68 @@ myKeyBindings = [
                 -- Volume
                 , ("<XF86AudioMute>", do
                         spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle"
-                        spawn "volume-show"
+                        spawn "popneovolume"
                   )
                 , ("<XF86AudioLowerVolume>", do
                         spawn ("pactl set-sink-volume @DEFAULT_SINK@ -" ++ (show myKeyStep) ++ "%")
-                        spawn "volume-show"
+                        spawn "popneovolume"
                   )
                 , ("<XF86AudioRaiseVolume>", do
                         spawn ("pactl set-sink-volume @DEFAULT_SINK@ +" ++ (show myKeyStep) ++ "%")
-                        spawn "volume-show"
+                        spawn "popneovolume"
                   )
                 -- Backlight
                 , ("<XF86MonBrightnessUp>", do
                         spawn ("light -A " ++ (show myKeyStep))
-                        spawn "light-show"
+                        spawn "popneolight"
                   )
                 , ("<XF86MonBrightnessDown>", do
                         spawn ("light -U " ++ (show myKeyStep))
-                        spawn "light-show"
+                        spawn "popneolight"
                   )
                 , ("M-<XF86MonBrightnessUp>", do
                         spawn ("light -S " ++ (show myVolJumpHigh))
-                        spawn "light-show"
+                        spawn "popneolight"
                   )
                 , ("M-<XF86MonBrightnessDown>", do
                         spawn ("light -S " ++ (show myVolJumpLow))
-                        spawn "light-show"
+                        spawn "popneolight"
                   )
                 -- Audio Media
                 , ("<XF86AudioPlay>", do
                         spawn "playerctl play-pause"
-                        spawn "icon-show media-playback-pp.svg \"Play / Pause\""
+                        spawn "popneoicon media-playback-pp.svg \"Play / Pause\""
                   )
                 , ("<XF86AudioStop>", do
                         spawn "playerctl stop"
-                        spawn "icon-show media-playback-stop.svg Stop"
+                        spawn "popneoicon media-playback-stop.svg Stop"
                   )
                 , ("<XF86AudioNext>", do
                         spawn "playerctl next"
-                        spawn "icon-show media-skip-forward.svg Next"
+                        spawn "popneoicon media-skip-forward.svg Next"
                   )
                 , ("<XF86AudioPrev>", do
                         spawn "playerctl previous"
-                        spawn "icon-show media-skip-backward.svg Previous"
+                        spawn "popneoicon media-skip-backward.svg Previous"
                   )
                 , ("M-<XF86AudioMute>", do
                         spawn "playerctl position 0"
-                        spawn "icon-show media-seek-backward.svg Restart"
+                        spawn "popneoicon media-seek-backward.svg Restart"
                   )
                 , ("M-<XF86AudioLowerVolume>", do
                         spawn ("playerctl position -" ++ (show myKeyStep))
-                        spawn "icon-show media-seek-backward.svg Seek"
+                        spawn "popneoicon media-seek-backward.svg Seek"
                   )
                 , ("M-<XF86AudioRaiseVolume>", do
                         spawn ("playerctl position +" ++ (show myKeyStep))
-                        spawn "icon-show media-seek-forward.svg Seek"
+                        spawn "popneoicon media-seek-forward.svg Seek"
                   )
                 -- Other Media
                 , ("<XF86Explorer>", spawn myExplorer)
                 , ("<XF86Mail>"    , spawn myMail)
                 , ("<Print>"       , do
                         spawn myPrint
-                        spawn "icon-show camera-photo.svg Screenshot"
+                        spawn "popneoicon camera-photo.svg Screenshot"
                   )
                 , ("M-<Print>"     , spawn myPrintSel)
                 -- Lock
@@ -356,7 +356,7 @@ myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
                  where tagIndex       = \w -> fromMaybe (0) $ elemIndex (XMonad.StackSet.tag w) allScreenIDs
                        relativeScreen = \w -> 1 + (toInteger $ screenNrs!!(tagIndex w))
                        underScript    = \w -> superScripsNumbers (show $ relativeScreen w) False
-
+/
          fmt w = printer pp $ (windower w)
           where printer | any (\x -> maybe False (== XMonad.StackSet.tag w) (XMonad.StackSet.findTag x s)) urgents  = ppUrgent
                         | XMonad.StackSet.tag w == this                                                             = ppCurrent
