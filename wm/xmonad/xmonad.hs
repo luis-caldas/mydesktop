@@ -81,15 +81,20 @@ myClip     = "neoclip"
 myBrowserPersistentFlags = "--user-data-dir=$HOME/.config/chromium-persistent/"
 
 -- Floating programs and how they should float
-myFloatingPrograms = [ ("neocalendar", doFloatAt 0.05 0.05)
-                     , ("neoweather", doFloatAt 0.05 0.05)
-                     , ("neosysinfo", doFloatAt 0.05 0.05)
-                     , ("neobatt", doFloatAt 0.05 0.05)
-                     , ("neonet", doFloatAt 0.05 0.05)
-                     , ("neovol", doFloatAt 0.05 0.05)
-                     , ("Calculator", doCenterFloat)
+myFloatingPrograms = [ ("Calculator", doCenterFloat)
                      , ("glxgears", doCenterFloat)
-                     ]
+                     ] ++ generatedFloatWindows
+        where
+                floatWindow = doFloatAt 0.05 0.05
+                generatedFloatWindows = map (\each -> (each, floatWindow))
+                                [ "wneobattery"
+                                , "wneocalendar"
+                                , "wneonetwork"
+                                , "wneosysinfo"
+                                , "wneovolume"
+                                , "wneoweather"
+                                ]
+
 
 myTerminalArgs :: String -> [String]
 myTerminalArgs programName =
