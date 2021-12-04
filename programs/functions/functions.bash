@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# put here all the functions you want to be sourced at init
+# All local functions that will be available to the user terminal
+
 function will {
 	while true; do
 		"${@}" && break
