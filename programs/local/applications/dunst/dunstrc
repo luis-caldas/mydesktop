@@ -1,0 +1,42 @@
+[global]
+	follow = mouse
+	scale = "${scale}"
+	font = "monospace 12"
+	width = "${width}"
+	height = "${width}"
+	offset = "${space}x${space}"
+	transparency = "${alpha}"
+	sort = true
+	indicate_hidden = true
+	word_wrap = true
+	padding = "${padding}"
+	horizontal_padding = "${padding}"
+	stack_duplicates = true
+	frame_width = "${border}"
+	frame_color = "${colour_border}"
+	min_icon_size = "${min_icon_size}"
+	separator_height = "${border}"
+	progress_bar_height = "${bar_height}"
+	progress_bar_min_width = "${width}"
+	progress_bar_max_width = "${width}"
+	progress_bar_frame_width = "${bar_frame}"
+	highlight = "${colour_foreground}"
+
+[urgency_low]
+	background = "${colour_lbackground}"
+	foreground = "${colour_foreground}"
+	timeout = "3s"
+
+[urgency_normal]
+	background = "${colour_nbackground}"
+	foreground = "${colour_foreground}"
+	timeout = "4s"
+
+[urgency_critical]
+	background = "${colour_cbackground}"
+	foreground = "${colour_foreground}"
+	timeout = "5s"
+
+[ncspot]
+	appname = *ncspot*
+	format = "<b>  Now Playing:</b>\n%s\n%b"
