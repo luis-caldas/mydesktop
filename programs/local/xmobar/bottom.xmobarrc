@@ -7,7 +7,6 @@ Config {
                        ]
    , bgColor         = "${background}"
    , fgColor         = "${foreground}"
-   , alpha	     = ${alpha}
    , position        = Bottom
    -- General behavior
    , lowerOnStart     = True
@@ -19,7 +18,7 @@ Config {
    -- Layout
    , sepChar  = "%"
    , alignSep = "}{"
-   , template = " [%UnsafeStdinReader%] }{"
+   , template = "${bottom_bar}"
    -- Plugins
    , commands = [
         -- Stdin reader for the workspaces

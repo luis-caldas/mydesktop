@@ -50,6 +50,8 @@ envVarsSet = [ ("APPLICATION_UNICODE", "true")
 
 -- Scaling
 scalingVarName = "GDK_SCALE"
+leftArrow="\xe0b2"
+rightArrow="\xe0b0"
 
 -- XResources
 xrCommand               = ("xrdb", ["-query"])
@@ -123,20 +125,12 @@ myModKey = mod1Mask -- alt
 -- XMobar config files
 displayVar = "DISPLAY"
 
-myBar = "neomobar"
+myBar = "/home/majora/home/docs/sources/mydesktop/programs/public/neomobar"
 
 myBarArguments :: [String]
 myBarArguments =
     [ "-f", "xft:" ++ myFontFace ++ ":size=" ++ (show myFontSize)
     ]
-
-myBarPP = def { ppCurrent          = wrap ">" ""
-              , ppHidden           = wrap " " ""
-              , ppHiddenNoWindows  = wrap " " ""
-              , ppUrgent           = wrap "*" ""
-              , ppSep              = "] ["
-              , ppLayout           = const ""
-              }
 
 -- Commands that should be run before startup
 myStartupCommands = [ -- Cursor setting
@@ -451,6 +445,15 @@ argumentsToString :: [String] -> String
 argumentsToString argsList =
     intercalate " " argsList
 
+-- Creates a colour arrow
+createArrow :: String -> String -> String -> String
+createArrow arrow colourF colourB =
+        "<fc="
+        ++ colourF ++ "," ++ colourB
+        ++ ":0><fn=2>"
+        ++ arrow
+        ++ "</fn></fc>"
+
 -- Adds double quotes to the beginning and end of a string
 addQuotes :: String -> String
 addQuotes stringIn =
@@ -511,6 +514,35 @@ main = do
     let xrSpace        = mToInteger $ lookMap xrdbData xrVarSpace (show myWindowSpacing)
     let xrColour       = lookMap xrdbData xrVarBorderColour myNormalBorderColour
     let xrActiveColour = lookMap xrdbData xrVarBorderColourActive myFocusedBorderColour
+
+    -- Create myBarPP with some variables got from xrdb
+    let xrBarColour0 = lookMap xrdbData "xmobar.colour0" "#E0E0E0"
+    let xrBarColour1 = lookMap xrdbData "xmobar.colour1" "#D0D0D0"
+    let xrBarColour2 = lookMap xrdbData "xmobar.colour2" "#C0C0C0"
+    let xrBarColourBack = lookMap xrdbData xrVarBarBack "#000000"
+    let xrBarColourFore = lookMap xrdbData xrVarBarFore "#FFFFFF"
+    let myBarPP = def { ppCurrent          = wrap ( (createArrow rightArrow xrBarColour2 xrBarColour1)
+                                                 ++ "<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0> "
+                                                  )
+                                                  ( "</fc>"
+                                                 ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
+                                                  )
+                      , ppHidden           = wrap
+                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
+                                             " </fc>"
+                      , ppHiddenNoWindows  = wrap
+                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
+                                             " </fc>"
+                      , ppUrgent           = wrap "*" ""
+                      , ppWsSep            = ""
+                      , ppTitle           = shorten 160
+                      , ppTitleSanitize   = wrap
+                                            ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
+                                            (" </fc>" ++ (createArrow rightArrow xrBarColour2 xrBarColourBack))
+                      , ppSep              = (createArrow rightArrow xrBarColour2 xrBarColour1)
+                                          ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
+                      , ppLayout           = const ""
+                      }
 
     -- Create the bar command
     let myBarCommand = unwords [ myBar

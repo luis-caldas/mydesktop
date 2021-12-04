@@ -125,7 +125,7 @@ top_bar+="$(build_block "neosysinfo" "%memory% " "" "e")"
 
 echo "$top_bar"
 
-bottom_bar=""
+bottom_bar=" %UnsafeStdinReader% }{"
 
 # Export needed variables
 export -- \
