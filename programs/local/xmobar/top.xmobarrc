@@ -47,7 +47,7 @@ Config {
         , Run Memory [ "--template", "<used> / <total>"
                      , "-w", "5"
                      ] 10
-        , Run ComX "lock-show" [] "" "lock-show" 10
+        , Run ComX "/home/majora/home/docs/sources/mydesktop/programs/local/caps/show.bash" [] "" "lock-show" 10
         -- Battery script
         , Run ComX "control-bat" [ "all" ] "" "control-bat" 10
         -- Backlight script
