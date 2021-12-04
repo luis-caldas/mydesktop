@@ -547,9 +547,10 @@ main = do
                                              " </fc>"
                       , ppUrgent           = wrap "*" ""
                       , ppWsSep            = ""
-                      , ppTitle            = shorten 160 . wrap
-                                           ("<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0> ")
-                                           ( " </fc>" ++ (createArrow rightArrow xrBarColour1 xrBarColour2))
+                      , ppTitle            = ( wrap
+                                               ("<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0> ")
+                                               (" </fc>" ++ (createArrow rightArrow xrBarColour1 xrBarColour2))
+                                             ) . (shorten 160)
                       , ppTitleSanitize    = myXmobarStrip
                       , ppSep              = (createArrow rightArrow xrBarColour2 xrBarColour1)
                                           ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
