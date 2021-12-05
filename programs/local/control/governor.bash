@@ -362,7 +362,7 @@ pretty_cpu() {
 	if [ -n "$print_data" ]; then
 		# Import styling tools
 		folder_now="$(get_folder)"
-		source "${folder_now}"
+		source "${folder_now}/../visual/xmobar-style.bash"
 
 		# Build the full block
 		build_block "neosysinfo" "${print_data}" ""
