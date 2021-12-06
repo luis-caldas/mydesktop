@@ -200,19 +200,19 @@ myKeyBindings = [
                 -- Backlight
                 , ("<XF86MonBrightnessUp>", do
                         spawn ("light -A " ++ (show myKeyStep))
-                        spawn "popneolight"
+                        spawn "popneobrightness"
                   )
                 , ("<XF86MonBrightnessDown>", do
                         spawn ("light -U " ++ (show myKeyStep))
-                        spawn "popneolight"
+                        spawn "popneobrightness"
                   )
                 , ("M-<XF86MonBrightnessUp>", do
                         spawn ("light -S " ++ (show myVolJumpHigh))
-                        spawn "popneolight"
+                        spawn "popneobrightness"
                   )
                 , ("M-<XF86MonBrightnessDown>", do
                         spawn ("light -S " ++ (show myVolJumpLow))
-                        spawn "popneolight"
+                        spawn "popneobrightness"
                   )
                 -- Audio Media
                 , ("<XF86AudioPlay>", do

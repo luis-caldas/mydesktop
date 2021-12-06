@@ -66,7 +66,7 @@ plight() {
 		source "${folder_now}/../visual/xmobar-style.bash"
 
 		# Build the full block
-		build_block "light-show" "${backlight_result}" ""
+		build_block "popneobrightness" "${backlight_result}" ""
 	fi
 }
 
