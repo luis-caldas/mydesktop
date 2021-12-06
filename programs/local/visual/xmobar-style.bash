@@ -40,6 +40,27 @@ build_block () {
 	echo -n "${block}"
 }
 
+simple_block() {
+
+	# Do we want actions for this block
+	[ -n "${1}" ] && block="<action=\`${1}\`>"
+
+	# Start block with the given icon and create the rest
+	block="${block}$(colour_arrow l "${colour1},${colour2}")"
+	block+="<fc=${background},${colour1}:0>${2}</fc>"
+	block+="$(colour_arrow r "${colour1},${colour2}")"
+
+	# If action required add closing tag
+	[ -n "${1}" ] && block+="</action>"
+
+	# Finish block with the init arrow if chosen
+	block+="${init_arrow}"
+
+	# Echo the whole block
+	echo -n "${block}"
+
+}
+
 # Extract colours xresource
 alpha=$(extract "alpha")
 background=$(extract "background")
