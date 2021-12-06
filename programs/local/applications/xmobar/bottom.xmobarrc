@@ -2,7 +2,7 @@
 Config {
    -- Appearance
      font            = "xft:Mono:size=12"
-   , additionalFonts = [ "xft:Font Awesome 5 Free Solid:size=11"
+   , additionalFonts = [ "xft:Iosevka Nerd Font:size=11"
                        , "xft:Mono:size=18"
                        ]
    , bgColor         = "${background}"

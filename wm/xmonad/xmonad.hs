@@ -123,7 +123,7 @@ myVolJumpHigh = 100
 myWorkspaces = map cover oglist
         where
                 cover = \each -> "<fn=1>" ++ each ++ " " ++ "</fn>"
-                oglist = [ "\xf120", "\xf06e", "\xf0e0", "\xf15b", "\xf11b", "\xf53f", "\xf0ac", "\xf0c1", "\xf001" ]
+                oglist = [ "\xe795", "\xf707", "\xf6ed", "\xf718", "\xf795", "\xf8d7", "\xe22e", "\xf0c1", "\xf001" ]
 myWorkspacesKeys = map show [ 1 .. (length myWorkspaces) ]
 myDisplays = [ "q", "w", "e", "r" ]
 myDisplaysKeys = take (length myDisplays) localKeys
@@ -352,15 +352,15 @@ myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
          allScreenIDs    = map (XMonad.StackSet.tag . XMonad.StackSet.workspace) allScreens
          screenNrs       = map (XMonad.StackSet.screen) allScreens
 
-         screenShow      = \w -> \_ -> wrap (underScript w) ""
+         screenShow      = \windowId -> wrap (underScript windowId) ""
                  where tagIndex       = \w -> fromMaybe (0) $ elemIndex (XMonad.StackSet.tag w) allScreenIDs
                        relativeScreen = \w -> 1 + (toInteger $ screenNrs!!(tagIndex w))
                        underScript    = \w -> superScripsNumbers (show $ relativeScreen w) False
 
-         fmt w = printer pp $ (windower w)
+         fmt w = printer pp $ windower w
           where printer | any (\x -> maybe False (== XMonad.StackSet.tag w) (XMonad.StackSet.findTag x s)) urgents  = ppUrgent
                         | XMonad.StackSet.tag w == this                                                             = ppCurrent
-                        | XMonad.StackSet.tag w `elem` visibleIDs                                                   = screenShow w
+                        | XMonad.StackSet.tag w `elem` visibleIDs                                                   = \pp -> (ppVisible pp) . (screenShow w)
                         | isJust (XMonad.StackSet.stack w)                                                          = ppHidden
                         | otherwise                                                                                 = ppHiddenNoWindows
                 windower = (\tag -> XMonad.StackSet.tag tag ++ (superScripsNumbers (show $ (length . XMonad.StackSet.integrate' . XMonad.StackSet.stack) tag) True))
@@ -538,12 +538,11 @@ main = do
     let xrBarColour2 = lookMap xrdbData "xmobar.colour2" "#C0C0C0"
     let xrBarColourBack = lookMap xrdbData xrVarBarBack "#000000"
     let xrBarColourFore = lookMap xrdbData xrVarBarFore "#FFFFFF"
-    let myBarPP = def { ppCurrent          = wrap ( (createArrow rightArrow xrBarColour2 xrBarColour1)
-                                                 ++ "<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0> "
-                                                  )
-                                                  ( "</fc>"
-                                                 ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
-                                                  )
+    let myBarPP = def { ppCurrent          = wrap ( "<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0>  " )
+                                                  ( " </fc>" )
+                      , ppVisible           = wrap
+                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
+                                             " </fc>"
                       , ppHidden           = wrap
                                              ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0>  ")
                                              " </fc>"

@@ -46,20 +46,20 @@ top_bar+="%lock-show%"
 top_bar+="$(build_block "wneovolume" "%default:Master%" "")"
 top_bar+="%control-bat%"
 top_bar+="%control-light%"
-top_bar+="$(build_block "wneoweather" "%EICK%" "")"
-top_bar+="$(build_block "wneonetwork" "%interf%" "")"
-top_bar+="$(build_block "wneosysinfo" "%cpu%" "")"
+top_bar+="$(build_block "wneoweather" "%EICK%" "")"
+top_bar+="$(build_block "wneonetwork" "%interf%" "")"
+top_bar+="$(build_block "wneosysinfo" "%cpu%" "﬙")"
 top_bar+="%cmd-gov%"
-top_bar+="$(build_block "wneosysinfo" "%memory%" "" "e")"
+top_bar+="$(build_block "wneosysinfo" "%memory%" "" "e")"
 
 # Create bottom bar
 bottom_bar="%UnsafeStdinReader%$(colour_arrow r "${colour2},${background}")}{"
 bottom_bar+="$(colour_arrow l "${colour2},${background}")"
-bottom_bar+="$(simple_block "jgmenu --at-pointer --icon-size=0" "<fn=1>  </fn>")"
+bottom_bar+="$(simple_block "jgmenu --at-pointer --icon-size=0" "<fn=1>  </fn>")"
 bottom_bar+="$(colour_arrow r "${colour2},${background}")"
 
 # Create mute icon
-mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn></fc>"
+mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn></fc>"
 mute_space=""
 
 # Export needed variables

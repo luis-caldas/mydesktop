@@ -169,7 +169,7 @@ fn_all_bats() {
 
 pretty_section() {
 	source "${folder_now}/../visual/xmobar-style.bash"
-	build_block "popneobattery" "${1}" " ${2}"
+	build_block "popneobattery" "${1}" " ${2}"
 }
 
 # Covers the string with given chars
@@ -181,8 +181,8 @@ cover() {
 
 pretty_icon() {
 	if   [ "${1}" == "c" ]; then echo "<fn=1> </fn>"
-	elif [ "${1}" == "d" ]; then echo "<fn=1> </fn>"
-	elif [ "${1}" == "f" ]; then echo "<fn=1> </fn>"
+	elif [ "${1}" == "d" ]; then echo "<fn=1> </fn>"
+	elif [ "${1}" == "f" ]; then echo "<fn=1> </fn>"
 	else echo "<fn=1> </fn>"
 	fi
 }
@@ -254,7 +254,7 @@ power() {
 			# Check specific condition to trigger a battery warning
 			# Battery must be discharging and less than a given number
 			if (( "${var_bat_capacity}" <= "$BATT_WARNING_PERCENTAGE" )); then
-				if [ "${var_bat_charging}" = "/\\" ]; then
+				if [ "${var_bat_charging}" = "c" ]; then
 					is_under="no"
 				fi
 			else
