@@ -38,6 +38,7 @@ function get_folder() {
     # return the directory
     echo "$DIR"
 }
+folder_now="$(get_folder)"
 
 # Transforms minutes to
 mins_to_time() {
@@ -50,13 +51,6 @@ mins_to_time() {
 
 	# Return the formatted hour
 	printf "%2d%c%02d" "$hours" "$divider" "$minutes"
-}
-
-# Covers the string with given chars
-cover() {
-	cleft="["
-	cright="]"
-	printf "%c%s%c" "$cleft" "$*" "$cright"
 }
 
 # Checks which battery is present in the system from the list
@@ -105,13 +99,13 @@ bat_charging() {
 		charge_file="$battery_now""/status"
 		if [ -e "$charge_file" ]; then
 			if grep -Fxq "Charging" "$charge_file"; then
-				printf "%s" "/\\"
+				echo -n c
 			elif grep -Fxq "Full" "$charge_file"; then
-				printf "%s" "##"
+				echo -n f
 			elif grep -Fxq "Discharging" "$charge_file"; then
-				printf "%s" "\\/"
+				echo -n d
 			else
-				printf "%s" "??"
+				echo -n ?
 			fi
 		fi
 	fi
@@ -139,15 +133,12 @@ warning() {
 
 	fi
 
-	# If we reached here the popup needs to be shown
-	folder_local="$(get_folder)"
-
 	# Update the timer it has been shown
 	echo "$timestamp_now" > "$BATT_POPED_CHECK"
 
 	# Show the popup
 	#"${folder_local}/bat_popup.bash"
-	"${folder_local}/../notf/bat_popup_not.bash"
+	"${folder_now}/../notf/bat_popup_not.bash"
 
 }
 
@@ -177,6 +168,34 @@ fn_all_bats() {
 # }}}
 # {{{ Printing
 
+pretty_section() {
+	source "${folder_now}/../visual/xmobar-style.bash"
+	build_block "popneobattery" "${1}" " ${2}"
+}
+
+# Covers the string with given chars
+cover() {
+	cleft="["
+	cright="]"
+	printf "%c%s%c" "$cleft" "$*" "$cright"
+}
+
+pretty_icon() {
+	if   [ "${1}" == "c" ]; then echo "<fn=1> </fn>"
+	elif [ "${1}" == "d" ]; then echo "<fn=1> </fn>"
+	elif [ "${1}" == "f" ]; then echo "<fn=1> </fn>"
+	else echo "<fn=1> </fn>"
+	fi
+}
+
+text_icon() {
+	if   [ "${1}" == "c" ]; then echo "/\\"
+	elif [ "${1}" == "d" ]; then echo "\\/"
+	elif [ "${1}" == "f" ]; then echo "##"
+	else echo "??"
+	fi
+}
+
 power() {
 
 	if [ -n "$battery_present" ]; then
@@ -187,6 +206,9 @@ power() {
 		# Variable for warning popup
 		is_under="yes"
 
+		# Count battery numbers
+		battery_nr=1
+
 		# Iterate the batteries
 		while IFS= read -r each_bat; do
 
@@ -195,8 +217,15 @@ power() {
 			var_bat_time="$(bat_time "$each_bat")"
 			var_bat_charging="$(bat_charging "$each_bat")"
 
+			# Chose the type of printing
+			if [ "${1}" == "p" ]; then
+				charging_icon="$(pretty_icon "${var_bat_charging}")"
+			else
+				charging_icon="$(text_icon "${var_bat_charging}")"
+			fi
+
 			# Create the array with each data
-			var_bat_array=( "$var_bat_capacity" "$var_bat_time" "$var_bat_charging" )
+			var_bat_array=( "$var_bat_capacity" "$var_bat_time" "$charging_icon" )
 
 			# Create the array that will contain the existing vars
 			var_bat_real=()
@@ -210,11 +239,15 @@ power() {
 
 			# Check if the array is not empty (no battery info found)
 			if [ ! "${#var_bat_real[@]}" -eq 0 ]; then
-				cover "${var_bat_real[@]}"
+				if [ "${1}" == "p" ]; then
+					full_bat="${var_bat_real[*]}"
+					pretty_section "$full_bat" "$(echo "${battery_nr}" | sed -e 'y|0123456789|⁰¹²³⁴⁵⁶⁷⁸⁹|')"
+				else
+					cover "${var_bat_real[@]}"
+					# Add new line at the end
+					echo
+				fi
 			fi
-
-			# Add new line at the end
-			echo
 
 			# Check if all batteries are under a certain level
 			# if so raise the battery warning
@@ -228,6 +261,9 @@ power() {
 			else
 				is_under="no"
 			fi
+
+			# Update battery number
+			battery_nr=$(( battery_nr + 1 ))
 
 		done <<< "$all_bats"
 
@@ -243,7 +279,7 @@ power() {
 
 all() {
 	# Run printing functions
-	powers="$(power)"
+	powers="$(power "${1}")"
 
 	# Start array that will contain all prints
 	all_prints=()
@@ -257,7 +293,8 @@ all() {
 
 	# Add newline if there is anything to print
 	if [ ! "${#all_prints[@]}" -eq 0 ]; then
-		echo "${all_prints[*]}"" "
+		if [ "${1}" == "p" ]; then space=" "; else space=""; fi
+		echo "${all_prints[*]}${space}"
 	# If there is nothing to show throw an error
 	else
 		exit 1
@@ -268,7 +305,7 @@ all() {
 # {{{ Main
 
 usage() {
-	echo "Usage: $0 {capacity,time,charging,power,all}"
+	echo "Usage: $0 {capacity,time,charging,power,ppower,all,pall}"
 }
 
 case "$1" in
@@ -283,6 +320,12 @@ case "$1" in
 		;;
 	power)
 		power
+		;;
+	ppower)
+		power p
+		;;
+	pall)
+		all p
 		;;
 	all)
 		all

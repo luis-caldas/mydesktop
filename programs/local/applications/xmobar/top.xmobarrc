@@ -34,7 +34,7 @@ Config {
         , Run Volume "default" "Master" [ "--template", "<volume><status>"
                                         , "-w", "3"
                                         , "--"
-                                        , "--on" , "",     "--off",  " M"
+                                        , "--on" , "   ",     "--off",  "${mute_identifier}"
                                         , "--onc", "white", "--offc", "white"
                                         ] 10
         -- CPU Usage
@@ -47,7 +47,7 @@ Config {
                      ] 10
         , Run ComX "cneokeys" [] "" "lock-show" 10
         -- Battery script
-        , Run ComX "cneobattery" [ "all" ] "" "control-bat" 10
+        , Run ComX "cneobattery" [ "pall" ] "" "control-bat" 10
         -- Backlight script
         , Run ComX "cneolight" [ "pretty" ] "" "control-light" 10
         -- Governor script

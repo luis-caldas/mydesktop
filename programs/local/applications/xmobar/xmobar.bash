@@ -44,7 +44,7 @@ top_bar+="$(colour_arrow r "${background},${colour2}")"
 top_bar+="$(colour_arrow r "${colour2},${colour1}")"
 top_bar+="%lock-show%"
 top_bar+="$(build_block "popneovolume" "%default:Master%" "")"
-top_bar+="$(build_block "popneobattery" "%control-bat%" "")"
+top_bar+="%control-bat%"
 top_bar+="%control-light%"
 top_bar+="$(build_block "wneoweather" "%EICK%" "")"
 top_bar+="$(build_block "wneonetwork" "%interf%" "")"
@@ -52,15 +52,17 @@ top_bar+="$(build_block "wneosysinfo" "%cpu%" "")"
 top_bar+="%cmd-gov%"
 top_bar+="$(build_block "wneosysinfo" "%memory%" "" "e")"
 
-echo "$top_bar"
-
+# Create bottom bar
 bottom_bar="%UnsafeStdinReader%$(colour_arrow r "${colour2},${background}")}{"
+
+# Create mute icon
+mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn><fc>"
 
 # Export needed variables
 export -- \
 	alpha background foreground \
 	colour0 colour1 colour2 \
-	top_bar bottom_bar
+	top_bar bottom_bar mute_identifier
 
 # Run both xmobar instances
 xmobar "$@" <(envsubst < "${folder_now}/top.xmobarrc") &

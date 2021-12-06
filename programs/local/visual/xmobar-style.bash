@@ -27,7 +27,7 @@ build_block () {
 	[ -n "${1}" ] && block="<action=\`${1}\`>"
 
 	# Start block with the given icon and create the rest
-	block="${block}<fc=${background},${colour1}:0><fn=1> ${3} </fn></fc>"
+	block="${block}<fc=${background},${colour1}:0><fn=1> ${3} </fn>${5}</fc>"
 	block+="$(colour_arrow r "${colour1},${colour2}")<fc=${foreground},${colour2}:0> ${2} </fc>"
 
 	# If action required add closing tag
