@@ -62,8 +62,6 @@ bottom_bar+="$(colour_arrow r "${colour2},${background}")"
 mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn></fc>"
 mute_space=""
 
-
-
 # Export needed variables
 export -- \
 	alpha background foreground \
