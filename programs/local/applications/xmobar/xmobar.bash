@@ -56,14 +56,14 @@ top_bar+="$(build_block "wneosysinfo" "%memory%" "" "e")"
 bottom_bar="%UnsafeStdinReader%$(colour_arrow r "${colour2},${background}")}{"
 
 # Create mute icon
-mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn></fc>"
+mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn></fc>"
 mute_space="<fc=${foreground},${colour2}:0>   </fc>"
 
 # Export needed variables
 export -- \
 	alpha background foreground \
 	colour0 colour1 colour2 \
-	top_bar bottom_bar mute_identifier
+	top_bar bottom_bar mute_identifier mute_space
 
 # Run both xmobar instances
 xmobar "$@" <(envsubst < "${folder_now}/top.xmobarrc") &
