@@ -137,8 +137,7 @@ warning() {
 	echo "$timestamp_now" > "$BATT_POPED_CHECK"
 
 	# Show the popup
-	#"${folder_local}/bat_popup.bash"
-	"${folder_now}/../notf/bat_popup_not.bash"
+	"${folder_now}/../notifications/popup-battery.bash"
 
 }
 
