@@ -34,7 +34,7 @@ Config {
         , Run Volume "default" "Master" [ "--template", "<volume><status>"
                                         , "-w", "3"
                                         , "--"
-                                        , "--on" , "   ",     "--off",  "${mute_identifier}"
+                                        , "--on" , "${mute_space}",     "--off",  "${mute_identifier}"
                                         , "--onc", "white", "--offc", "white"
                                         ] 10
         -- CPU Usage

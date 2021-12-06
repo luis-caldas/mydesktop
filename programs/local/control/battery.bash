@@ -241,7 +241,7 @@ power() {
 			if [ ! "${#var_bat_real[@]}" -eq 0 ]; then
 				if [ "${1}" == "p" ]; then
 					full_bat="${var_bat_real[*]}"
-					pretty_section "$full_bat" "$(echo "${battery_nr}" | sed -e 'y|0123456789|⁰¹²³⁴⁵⁶⁷⁸⁹|')"
+					pretty_section "$full_bat" "<fn=0>$(echo "${battery_nr}" | sed -e 'y|0123456789|⁰¹²³⁴⁵⁶⁷⁸⁹|')</fn>"
 				else
 					cover "${var_bat_real[@]}"
 					# Add new line at the end
@@ -293,7 +293,7 @@ all() {
 
 	# Add newline if there is anything to print
 	if [ ! "${#all_prints[@]}" -eq 0 ]; then
-		if [ "${1}" == "p" ]; then space=" "; else space=""; fi
+		if [ "${1}" == "p" ]; then space=""; else space=" "; fi
 		echo "${all_prints[*]}${space}"
 	# If there is nothing to show throw an error
 	else

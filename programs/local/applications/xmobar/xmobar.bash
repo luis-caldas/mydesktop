@@ -56,7 +56,8 @@ top_bar+="$(build_block "wneosysinfo" "%memory%" "" "e")"
 bottom_bar="%UnsafeStdinReader%$(colour_arrow r "${colour2},${background}")}{"
 
 # Create mute icon
-mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn><fc>"
+mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn></fc>"
+mute_space="<fc=${foreground},${colour2}:0>   </fc>"
 
 # Export needed variables
 export -- \
