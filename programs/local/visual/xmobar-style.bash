@@ -46,9 +46,9 @@ simple_block() {
 	[ -n "${1}" ] && block="<action=\`${1}\`>"
 
 	# Start block with the given icon and create the rest
-	block="${block}$(colour_arrow l "${colour1},${colour2}")"
-	block+="<fc=${background},${colour1}:0>${2}</fc>"
-	block+="$(colour_arrow r "${colour1},${colour2}")"
+	block="${block}$(colour_arrow l "${colour0},${colour2}")"
+	block+="<fc=${background},${colour0}:0>${2}</fc>"
+	block+="$(colour_arrow r "${colour0},${colour2}")"
 
 	# If action required add closing tag
 	[ -n "${1}" ] && block+="</action>"

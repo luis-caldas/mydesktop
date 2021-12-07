@@ -152,13 +152,13 @@ myApplicationStartLayouts = [ ( "M-o", do
                                          spawnOn (myWorkspaces!!0) $ argumentsToString $ myTerminalArgs myTerminal
                                          spawnOn (myWorkspaces!!1) myBrowser
                                          spawnOn (myWorkspaces!!2) myMail
-                                         spawnOn (myWorkspaces!!7) $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ]
+                                         spawnOn (myWorkspaces!!6) $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ]
                                          spawnOn (myWorkspaces!!8) $ argumentsToString $ myTerminalArgs myTerminal
                               )
                             , ( "M-i", do
                                          spawnOn (myWorkspaces!!1) myBrowser
                                          spawnOn (myWorkspaces!!2) myMail
-                                         spawnOn (myWorkspaces!!7) $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ]
+                                         spawnOn (myWorkspaces!!6) $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ]
                               )
                             ]
 
@@ -538,7 +538,7 @@ main = do
     let xrBarColour2 = lookMap xrdbData "xmobar.colour2" "#C0C0C0"
     let xrBarColourBack = lookMap xrdbData xrVarBarBack "#000000"
     let xrBarColourFore = lookMap xrdbData xrVarBarFore "#FFFFFF"
-    let myBarPP = def { ppCurrent          = wrap ( "<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0>  " )
+    let myBarPP = def { ppCurrent          = wrap ( "<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour0 ++ ":0>  " )
                                                   ( " </fc>" )
                       , ppVisible           = wrap
                                              ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0> ")
@@ -552,13 +552,14 @@ main = do
                       , ppUrgent           = wrap "*" ""
                       , ppWsSep            = ""
                       , ppTitle            = ( wrap
-                                               ("<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0> ")
-                                               (" </fc>" ++ (createArrow rightArrow xrBarColour1 xrBarColour2))
+                                               ("<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour0 ++ ":0> ")
+                                               (" </fc>" ++ (createArrow rightArrow xrBarColour0 xrBarColour2))
                                              ) . (shorten 160)
                       , ppTitleSanitize    = myXmobarStrip
-                      , ppSep              = (createArrow rightArrow xrBarColour2 xrBarColour1)
-                                          ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
+                      , ppSep              = "<fc=" ++ xrBarColour2 ++ "," ++ xrBarColour2 ++ ":0> </fc>"
                                           ++ (createArrow rightArrow xrBarColour2 xrBarColour1)
+                                          ++ (createArrow rightArrow xrBarColour1 xrBarColour2)
+                                          ++ (createArrow rightArrow xrBarColour2 xrBarColour0)
                       , ppLayout           = const ""
                       }
 

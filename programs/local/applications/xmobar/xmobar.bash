@@ -53,14 +53,17 @@ top_bar+="%cmd-gov%"
 top_bar+="$(build_block "wneosysinfo" "%memory%" "" "e")"
 
 # Create bottom bar
-bottom_bar="%UnsafeStdinReader%$(colour_arrow r "${colour2},${background}")}{"
+bottom_bar="%UnsafeStdinReader%"
+bottom_bar+="<fc=${colour2},${colour2}:0> </fc>"
+bottom_bar+="$(colour_arrow r "${colour2},${background}")"
+bottom_bar+="}{"
 bottom_bar+="$(colour_arrow l "${colour2},${background}")"
 bottom_bar+="$(simple_block "jgmenu --at-pointer --icon-size=0" "<fn=1>   </fn>")"
 bottom_bar+="$(colour_arrow r "${colour2},${background}")"
 
 # Create mute icon
 mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn></fc>"
-mute_space="<fc=${foreground},${colour2}:0>   </fc>"
+mute_space=""
 
 # Export needed variables
 export -- \
