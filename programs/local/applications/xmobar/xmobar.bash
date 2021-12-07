@@ -37,6 +37,7 @@ source "${folder_now}/../../visual/xmobar-style.bash"
 
 # Create line for top bar
 top_bar="<action=\`wneocalendar\`><fc=${background},${colour1}:0> %date% </fc></action>"
+top_bar+="$(colour_arrow r "${colour0},${colour1}")"
 top_bar+="$(colour_arrow r "${colour1},${colour2}")"
 top_bar+="$(colour_arrow r "${colour2},${background}")"
 top_bar+=" }{ "
