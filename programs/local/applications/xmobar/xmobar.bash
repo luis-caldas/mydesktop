@@ -60,6 +60,7 @@ bottom_bar+="$(colour_arrow r "${colour2},${background}")"
 bottom_bar+="}{"
 bottom_bar+="$(colour_arrow l "${colour2},${background}")"
 bottom_bar+="$(simple_block "jgmenu --at-pointer --icon-size=0" "<fn=1>   </fn>")"
+bottom_bar+="$(simple_block "neopowermenu" "<fn=1>  </fn>")"
 bottom_bar+="$(colour_arrow r "${colour2},${background}")"
 
 # Create mute icon
