@@ -62,7 +62,7 @@ function extract_scaling_factor() {
 }
 
 function extract() {
-	data=$(xrdb -query | grep "${XRESOURCE_NAME}\.${1}" | cut -f 2)
+	data=$(xrdb -query | grep "${XRESOURCE_NAME}\.${1}:" | cut -f 2)
 	[ -z "$data" ] && data="0"
 	echo -n "$data"
 }
@@ -116,6 +116,10 @@ export -- \
 	alpha_back border_colour transparent \
 	background foreground \
 	colour0 colour1 colour2
+
+envsubst < "$folder_now/theme.rasi"
+
+echo "$border"
 
 # Run rofi with exported theme file
 rofi -show run -display-run "$user_char " \

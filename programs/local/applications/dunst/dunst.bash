@@ -57,7 +57,7 @@ function extract_scaling_factor() {
 }
 
 function extract() {
-	data=$(xrdb -query | grep "${XRESOURCE_NAME}\.${1}" | cut -f 2)
+	data=$(xrdb -query | grep "${XRESOURCE_NAME}\.${1}:" | cut -f 2)
 	[ -z "$data" ] && data="0"
 	echo -n "$data"
 }
