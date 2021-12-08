@@ -86,7 +86,7 @@ main() {
 	source "${folder_now}/../visual/xmobar-style.bash"
 
 	# Print block
-	build_block "" " ${inside_data} " " "
+	build_block "" " ${inside_data} " "  "
 
 }
 
