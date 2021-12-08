@@ -70,9 +70,10 @@ main() {
 
 	# Iterate array
 	for each in "${all_states[@]}"; do
-		inside_data+=" "
 		if [ -n "$each" ]; then
-			inside_data="${each}"
+			inside_data="${inside_data}${each}"
+		else
+			inside_data="${inside_data} "
 		fi
 	done
 
