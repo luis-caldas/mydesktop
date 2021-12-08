@@ -169,7 +169,7 @@ fn_all_bats() {
 
 pretty_section() {
 	source "${folder_now}/../visual/xmobar-style.bash"
-	build_block "popneobattery" "${1}" " ${2}"
+	build_block "popneobattery" " ${1} " " ${2}"
 }
 
 # Covers the string with given chars
