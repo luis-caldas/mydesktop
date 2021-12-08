@@ -541,7 +541,7 @@ main = do
     let myBarPP = def { ppCurrent          = wrap ( "<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour0 ++ ":0>  " )
                                                   ( " </fc>" )
                       , ppVisible           = wrap
-                                             ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour1 ++ ":0> ")
+                                             ("<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0> ")
                                              " </fc>"
                       , ppHidden           = wrap
                                              ("<fc=" ++ xrBarColourFore ++ "," ++ xrBarColour2 ++ ":0>  ")
