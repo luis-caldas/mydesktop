@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-POPUP_ID="30083"
-
 # Function to get current folder
 function get_folder() {
 
@@ -37,7 +35,7 @@ function gen_icon_name () {
 
 # Create the notification function
 function notfy() {
-	dunstify -i "$(gen_icon_name "${1}")" "${2}" -r "${POPUP_ID}" -t 1500
+	dunstify -i "$(gen_icon_name "${1}")" "${2}" -t 1500
 }
 
 function main() {
