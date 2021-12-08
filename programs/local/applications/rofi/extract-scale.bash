@@ -12,31 +12,6 @@ XRESOURCE_NAME="rofi"
 # Functions #
 #############
 
-# Function to get real script dir
-function get_folder() {
-
-    # get the folder in which the script is located
-    SOURCE="${BASH_SOURCE[0]}"
-
-    # resolve $SOURCE until the file is no longer a symlink
-    while [ -h "$SOURCE" ]; do
-
-      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-      SOURCE="$(readlink "$SOURCE")"
-
-      # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-
-    done
-
-    # the final assignment of the directory
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-    # return the directory
-    echo "$DIR"
-}
-
 function extract_scaling_factor() {
 
 	# run the gsettings command to get the scaling factor
@@ -83,9 +58,6 @@ function x_scale_defloat() {
 # Main #
 ########
 
-# Get local folder
-folder_now="$(get_folder)"
-
 # Extract all from xresources
 width=$(scale_defloat "$DEFAULT_WIDTH")
 dpi=$(scale_defloat "$DEFAULT_DPI")
@@ -115,17 +87,5 @@ export -- \
 	lines line_margin line_padding \
 	alpha_back border_colour transparent \
 	background foreground \
-	colour0 colour1 colour2
-
-envsubst < "$folder_now/theme.rasi"
-
-echo "$border"
-
-# Run rofi with exported theme file
-rofi -show run -display-run "$user_char " \
-	-theme <(envsubst < "${folder_now}/theme.rasi") \
-	-location 0 \
-	-dpi "$dpi" \
-	-no-click-to-exit \
-	-disable-history \
-	"$@"
+	colour0 colour1 colour2 \
+	user_char
