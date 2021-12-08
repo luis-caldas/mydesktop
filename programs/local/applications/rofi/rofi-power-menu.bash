@@ -141,4 +141,4 @@ chosen=$(echo "${echo_line}" | rofi -dmenu -sep "," \
 	"$@"
 	)
 
-[ -n "${chosen}" ] && "${options["$chosen"]}"
+[ -n "${chosen}" ] && eval "${options["$chosen"]}"
