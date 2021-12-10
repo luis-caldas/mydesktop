@@ -35,7 +35,7 @@ source "${folder_now}/extract-scale.bash"
 declare -A options
 options=(
 	["Power Off"]="systemctl poweroff"
-	["Reboot"]="systemctl reboot"
+	["Reboot "]="systemctl reboot"
 	["Logout"]="pkill xmonad"
 	["Close"]="exit 0"
 )
