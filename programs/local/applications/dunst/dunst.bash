@@ -85,6 +85,7 @@ space=$(x_scale_defloat "space")
 padding=$(extract "padding")
 alpha=$(extract "alpha")
 min_icon_size=$(extract "min-icon-size")
+max_icon_size=$(extract "max-icon-size")
 bar_height=$(extract "bar-size")
 bar_frame=$(extract "bar-frame")
 colour_border=$(extract "border-colour")
@@ -98,10 +99,11 @@ local_folder="$(get_folder)"
 
 # Export variables that are going to be used in envsubst
 export -- scale \
-	width border space padding min_icon_size \
+	width border space padding min_icon_size max_icon_size \
 	bar_height bar_frame \
 	alpha colour_border colour_foreground \
 	colour_lbackground colour_nbackground colour_cbackground
 
 # Start the program with custom rc file
+envsubst < "${local_folder}/dunstrc" # | dunst -config -
 envsubst < "${local_folder}/dunstrc" | dunst -config -
