@@ -79,6 +79,7 @@ myClip     = "neoclip"
 
 -- Browser flags
 myBrowserPersistentFlags = "--user-data-dir=$HOME/.config/chromium-persistent/"
+myBrowserWorkFlags = "--user-data-dir=$HOME/.config/chromium-work/"
 
 -- Floating programs and how they should float
 myFloatingPrograms = [ ("Calculator", doCenterFloat)
@@ -153,6 +154,7 @@ myApplicationStartLayouts = [ ( "M-o", do
                                          spawnOn (myWorkspaces!!1) myBrowser
                                          spawnOn (myWorkspaces!!2) myMail
                                          spawnOn (myWorkspaces!!6) $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ]
+                                         spawnOn (myWorkspaces!!6) $ argumentsToString $ [ myBrowser, myBrowserWorkFlags ]
                                          spawnOn (myWorkspaces!!8) $ argumentsToString $ myTerminalArgs myTerminal
                               )
                             , ( "M-i", do
@@ -172,6 +174,7 @@ myKeyBindings = [
                 , ("M-u"       , spawn myClip)
                 , ("M-n"       , spawn myBrowser)
                 , ("M-m"       , spawn $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ])
+                , ("M-b"       , spawn $ argumentsToString $ [ myBrowser, myBrowserWorkFlags ])
                 , ("M-<Space>" , spawn myLauncher)
                 -- Killer
                 , ("M-<Backspace>", kill)
