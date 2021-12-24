@@ -344,6 +344,17 @@ myDynamicLogString pp = do
                         ]
                         ++ catMaybes extras
 
+-- Create right command tag for clickable workspace
+clickableWrap :: Int -> String -> String
+clickableWrap i = myXmobarAction ("xdotool set_desktop " ++ show i)
+
+-- Wrap string with action tag and given command
+myXmobarAction :: String -> String -> String
+myXmobarAction command = wrap l r
+    where
+        l = "<action=`" ++ command ++ "`>"
+        r = "</action>"
+
 myPprWindowSet :: WorkspaceSort -> [Window] -> PP -> WindowSet -> String
 myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
             map XMonad.StackSet.workspace (XMonad.StackSet.current s : XMonad.StackSet.visible s) ++ XMonad.StackSet.hidden s
@@ -355,17 +366,22 @@ myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
          allScreenIDs    = map (XMonad.StackSet.tag . XMonad.StackSet.workspace) allScreens
          screenNrs       = map (XMonad.StackSet.screen) allScreens
 
-         screenShow      = \windowId -> wrap (underScript windowId) ""
-                 where tagIndex       = \w -> fromMaybe (0) $ elemIndex (XMonad.StackSet.tag w) allScreenIDs
-                       relativeScreen = \w -> 1 + (toInteger $ screenNrs!!(tagIndex w))
-                       underScript    = \w -> superScripsNumbers (show $ relativeScreen w) False
+         -- Shows screen number where there is multiple monitors
+         screenShow windowId = wrap (underScript windowId) ""
+                 where tagIndex       w = fromMaybe (0) $ elemIndex (XMonad.StackSet.tag w) allScreenIDs
+                       relativeScreen w = 1 + (toInteger $ screenNrs!!(tagIndex w))
+                       underScript    w = superScripsNumbers (show $ relativeScreen w) False
 
-         fmt w = printer pp $ windower w
+         -- Get current workspace
+         getWorkspace w = fromMaybe 0 (elemIndex (XMonad.StackSet.tag w) myWorkspaces)
+
+         fmt w = clickableWrap (getWorkspace w) $ printer pp $ windower w
           where printer | any (\x -> maybe False (== XMonad.StackSet.tag w) (XMonad.StackSet.findTag x s)) urgents  = ppUrgent
                         | XMonad.StackSet.tag w == this                                                             = ppCurrent
                         | XMonad.StackSet.tag w `elem` visibleIDs                                                   = \pp -> (ppVisible pp) . (screenShow w)
                         | isJust (XMonad.StackSet.stack w)                                                          = ppHidden
                         | otherwise                                                                                 = ppHiddenNoWindows
+                -- Adds superscripted number of windows besides the workspace
                 windower = (\tag -> XMonad.StackSet.tag tag ++ (superScripsNumbers (show $ (length . XMonad.StackSet.integrate' . XMonad.StackSet.stack) tag) True))
 
 myXmobarStrip :: String -> String
