@@ -24,3 +24,7 @@ function after_monitor_lap {
 	xinput map-to-output "Raydium Corporation Raydium Touch System" eDP1
 	neotrogen restore
 }
+
+function wher {
+	readlink "$(whereis "${1}" | awk '{print $2}')"
+}
