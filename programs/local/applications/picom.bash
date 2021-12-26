@@ -48,6 +48,7 @@ picom \
 	--shadow-radius "$new_border" \
 	--shadow-offset-x "$new_border" \
 	--shadow-offset-y "$new_border" \
+	--shadow-exclude "bounding_shaped" \
 	--no-dock-shadow \
 	--fading \
 	--fade-delta 5
