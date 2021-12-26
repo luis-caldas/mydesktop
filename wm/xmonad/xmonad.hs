@@ -76,6 +76,7 @@ myMail     = "thunderbird"
 myPrint    = "neoscrot"
 myPrintSel = "neoscrot select"
 myClip     = "neoclip"
+myFinder   = "neofind"
 
 -- Browser flags
 myBrowserPersistentFlags = "--user-data-dir=$HOME/.config/chromium-persistent/"
@@ -176,6 +177,7 @@ myKeyBindings = [
                 , ("M-m"       , spawn $ argumentsToString $ [ myBrowser, myBrowserPersistentFlags ])
                 , ("M-b"       , spawn $ argumentsToString $ [ myBrowser, myBrowserWorkFlags ])
                 , ("M-<Space>" , spawn myLauncher)
+                , ("M-f"       , spawn myFinder)
                 -- Killer
                 , ("M-<Backspace>", kill)
                 -- Navigation

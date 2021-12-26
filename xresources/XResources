@@ -86,6 +86,15 @@ rofi.space: MY_INSIDE_SPACING
 rofi.lines: 6
 rofi.line-padding: 10
 
+! Cursor finder
+find-cursor.size: 100
+find-cursor.distance: 15
+find-cursor.wait: 500
+find-cursor.width: 3
+find-cursor.colour: MY_FOREGROUND
+find-cursor.outline: 6
+find-cursor.background: MY_BACKGROUND
+
 ! Dunst
 dunst.border-size: MY_BORDER
 dunst.space: MY_OUTSIDE_SPACING_DB
