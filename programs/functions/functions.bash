@@ -16,6 +16,7 @@ function memdisk {
 function lap_dock {
 	xrandr --output DP2-1 --auto --primary --right-of eDP1 --output eDP1 --auto
 	xinput map-to-output "Raydium Corporation Raydium Touch System" eDP1
+	numlockx on
 	reneorevbackslash
 	neotrogen restore
 }
