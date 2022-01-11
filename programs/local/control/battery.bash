@@ -88,7 +88,7 @@ bat_time() {
 		if [ -e "$time_file" ]; then
 			time_mins=$(cat "$time_file")
 			converted_time=$(mins_to_time "$time_mins")
-			printf "%5s" "$converted_time"
+			printf "%s" "$converted_time"
 		fi
 	fi
 }
