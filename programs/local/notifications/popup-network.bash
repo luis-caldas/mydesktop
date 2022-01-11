@@ -102,7 +102,7 @@ function main() {
 		connected_devices="$(grep -v wifi <<< "${connected_devices}")";
 		grep ethernet <<< "${connected_devices}" | awk '{ print $1 " " $2 }';
 		connected_devices="$(grep -v ethernet <<< "${connected_devices}")";
-		awk '{ print $1 " " $2 }' <<< "${connected_devices}";
+		[ -n "${connected_devices}" ] && awk '{ print $1 " " $2 }' <<< "${connected_devices}";
 	})"
 
 	# Iterate the connected devices and notify them
