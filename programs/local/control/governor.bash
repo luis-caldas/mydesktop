@@ -396,7 +396,7 @@ pretty_gpu() {
 		source "${folder_now}/../visual/xmobar-style.bash"
 
 		# Build the full block
-		build_block "wneosysinfo" " ${print_data} " "  "
+		build_block "wneosysinfo" " ${print_data} " "  "
 	else
 		exit 1
 	fi
