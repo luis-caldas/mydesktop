@@ -50,7 +50,7 @@ mins_to_time() {
 	((minutes=${1}%60))
 
 	# Return the formatted hour
-	printf "%2d%c%02d" "$hours" "$divider" "$minutes"
+	printf "%d%c%02d" "$hours" "$divider" "$minutes"
 }
 
 # Checks which battery is present in the system from the list
