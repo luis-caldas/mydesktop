@@ -365,7 +365,7 @@ pretty_cpu() {
 		source "${folder_now}/../visual/xmobar-style.bash"
 
 		# Build the full block
-		build_block "wneosysinfo" " ${print_data} " "  "
+		build_block "wneosysinfo" " ${print_data} " "  "
 	else
 		exit 1
 	fi
@@ -396,7 +396,7 @@ pretty_gpu() {
 		source "${folder_now}/../visual/xmobar-style.bash"
 
 		# Build the full block
-		build_block "wneosysinfo" " ${print_data} " "  "
+		build_block "wneosysinfo" " ${print_data} " "  "
 	else
 		exit 1
 	fi
@@ -442,7 +442,7 @@ pretty_all() {
 
 	# Add newline if there is anything to print
 	if [ ! "${#all_prints[@]}" -eq 0 ]; then
-		echo -n "${all_prints[@]}"
+		printf "%s" "${all_prints[@]}"
 	# If there is nothing to show throw an error
 	else
 		exit 1
