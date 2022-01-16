@@ -178,6 +178,8 @@ myKeyBindings = [
                 , ("M-b"       , spawn $ argumentsToString $ [ myBrowser, myBrowserWorkFlags ])
                 , ("M-<Space>" , spawn myLauncher)
                 , ("M-f"       , spawn myFinder)
+                -- Custom key launcher
+                , ("<XF86Search>" , spawn myLauncher)
                 -- Killer
                 , ("M-<Backspace>", kill)
                 -- Navigation
