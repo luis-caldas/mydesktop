@@ -243,11 +243,11 @@ myKeyBindings = [
                         spawn "popneoicon media-seek-backward.svg Restart"
                   )
                 , ("M-<XF86AudioLowerVolume>", do
-                        spawn ("playerctl position -" ++ (show myKeyStep))
+                        spawn ("playerctl position " ++ (show myKeyStep) ++ "-")
                         spawn "popneoicon media-seek-backward.svg Seek"
                   )
                 , ("M-<XF86AudioRaiseVolume>", do
-                        spawn ("playerctl position +" ++ (show myKeyStep))
+                        spawn ("playerctl position " ++ (show myKeyStep) ++ "+")
                         spawn "popneoicon media-seek-forward.svg Seek"
                   )
                 -- Other Media
