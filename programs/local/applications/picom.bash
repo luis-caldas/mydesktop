@@ -49,6 +49,7 @@ picom \
 	--shadow-offset-x "$new_border" \
 	--shadow-offset-y "$new_border" \
 	--shadow-exclude "bounding_shaped" \
+	--shadow-exclude "i:e:Conky" \
 	--no-dock-shadow \
 	--fading \
 	--fade-delta 5
