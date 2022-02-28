@@ -124,6 +124,12 @@ xmobar.colour2: MY_GREY_2
 ! Conky
 conky.background: MY_BACKGROUND
 conky.foreground: MY_FOREGROUND
+conky.border: MY_INSIDE_SPACING
+conky.gapx: 60
+conky.gapy: 85
+conky.bar: 100
+conky.graph-height: 50
+conky.graph-width: 200
 
 ! St
 st.alpha:  MY_ALPHA
