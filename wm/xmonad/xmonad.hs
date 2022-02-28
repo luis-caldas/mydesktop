@@ -17,6 +17,7 @@ import XMonad.Hooks.UrgencyHook
 import XMonad.Util.WorkspaceCompare
 import XMonad.Util.NamedWindows
 import XMonad.Util.EZConfig
+import XMonad.Util.Ungrab
 import XMonad.Util.Run
 
 -- System
@@ -259,10 +260,7 @@ myKeyBindings = [
                   )
                 , ("M-<Print>"     , spawn myPrintSel)
                 -- Lock
-                , ("M-S-l", do
-                        spawn "sleep 1"
-                        spawn "loginctl lock-session"
-                  )
+                , ("M-S-l", unGrab >> spawn "loginctl lock-session \"$XDG_SESSION_ID\" && xset dpms force off")
                 -- Suicide
                 , ("M-S-C-k", io (exitWith ExitSuccess))
                 ] ++
