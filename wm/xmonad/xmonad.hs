@@ -381,7 +381,7 @@ myPprWindowSet sort' urgents pp s = mySepBy (ppWsSep pp) . map fmt . sort' $
 
          fmt w = clickableWrap (getWorkspace w) $ printer pp $ windower w
           where printer | any (\x -> maybe False (== XMonad.StackSet.tag w) (XMonad.StackSet.findTag x s)) urgents  = ppUrgent
-                        | XMonad.StackSet.tag w == this                                                             = ppCurrent
+                        | XMonad.StackSet.tag w == this                                                             = \pp -> (ppCurrent pp) . (screenShow w)
                         | XMonad.StackSet.tag w `elem` visibleIDs                                                   = \pp -> (ppVisible pp) . (screenShow w)
                         | isJust (XMonad.StackSet.stack w)                                                          = ppHidden
                         | otherwise                                                                                 = ppHiddenNoWindows
@@ -561,9 +561,10 @@ main = do
     let xrBarColour2 = lookMap xrdbData "xmobar.colour2" "#C0C0C0"
     let xrBarColourBack = lookMap xrdbData xrVarBarBack "#000000"
     let xrBarColourFore = lookMap xrdbData xrVarBarFore "#FFFFFF"
-    let myBarPP = def { ppCurrent          = wrap ( "<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour0 ++ ":0>  " )
-                                                  ( " </fc>" )
-                      , ppVisible           = wrap
+    let myBarPP = def { ppCurrent          = wrap
+                                             ("<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour0 ++ ":0> ")
+                                             " </fc>"
+                      , ppVisible          = wrap
                                              ("<fc=" ++ xrBarColourBack ++ "," ++ xrBarColour1 ++ ":0> ")
                                              " </fc>"
                       , ppHidden           = wrap
