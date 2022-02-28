@@ -1,5 +1,4 @@
 ! vim: syntax=xdefaults
-
 ! {{{ Initial defining
 
 ! Font
@@ -17,7 +16,7 @@
 #define MY_OUTSIDE_SPACING 15
 #define MY_OUTSIDE_SPACING_DB 30
 
-! Background and foregound
+! Background and foreground
 #define MY_ALPHA_BACK  #0D0D0DE0
 #define MY_BACKGROUND  #0D0D0D
 #define MY_FOREGROUND  #FFFFFF
@@ -46,7 +45,6 @@
 #define MY_GREY_2 #262626
 
 ! }}}
-
 ! {{{ Reasigning configs to programs
 
 ! Foregrounds and backgrounds
@@ -122,6 +120,10 @@ xmobar.foreground: MY_FOREGROUND
 xmobar.colour0: MY_GREY_0
 xmobar.colour1: MY_GREY_1
 xmobar.colour2: MY_GREY_2
+
+! Conky
+conky.background: MY_BACKGROUND
+conky.foreground: MY_FOREGROUND
 
 ! St
 st.alpha:  MY_ALPHA
