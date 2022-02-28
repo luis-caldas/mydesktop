@@ -259,7 +259,10 @@ myKeyBindings = [
                   )
                 , ("M-<Print>"     , spawn myPrintSel)
                 -- Lock
-                , ("M-S-l", spawn "loginctl lock-session")
+                , ("M-S-l", do
+                        spawn "sleep 1"
+                        spawn "loginctl lock-session"
+                  )
                 -- Suicide
                 , ("M-S-C-k", io (exitWith ExitSuccess))
                 ] ++

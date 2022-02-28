@@ -2,6 +2,9 @@
 
 TIMEOUT=10 # seconds
 
+# disable picom if it is enabled
+systemctl stop --user neopicom
+
 # blank screen
 xset dpms force off
 
@@ -22,3 +25,6 @@ xset dpms "$TIMEOUT" "$TIMEOUT" "$TIMEOUT"
 
 # restore the timeout to nothing
 xset dpms 0 0 0
+
+# reenable picom
+systemctl start --user neopicom
