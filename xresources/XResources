@@ -33,6 +33,24 @@
 #define MY_COLOUR_4 #838387
 #define MY_COLOUR_5 #ADAAB1
 
+! One Dark Pro colours
+#define MY_THEME_0  #3F4451
+#define MY_THEME_1  #E05561
+#define MY_THEME_2  #8CC265
+#define MY_THEME_3  #D18F52
+#define MY_THEME_4  #4AA5F0
+#define MY_THEME_5  #C162DE
+#define MY_THEME_6  #42B3C2
+#define MY_THEME_7  #E6E6E6
+#define MY_THEME_8  #4F5666
+#define MY_THEME_9  #FF616E
+#define MY_THEME_10 #A5E075
+#define MY_THEME_11 #F0A45D
+#define MY_THEME_12 #4DC4FF
+#define MY_THEME_13 #DE73FF
+#define MY_THEME_14 #4CD1E0
+#define MY_THEME_15 #D7DAE0
+
 ! Shades
 #define MY_SHADE_0 #000000
 #define MY_SHADE_1 #AAAAAA
