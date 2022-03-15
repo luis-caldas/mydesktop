@@ -22,7 +22,7 @@ Config {
    -- Plugins
    , commands = [
         -- Backlight
-        , Run Brightness [ "--template", "<percent>"
+        Run Brightness [ "--template", "<percent>"
                          , "-w", "3"
                          , "--"
                          , "-D", "edp-backlight"
