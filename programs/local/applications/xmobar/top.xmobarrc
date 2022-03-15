@@ -21,9 +21,6 @@ Config {
    , template = "${top_bar}"
    -- Plugins
    , commands = [
-        -- Weather monitor
-        Run Weather "EICK" [ "--template", "<tempC>°C - <skyCondition>"
-                             ] 36000
         -- Backlight
         , Run Brightness [ "--template", "<percent>"
                          , "-w", "3"
