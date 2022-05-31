@@ -45,7 +45,7 @@ function dock {
 	done < "${folder_now}/../../displays/nec-v72.modelines"
 
 	# select the best resolution
-	xrandr --output "${MONITOR}" --mode "1440x1080_65.00" --primary --right-of "${ATTACHED}" --output "${ATTACHED}" --auto
+	xrandr --output "${MONITOR}" --mode "1920x1440_46.00" --primary --right-of "${ATTACHED}" --output "${ATTACHED}" --auto
 
 	# fix rest of stuff for desktop
 	xinput map-to-output "Raydium Corporation Raydium Touch System" "${ATTACHED}"
