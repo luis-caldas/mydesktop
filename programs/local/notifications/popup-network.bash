@@ -53,11 +53,12 @@ function wifi_not() {
 	wsign="$(awk '{print $8}' <<< "${line}")"
 	wsecu="$(awk '{print $10}' <<< "${line}")"
 
+	wdevc="${1}"
 	ipaddr="${2}"
 	gateway="${3}"
 
 	# Create the information line
-	info_line="$(printf "%s\n\n%s%%\nCh %s - %s %s - %s\n%s @ %s" "${wssid}" "${wsign}" "${wchan}" "${wrate}" "${wunit}" "${wsecu}" "${ipaddr}" "${gateway}")"
+	info_line="$(printf "%s\n\n%s%%\nCh %s - %s %s - %s\n%s @ %s\n(%s)" "${wssid}" "${wsign}" "${wchan}" "${wrate}" "${wunit}" "${wsecu}" "${ipaddr}" "${gateway}" "${wdevc}")"
 
 	# Get the appropriate icon
 	icon_ratio=$(awk -v n="${wsign}" -v m="${#wifi_icons[@]}" 'BEGIN{print int( m * ( n / 100 ) )}')
@@ -135,14 +136,14 @@ function main() {
 			eth_duplex="$(grep "Duplex:" <<< "${eth_info}" | head -n1 | awk '{print $2}')"
 
 			# Create the notification line
-			info_line="$(printf "%s - %s\n%s - %s\n%s @ %s" "${wconn}" "${wtype}" "${eth_speed}" "${eth_duplex}" "${wip}" "${wroute}")"
+			info_line="$(printf "%s - %s\n%s - %s\n%s @ %s\n(%s)" "${wconn}" "${wtype}" "${eth_speed}" "${eth_duplex}" "${wip}" "${wroute}" "${wdevc}")"
 			notfy "${network_icon}" "${info_line}"
 
 		# Print simple info for other connections
 		else
 
 			# Create the notification line
-			info_line="$(printf "%s - %s\n%s @ %s" "${wconn}" "${wtype}" "${wip}" "${wroute}")"
+			info_line="$(printf "%s - %s\n%s @ %s\n(%s)" "${wconn}" "${wtype}" "${wip}" "${wroute}" "${wdevc}")"
 			notfy "${network_icon}" "${info_line}"
 
 		fi
