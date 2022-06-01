@@ -6,11 +6,11 @@
 BLUE_CACHE_FOLDER="${HOME}/.cache/neoblue"
 
 # Warning popup variables
-BLUE_WARNING_PERCENTAGE=25
+BLUE_WARNING_PERCENTAGE=101
 BLUE_POP_COOLDOWN_TIME=60  # Seconds
 
 # Cache variables
-BLUE_READ_COOLDOWN=$(( 60 * 5 )) # Seconds
+BLUE_READ_COOLDOWN=$(( 60 * 2 )) # Seconds
 
 # State of folder creation
 cache_created=0
@@ -235,11 +235,9 @@ main_check() {
 
 		fi
 
-		continue
-
 		# Check battery percentage
 		if (( "${batt_now}" <= "${BLUE_WARNING_PERCENTAGE}" )); then
-			warning "${each_dev}" &
+			warning "${each_dev}" "${batt_now}" &
 		fi
 
 	done <<< "${1}"
@@ -255,14 +253,16 @@ warning() {
 	timestamp_now="$(date +%s)"
 
 	# Create specific string for device
-	dev_pop_file=$()
+	fixed_mac="$(fix_mac "${1}")"
+	pop_name="pop-${fixed_mac}"
+	pop_path="${BLUE_CACHE_FOLDER}/${pop_name}"
 
 	# Get previous timestamp
 	# If it exists and is within time dont pop anything
-	if [ -f "$dev_pop_file" ]; then
+	if [ -f "$pop_path" ]; then
 
 		# Extract before time with the file
-		time_before="$(cat "$dev_pop_file")"
+		time_before="$(cat "$pop_path")"
 
 		# Check if time has not expired
 		if (( timestamp_now < (time_before + BLUE_POP_COOLDOWN_TIME) )); then
@@ -272,10 +272,11 @@ warning() {
 	fi
 
 	# Update the timer it has been shown
-	echo "$timestamp_now" > "$dev_pop_file"
+	check_cache_create
+	echo "$timestamp_now" > "$pop_path"
 
 	# Show the popup
-	"${folder_now}/../notifications/popup-bluetooth.bash" "${1}"
+	"${folder_now}/../notifications/popup-bluetooth.bash" single "${1}" "${2}"
 
 }
 
