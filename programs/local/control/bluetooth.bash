@@ -235,9 +235,14 @@ main_check() {
 
 		fi
 
-		# Check battery percentage
-		if (( "${batt_now}" <= "${BLUE_WARNING_PERCENTAGE}" )); then
-			warning "${each_dev}" "${batt_now}" &
+		# Check if only a print is sufficient
+		if [ "${2}" == "print" ]; then
+			printf "%s %s\n" "${each_dev}" "${batt_now}"
+		else
+			# Check battery percentage
+			if (( "${batt_now}" <= "${BLUE_WARNING_PERCENTAGE}" )); then
+				warning "${each_dev}" "${batt_now}" &
+			fi
 		fi
 
 	done <<< "${1}"
@@ -326,11 +331,17 @@ print() {
 
 }
 
+# Only print devices and percentages (api)
+print_devices() {
+	devices_now="$(devices)"
+	main_check "${devices_now}" print
+}
+
 # }}}
 # {{{ Main
 
 usage() {
-	echo "Usage: $0 {pretty,simple}"
+	echo "Usage: $0 {pretty,simple,devices}"
 }
 
 case "$1" in
@@ -339,6 +350,9 @@ case "$1" in
 		;;
 	simple)
 		print
+		;;
+	devices)
+		print_devices
 		;;
 	-h|--help)
 		usage

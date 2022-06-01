@@ -54,28 +54,39 @@ single() {
 
 	# Show notification
 	icon_path="$("${folder_now}/generate-icon.bash" "bluetooth.svg")"
-	text_now="$(printf "%s\n\n%s\n%s\n\nBattery @ %s%%" "${mac_addr}" "${description}" "${trusted}" "${batt}")"
+	text_now="$(printf "%s - %s\n\n%s\n\nBattery @ %s%%" "${description}" "${trusted}" "${mac_addr}" "${batt}")"
 	dunstify -i "${icon_path}" -h "int:value:${batt}" "${dev_name}" "\n${text_now}"
 
 }
 
+all() {
+
+	# Get all devices
+	all_dev_info="$("${folder_now}/../control/bluetooth.bash" devices)"
+
+	# Iterate and notify
+	while read -r each_dev; do
+		# Split input into vars
+		mac_addr="$(awk '{print $1}' <<< "${each_dev}")"
+		battery="$(awk '{print $2}' <<< "${each_dev}")"
+		single "${mac_addr}" "${battery}"
+	done <<< "${all_dev_info}"
+
+}
+
 usage() {
-	echo "Usage: $0 {single,all} [device mac] [percentage]"
+	echo "Usage: $0 {single [device mac] [percentage]}"
 }
 
 case "$1" in
 	single)
 		single "${2}" "${3}"
 		;;
-	all)
-		echo "not implemented"
-		;;
 	-h|--help)
 		usage
 		exit 64
 		;;
 	*)
-		usage
-		exit 1
+		all
 		;;
 esac
