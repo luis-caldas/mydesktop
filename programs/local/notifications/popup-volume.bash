@@ -56,7 +56,7 @@ function gen_icon_name () {
 
 # Create the notification function
 function notfy() {
-	dunstify -i "$(gen_icon_name "${1}")" "${2}" -h "int:value:${3}" -r "${POPUP_ID}" -t 1500
+	dunstify -i "$(gen_icon_name "${1}")" "${2}" "\n${3}" -h "int:value:${4}" -r "${POPUP_ID}" -t 1500
 }
 
 function main() {
@@ -68,11 +68,9 @@ function main() {
 	vol_sink=$(get_sink_vol "${default_sink}")
 	muted_sink=$(get_sink_muted "${default_sink}")
 
-	message_start="Volume - "
-
 	# Check if it is muted
 	if [ "$muted_sink" == "yes" ]; then
-		notfy "muted" "${message_start}Muted - ${vol_sink} %" "${vol_sink}"
+		notfy "muted" "Volume" "Muted - ${vol_sink} %" "${vol_sink}"
 	else
 		# Overflow limit
 		[ "$vol_sink" -lt 0 ] && vol_sink=0
@@ -92,7 +90,7 @@ function main() {
 		fi
 
 		# Send the notification
-		notfy "${icon_setted}" "${message_start}${vol_sink} %" "${vol_sink}"
+		notfy "${icon_setted}" "Volume" "${vol_sink} %" "${vol_sink}"
 
 	fi
 

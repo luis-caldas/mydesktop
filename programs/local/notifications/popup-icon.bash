@@ -35,12 +35,12 @@ function gen_icon_name () {
 
 # Create the notification function
 function notfy() {
-	dunstify -i "$(gen_icon_name "${1}")" "${2}" -t 1500
+	dunstify -i "$(gen_icon_name "${1}")" "${2}" "\n${3}" -t 1500
 }
 
 function main() {
 	# Send the notification
-	notfy "${1}" "${2}"
+	notfy "${1}" "${2}" "${3}"
 }
 
 main "$@"

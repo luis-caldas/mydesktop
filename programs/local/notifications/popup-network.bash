@@ -58,7 +58,7 @@ function wifi_not() {
 	gateway="${3}"
 
 	# Create the information line
-	info_line="$(printf "%s\n\n%s%%\nCh %s - %s %s - %s\n%s @ %s\n(%s)" "${wssid}" "${wsign}" "${wchan}" "${wrate}" "${wunit}" "${wsecu}" "${ipaddr}" "${gateway}" "${wdevc}")"
+	info_line="$(printf "%s%%\nCh %s - %s %s - %s\n%s @ %s\n(%s)" "${wsign}" "${wchan}" "${wrate}" "${wunit}" "${wsecu}" "${ipaddr}" "${gateway}" "${wdevc}")"
 
 	# Get the appropriate icon
 	icon_ratio=$(awk -v n="${wsign}" -v m="${#wifi_icons[@]}" 'BEGIN{print int( m * ( n / 100 ) )}')
@@ -66,7 +66,7 @@ function wifi_not() {
 	[ "$icon_ratio" -ge "${#wifi_icons[@]}" ] && icon_ratio=$(( ${#wifi_icons[@]} - 1 ))
 
 	# Send the notification
-	notfy_bar "${wifi_icon_prefix}${wifi_icons[icon_ratio]}" "${info_line}" "${wsign}"
+	notfy_bar "${wifi_icon_prefix}${wifi_icons[icon_ratio]}" "${wssid}" "${info_line}" "${wsign}"
 
 }
 
@@ -77,10 +77,10 @@ function gen_icon_name () {
 
 # Create the notification function
 function notfy() {
-	dunstify -i "$(gen_icon_name "${1}")" "${2}" -t "${TIMEOUT}"
+	dunstify -i "$(gen_icon_name "${1}")" "${2}" "${3}" -t "${TIMEOUT}"
 }
 function notfy_bar() {
-	dunstify -i "$(gen_icon_name "${1}")" "${2}" -h "int:value:${3}" -t "${TIMEOUT}"
+	dunstify -i "$(gen_icon_name "${1}")" "${2}" "${3}" -h "int:value:${4}" -t "${TIMEOUT}"
 }
 
 function main() {
@@ -136,15 +136,15 @@ function main() {
 			eth_duplex="$(grep "Duplex:" <<< "${eth_info}" | head -n1 | awk '{print $2}')"
 
 			# Create the notification line
-			info_line="$(printf "%s - %s\n%s - %s\n%s @ %s\n(%s)" "${wconn}" "${wtype}" "${eth_speed}" "${eth_duplex}" "${wip}" "${wroute}" "${wdevc}")"
-			notfy "${network_icon}" "${info_line}"
+			info_line="$(printf "%s\n%s - %s\n%s @ %s\n(%s)" "${wtype}" "${eth_speed}" "${eth_duplex}" "${wip}" "${wroute}" "${wdevc}")"
+			notfy "${network_icon}" "${wconn}" "${info_line}"
 
 		# Print simple info for other connections
 		else
 
 			# Create the notification line
-			info_line="$(printf "%s - %s\n%s @ %s\n(%s)" "${wconn}" "${wtype}" "${wip}" "${wroute}" "${wdevc}")"
-			notfy "${network_icon}" "${info_line}"
+			info_line="$(printf "%s\n%s @ %s\n(%s)" "${wtype}" "${wip}" "${wroute}" "${wdevc}")"
+			notfy "${network_icon}" "${wconn}" "${info_line}"
 
 		fi
 
