@@ -42,6 +42,16 @@ single() {
 	mac_addr="${1}"
 	batt="${2}"
 
+	# Empty vars
+	batt_str=""
+	batt_loader=()
+
+	# Check if there is battery
+	if [ ! "${batt}" == "?" ]; then
+		batt_str="$(printf "\n\nBattery @ %s%%" ${batt})"
+		batt_loader=( "-h" "int:value:${batt}" )
+	fi
+
 	# Split info into variables
 	dev_name="$(grep Name <<< "${all_info}" | awk '{$1=""; print $0}' | sed -e 's/^\s*//' -e 's/\s*$//')"
 	des_name="$(grep Icon <<< "${all_info}" | awk '{$1=""; print $0}' | sed -e 's/^\s*//' -e 's/\s*$//')"
@@ -54,8 +64,8 @@ single() {
 
 	# Show notification
 	icon_path="$("${folder_now}/generate-icon.bash" "bluetooth.svg")"
-	text_now="$(printf "%s - %s\n\n%s\n\nBattery @ %s%%" "${description}" "${trusted}" "${mac_addr}" "${batt}")"
-	dunstify -i "${icon_path}" -h "int:value:${batt}" "${dev_name}" "\n${text_now}"
+	text_now="$(printf "%s - %s\n\n%s%s" "${description}" "${trusted}" "${mac_addr}" "${batt_str}")"
+	dunstify -i "${icon_path}" "${batt_loader[@]}" "${dev_name}" "\n${text_now}"
 
 }
 

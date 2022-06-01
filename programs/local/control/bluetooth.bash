@@ -231,18 +231,24 @@ main_check() {
 			timestamp_updated="$(date +%s)"
 
 			# Save to cache the new information
-			printf "%s %d\n" "${timestamp_updated}" "${batt_now}" > "${cache_path}"
+			printf "%s %s\n" "${timestamp_updated}" "${batt_now}" > "${cache_path}"
 
 		fi
 
 		# Check if only a print is sufficient
 		if [ "${2}" == "print" ]; then
 			printf "%s %s\n" "${each_dev}" "${batt_now}"
-		else
-			# Check battery percentage
-			if (( "${batt_now}" <= "${BLUE_WARNING_PERCENTAGE}" )); then
-				warning "${each_dev}" "${batt_now}" &
-			fi
+			continue
+		fi
+
+		# Check if no percentage was found
+		if [ "${batt_now}" == "?" ]; then
+			continue
+		fi
+
+		# Check battery percentage
+		if (( "${batt_now}" <= "${BLUE_WARNING_PERCENTAGE}" )); then
+			warning "${each_dev}" "${batt_now}" &
 		fi
 
 	done <<< "${1}"
