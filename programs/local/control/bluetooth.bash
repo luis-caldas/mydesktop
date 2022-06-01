@@ -62,6 +62,32 @@ revert_mac() {
 	tr '_' ':' <<< "${1}"
 }
 
+# Get full dbus bluez object
+bluez_full() {
+	dbus-send \
+		--system \
+		--print-reply \
+		--type=method_call \
+		--dest='org.bluez' '/' \
+		org.freedesktop.DBus.ObjectManager.GetManagedObjects \
+		| grep "object path" \
+		| sed -e 's/variant//' \
+			-e 's/object path//' \
+			-e 's/^\s*//' \
+			-e 's/^"//' \
+			-e 's/"$//' \
+		| sort -h \
+		| uniq
+}
+
+# Find adapter from mac
+find_path_bluez_dbus() {
+
+	# Extract the wanted device
+	grep "${1}" <<< "${2}" | head -n1
+
+}
+
 # }}}
 # {{{ Devices
 
@@ -99,25 +125,56 @@ devices() {
 # {{{ Battery
 
 check_battery_rfcomm() {
-	bluetooth_battery "$1" 2> /dev/null | awk '{print $NF}' | sed 's/[^0-9]*//g'
+
+	while true; do
+		# Run command and save both stdout and stderr
+		{
+			IFS=$'\n' read -r -d '' stderr_now;
+			IFS=$'\n' read -r -d '' stdout_now;
+		} < <((printf '\0%s\0' "$(bluetooth_battery "$1")" 1>&2) 2>&1)
+
+		# Check for output on stdout
+		output_value="$(awk '{print $NF}' <<< "${stdout_now}" | sed 's/[^0-9]*//g')"
+
+		# Check if device busy was the cause
+		if [ -z "$output_value" ]; then
+			if ! grep -q 'Device or resource busy' <<< "$stderr_now"; then
+				break
+			fi
+		else
+			echo "${output_value}"
+			break
+		fi
+
+	done
+
 }
 
 check_battery_dbus() {
-	converted_mac="$(tr ':' '_' <<< "${1}")"
-	# FIXME Hardcoded bluetooth adapter number
+
+	# Fix given mac
+	fixed_mac="$(fix_mac "${1}")"
+
+	# Find which adapter is connected to device
+	dev_path="$(find_path_bluez_dbus "${fixed_mac}" "${2}")"
+
+	# Get the battery percentage
 	dbus-send \
 		--print-reply=literal \
 		--system \
-		--dest=org.bluez /org/bluez/hci0/dev_"${converted_mac}" \
+		--dest=org.bluez \
+		"${dev_path}" \
 		org.freedesktop.DBus.Properties.Get \
 		string:"org.bluez.Battery1" \
 		string:"Percentage" 2> /dev/null | awk '{print $NF}'
+
 }
 
 check_battery() {
+
 	# Print battery by whatever method necessary
 	rf_bat="$(check_battery_rfcomm "${1}")"
-	db_bat="$(check_battery_dbus "${1}")"
+	db_bat="$(check_battery_dbus "${1}" "${2}")"
 
 	# Create print number
 	print_nr=0
@@ -127,6 +184,7 @@ check_battery() {
 	elif [ -n "$db_bat" ]; then
 		print_nr="$db_bat"
 	else
+		printf "%s ?\n" "$1"
 		return
 	fi
 
@@ -135,8 +193,15 @@ check_battery() {
 
 main_check() {
 
+	# Create cache for dbus bluez
+	bluez_cache="$(bluez_full)"
+
 	# Iterate the devices
 	while read -r each_dev; do
+
+		check_battery "${each_dev}" "${bluez_cache}"
+
+		continue
 
 		# Check battery percentage
 		if (( "${batt_now}" <= "${BLUE_WARNING_PERCENTAGE}" )); then
