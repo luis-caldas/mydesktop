@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # Acquire all networks
-networks="$(nmcli c show --active | sed '1d' | awk '{ print $(NF - 0) }' | xargs echo)"
+networks="$(nmcli c show --active | sed '1d' | awk '{ print $(NF - 0) }')"
 
 # Print all networks if not empty, else print none
 if [ -n "$networks" ]; then
-	echo -n "$networks"
+	wc -l <<< "${networks}"
 else
-	echo -n none
+	echo -n 0
 fi
