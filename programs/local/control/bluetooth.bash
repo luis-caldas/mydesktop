@@ -6,7 +6,7 @@
 BLUE_CACHE_FOLDER="${HOME}/.cache/neoblue"
 
 # Warning popup variables
-BLUE_WARNING_PERCENTAGE=101
+BLUE_WARNING_PERCENTAGE=25
 BLUE_POP_COOLDOWN_TIME=60  # Seconds
 
 # Cache variables
@@ -290,7 +290,7 @@ warning() {
 
 pretty_section() {
 	source "${folder_now}/../visual/xmobar-style.bash"
-	build_block "popneobluetooth" " ${1} " "  "
+	build_block "popneoblue" " ${1} " "  "
 }
 
 # Covers the string with given chars

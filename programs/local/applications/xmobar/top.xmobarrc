@@ -46,6 +46,8 @@ Config {
         -- Battery script
         , Run ComX "cneobattery" [ "pall" ] "" "control-bat" 10
         -- Backlight script
+        , Run ComX "cneoblue" [ "pretty" ] "" "control-bluetooth" 10
+        -- Backlight script
         , Run ComX "cneolight" [ "pretty" ] "" "control-light" 10
         -- Governor script
         , Run ComX "cneogovernor" [ "pretty" ] "" "cmd-gov" 10
