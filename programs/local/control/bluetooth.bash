@@ -10,7 +10,7 @@ BLUE_WARNING_PERCENTAGE=25
 BLUE_POP_COOLDOWN_TIME=60  # Seconds
 
 # Cache variables
-READ_COOLDOWN=$(( 60 * 5 )) # Seconds
+BLUE_READ_COOLDOWN=$(( 60 * 5 )) # Seconds
 
 # State of folder creation
 cache_created=0
@@ -46,7 +46,7 @@ folder_now="$(get_folder)"
 
 # Creates the cache folder
 check_cache_create() {
-	if [ "$cache_created" -ne 0 ]; then # Check wether it was created by this same script
+	if [ "$cache_created" -eq 0 ]; then # Check wether it was created by this same script
 		if [ ! -d "$BLUE_CACHE_FOLDER" ]; then
 			mkdir -p "${BLUE_CACHE_FOLDER}"
 		fi
@@ -110,9 +110,6 @@ devices() {
 
 	# If there are connected devices
 	if [ "${#all_connected_devices[@]}" -ne 0 ]; then
-
-		# Check for cache folder
-		check_cache_create
 
 		# Print the list of connected devices
 		printf "%s\n" "${all_connected_devices[@]}"
@@ -184,11 +181,12 @@ check_battery() {
 	elif [ -n "$db_bat" ]; then
 		print_nr="$db_bat"
 	else
-		printf "%s ?\n" "$1"
+		printf "?\n"
 		return
 	fi
 
-	printf "%s %3d\n" "$1" "$print_nr"
+	printf "%3d\n" "$print_nr"
+
 }
 
 main_check() {
@@ -199,7 +197,43 @@ main_check() {
 	# Iterate the devices
 	while read -r each_dev; do
 
-		check_battery "${each_dev}" "${bluez_cache}"
+		# Clear variable for next iteration
+		batt_now=""
+
+		# Create fixed mac for it and cache name
+		fixed_mac="$(fix_mac "${each_dev}")"
+		cache_name="batt-check-${fixed_mac}"
+		cache_path="${BLUE_CACHE_FOLDER}/${cache_name}"
+
+		# Check if current device is cached and requires to be reevaluated
+		timestamp_now="$(date +%s)"
+		if [ -f "${cache_path}" ]; then
+			# Get file
+			cache_file="$(cat "${cache_path}")"
+			# Get time within file
+			time_before="$(awk '{print $1}' <<< "${cache_file}")"
+			# Check if time has not expired
+			if (( timestamp_now < (time_before + BLUE_READ_COOLDOWN) )); then
+				batt_now="$(awk '{print $2}' <<< "${cache_file}")"
+			fi
+		fi
+
+		# Check if cache was not successful
+		if [ -z "$batt_now" ]; then
+
+			# Check battery of current device
+			batt_now="$(check_battery "${each_dev}" "${bluez_cache}")"
+
+			# Check cache folder
+			check_cache_create
+
+			# Get updated timestamp
+			timestamp_updated="$(date +%s)"
+
+			# Save to cache the new information
+			printf "%s %d\n" "${timestamp_updated}" "${batt_now}" > "${cache_path}"
+
+		fi
 
 		continue
 
