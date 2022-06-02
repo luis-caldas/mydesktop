@@ -55,6 +55,14 @@ function dock {
 
 }
 
+function undock {
+	xrandr --output "${MONITOR}" --off --output "${ATTACHED}" --auto --primary
+	xinput map-to-output "Raydium Corporation Raydium Touch System" "${ATTACHED}"
+	numlockx off
+	reneoslashtoback
+	neotrogen restore
+}
+
 function dock_legacy {
 	xrandr --output "${MONITOR}" --auto --primary --right-of "${ATTACHED}" --output "${ATTACHED}" --auto
 	xinput map-to-output "Raydium Corporation Raydium Touch System" "${ATTACHED}"
