@@ -30,23 +30,14 @@ function get_folder() {
 # Get our folder
 folder_now="$(get_folder)"
 
-# Get the default sink from pulseaudio
-function get_sink() {
-	pacmd stat | awk -F": " '/^Default sink name: /{print $2}'
-}
-
 # Get volume from a given sink
 function get_sink_vol() {
-	pacmd list-sinks |
-		awk '/^\s+name: /{indefault = $2 == "<'"$1"'>"}
-		     /^\s+volume: / && indefault {print $5; exit}' | tr -d '%'
+	pamixer --get-volume
 }
 
 # Get muted state from a given sink
 function get_sink_muted() {
-	pacmd list-sinks |
-		awk '/^\s+name: /{indefault = $2 == "<'"$1"'>"}
-		     /^\s+muted: / && indefault {print $2; exit}' | tr -d '%'
+	pamixer --get-mute
 }
 
 # Create icon name
@@ -65,11 +56,11 @@ function main() {
 	default_sink=$(get_sink)
 
 	# Get volume and muted state
-	vol_sink=$(get_sink_vol "${default_sink}")
-	muted_sink=$(get_sink_muted "${default_sink}")
+	vol_sink=$(get_sink_vol)
+	muted_sink=$(get_sink_muted)
 
 	# Check if it is muted
-	if [ "$muted_sink" == "yes" ]; then
+	if [ "$muted_sink" == "true" ]; then
 		notfy "muted" "Volume" "Muted - ${vol_sink} %" "${vol_sink}"
 	else
 		# Overflow limit

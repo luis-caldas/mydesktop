@@ -194,15 +194,15 @@ myKeyBindings = [
                 , ("M-;", sendMessage Shrink)
                 -- Volume
                 , ("<XF86AudioMute>", do
-                        spawn "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+                        spawn "pamixer --toggle-mute"
                         spawn "popneovolume"
                   )
                 , ("<XF86AudioLowerVolume>", do
-                        spawn ("pactl set-sink-volume @DEFAULT_SINK@ -" ++ (show myKeyStep) ++ "%")
+                        spawn ("pamixer --decrease " ++ (show myKeyStep))
                         spawn "popneovolume"
                   )
                 , ("<XF86AudioRaiseVolume>", do
-                        spawn ("pactl set-sink-volume @DEFAULT_SINK@ +" ++ (show myKeyStep) ++ "%")
+                        spawn ("pamixer --increase " ++ (show myKeyStep))
                         spawn "popneovolume"
                   )
                 -- Backlight
