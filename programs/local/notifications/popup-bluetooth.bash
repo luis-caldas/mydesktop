@@ -48,7 +48,7 @@ single() {
 
 	# Check if there is battery
 	if [ ! "${batt}" == "?" ]; then
-		batt_str="$(printf "\n\nBattery @ %s%%" ${batt})"
+		batt_str="$(printf "\n\nBattery @ %s%%" "${batt}")"
 		batt_loader=( "-h" "int:value:${batt}" )
 	fi
 

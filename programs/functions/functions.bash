@@ -33,7 +33,7 @@ function dock {
     folder_now="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 	# import all modelines
-	while read modeline; do
+	while read -r modeline; do
 		# read line into array
         read -ra array_modes <<< "${modeline}"
 		# clean array
