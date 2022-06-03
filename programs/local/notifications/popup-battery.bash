@@ -3,26 +3,26 @@
 # Function to get current folder
 function get_folder() {
 
-    # get the folder in which the script is located
-    SOURCE="${BASH_SOURCE[0]}"
+	# get the folder in which the script is located
+	SOURCE="${BASH_SOURCE[0]}"
 
-    # resolve $SOURCE until the file is no longer a symlink
-    while [ -h "$SOURCE" ]; do
+	# resolve $SOURCE until the file is no longer a symlink
+	while [ -h "$SOURCE" ]; do
 
-      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+	  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-      SOURCE="$(readlink "$SOURCE")"
+	  SOURCE="$(readlink "$SOURCE")"
 
-      # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+	  # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+	  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
 
-    done
+	done
 
-    # the final assignment of the directory
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+	# the final assignment of the directory
+	DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
-    # return the directory
-    echo "$DIR"
+	# return the directory
+	echo "$DIR"
 }
 
 # Get icon depending on number
@@ -49,6 +49,16 @@ function get_icon() {
 
 }
 
+# Transform number ordinal
+function ordinal () {
+	case "${1}" in
+		*1[0-9] | *[04-9]) echo "$1"th;;
+		*1) echo "$1"st;;
+		*2) echo "$1"nd;;
+		*3) echo "$1"rd;;
+	esac
+}
+
 # Get our folder
 folder_now="$(get_folder)"
 
@@ -61,7 +71,9 @@ batt_count=1
 
 # Iterate the array of batteries
 for each_batt in "${arg_array[@]}"; do
-	icon_path=$(get_icon "$each_batt")
-	dunstify -i "${icon_path}" -h "int:value:${each_batt}" "Battery" "\n${batt_count} @ ${each_batt}%"
+	icon_path="$(get_icon "$each_batt")"
+	ordinal_nr="$(ordinal "${batt_count}")"
+	battery_title="$(printf "%s Battery" "${ordinal_nr}")"
+	dunstify -i "${icon_path}" -h "int:value:${each_batt}" "${battery_title}" "\n@ ${each_batt}%"
 	batt_count=$(( batt_count + 1 ))
 done
