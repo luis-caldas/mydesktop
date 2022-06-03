@@ -20,7 +20,7 @@ static const char *colorname[] = {
     "#FFFFFF",
 
     [255] = 0,
- 
+
     "#CCCCCC",
     "#EEEEEE",
     "#111111",
@@ -67,7 +67,7 @@ ResourcePref resources[] = {
     { "alpha",         FLOAT,  &alpha },
     { "border",      INTEGER,  &borderperc },
 };
- 
+
 // Original configuration
 
 static char *shell = "/bin/sh";
@@ -89,7 +89,7 @@ static unsigned int cursorthickness = 2;
 static int bellvolume = 0;
 char *termname = "st-256color";
 unsigned int tabspaces = 8;
-static unsigned int defaultcs = 257;
+unsigned int defaultcs = 257;
 static unsigned int defaultrcs = 258;
 static unsigned int cursorshape = 2;
 static unsigned int cols = 80;
@@ -106,7 +106,7 @@ static MouseShortcut mshortcuts[] = {
 #define MODKEY Mod1Mask
 #define TERMMOD (ControlMask|ShiftMask)
 static Shortcut shortcuts[] = {
-	
+
 	{ XK_ANY_MOD,           XK_Break,       sendbreak,      {.i =  0} },
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
@@ -125,7 +125,7 @@ static uint ignoremod = Mod2Mask|XK_SWITCH_MOD;
 static uint forceselmod = ShiftMask;
 static uint forcemousemod = ShiftMask;
 static Key key[] = {
-	
+
 	{ XK_KP_Home,       ShiftMask,      "\033[2J",       0,   -1},
 	{ XK_KP_Home,       ShiftMask,      "\033[1;2H",     0,   +1},
 	{ XK_KP_Home,       XK_ANY_MOD,     "\033[H",        0,   -1},
