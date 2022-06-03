@@ -473,7 +473,7 @@ spacingRawScalable borderPx scalingFactor =
 -- Spawn xmobar with input pipe
 spawnMyBar :: LayoutClass l Window => String -> PP -> XConfig l -> IO (XConfig (ModifiedLayout AvoidStruts l))
 spawnMyBar commandString ppIn confIn = do
-    pipe <- spawnPipe commandString
+    pipe <- spawnPipeWithNoEncoding commandString
     return $ docks $ confIn
         { layoutHook = avoidStruts (layoutHook confIn)
         , logHook    = do
@@ -606,13 +606,13 @@ main = do
                                    spacingRawScalable xrSpace scaling $
                                    layoutHook def
             , manageHook         = myManageHook <+> manageHook def
-            , handleEventHook    = handleEventHook def <+> fullscreenEventHook
+            , handleEventHook    = handleEventHook def
             , startupHook        = startupHook def <+> setFullscreenSupported
             , workspaces         = myWorkspaces
             }
 
     -- Add my key bindings
-    xmobarSpawner <- spawnMyBar myBarCommand myBarPP $ ewmh $ myDefaultConfig
+    xmobarSpawner <- spawnMyBar myBarCommand myBarPP $ ewmh $ ewmhFullscreen $ myDefaultConfig
                  `removeKeysP`     myRemoveBindings
                  `additionalKeysP` myKeyBindings
 
