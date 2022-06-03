@@ -27,13 +27,6 @@ Config {
                          , "--"
                          , "-D", "edp-backlight"
                          ] 10
-        -- Volume
-        , Run Volume "default" "Master" [ "--template", "<volume><status>"
-                                        , "-w", "3"
-                                        , "--"
-                                        , "--on" , "${mute_space}",     "--off",  "${mute_identifier}"
-                                        , "--onc", "white", "--offc", "white"
-                                        ] 10
         -- CPU Usage
         , Run Cpu [ "--template", "<total>"
                   , "-w", "3"
