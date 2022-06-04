@@ -45,6 +45,7 @@ top_bar+="$(colour_arrow r "${background},${colour2}")"
 top_bar+="$(colour_arrow r "${colour2},${colour1}")"
 top_bar+="%lock-show%"
 top_bar+="%control-bluetooth%"
+top_bar+="$(build_block "wneovolume" " %volumm% " "  ")"
 top_bar+="%control-bat%"
 top_bar+="%control-light%"
 top_bar+="$(build_block "popneonetwork" " %interf% " "  ")"
@@ -64,15 +65,11 @@ bottom_bar+="$(simple_block "wneonetwork" "<fn=1>   </fn>")"
 bottom_bar+="$(simple_block "neopowermenu" "<fn=1>   </fn>")"
 bottom_bar+="$(colour_arrow r "${colour2},${background}")"
 
-# Create mute icon
-mute_identifier="<fc=${foreground},${colour2}:0><fn=1>  </fn></fc>"
-mute_space=""
-
 # Export needed variables
 export -- \
 	alpha background foreground \
 	colour0 colour1 colour2 \
-	top_bar bottom_bar mute_identifier mute_space
+	top_bar bottom_bar
 
 # Run both xmobar instances
 xmobar "$@" <(envsubst < "${folder_now}/top.xmobarrc") &
