@@ -38,7 +38,7 @@ volume="$(pamixer --get-volume)"
 mute="$(pamixer --get-mute)"
 
 # Check if there is volume
-[ -z "${volume}" ] && exit 1
+[ -z "${volume}" ] && { echo "<fc=${foreground},${colour2}:0><fn=1>  </fn></fc>"; exit 1; }
 
 simple() {
 
