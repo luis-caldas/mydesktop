@@ -33,19 +33,42 @@ function dock {
     folder_now="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 	# import all modelines
-	while read -r modeline; do
-		# read line into array
-        read -ra array_modes <<< "${modeline}"
-		# clean array
-		array_modes[1]="$(tr -d '"' <<< "${array_modes[1]}")"
-		# add modes
-		xrandr --newmode "${array_modes[@]:1}"
-		# add to specific monitor
-		xrandr --addmode "${MONITOR}" "${array_modes[1]}"
-	done < "${folder_now}/../../displays/nec-v72.modelines"
+	# while read -r modeline; do
+	# 	# read line into array
+	#     read -ra array_modes <<< "${modeline}"
+	# 	# clean array
+	# 	array_modes[1]="$(tr -d '"' <<< "${array_modes[1]}")"
+	# 	# add modes
+	# 	xrandr --newmode "${array_modes[@]:1}"
+	# 	# add to specific monitor
+	# 	xrandr --addmode "${MONITOR}" "${array_modes[1]}"
+	# done < "${folder_now}/../../displays/nec-v72.modelines"
+
+	# get the new scaling
+	normal_scale="${GDK_SCALE}x${GDK_SCALE}"
+
+	# calculate the xrandr scale
+	start=1
+	# get boundaries for mirroring value
+	range=$(( GDK_SCALE - start ))
+	middle="$(bc <<< "scale=2; ${range} / 2")"
+	# get pure number of target
+	pure="$(bc <<< "${TARGET_SCALE} - ${start}")"
+	# calculate inverse correlation
+	corr="$(bc <<< "$start + ( $middle + ( $middle - $pure ) )" )"
+
+	# fix the scale
+	scaling="${corr}x${corr}"
+
+	# offset for the second monitor
+	width="$(xrandr | sed -n "/^${ATTACHED}.*/,/^[^[:space:]]/p" | head -n-1 | awk '/\*/ {print $1}' | head -n1 | cut -d'x' -f1)"
+	new_pos=$(( width * GDK_SCALE ))
+
+	# set custom resolution
+	custom_res="1920x1440_49.00"
 
 	# select the best resolution
-	xrandr --output "${MONITOR}" --mode "1920x1440_49.00" --primary --right-of "${ATTACHED}" --output "${ATTACHED}" --auto
+	xrandr --output "${MONITOR}" --mode "${custom_res}" --scale "${scaling}" --primary --pos "${new_pos}"x0 --output "${ATTACHED}" --scale "${normal_scale}" --auto
 
 	# fix rest of stuff for desktop
 	xinput map-to-output "Raydium Corporation Raydium Touch System" "${ATTACHED}"
