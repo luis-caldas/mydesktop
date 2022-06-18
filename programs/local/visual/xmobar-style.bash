@@ -42,15 +42,9 @@ build_block () {
 
 build_flag_block () {
 
-	# Wether we should include an arrow at the start
-	init_arrow="$(colour_arrow r "${colour2},${colour1}")"
-
 	# Start block with the given icon and create the rest
-	block="${block}<fc=${background},${colour1}:0><fn=1>${3}</fn>${5}</fc>"
+	block="${block}<fc=${background},${colour1}:0><fn=3>${3}</fn>${5}</fc>"
 	block+="$(colour_arrow r "${colour1},${colour2}")<fc=${foreground},${colour2}:0>${2}</fc>"
-
-	# Finish block with the init arrow if chosen
-	block+="${init_arrow}"
 
 	# Echo the whole block
 	echo -n "${block}"
