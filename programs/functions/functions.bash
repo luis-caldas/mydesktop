@@ -17,6 +17,24 @@ function memdisk {
 	watch -d -c -n1 grep -A1 Dirty /proc/meminfo
 }
 
+function mmerge {
+
+	# get current branch
+	current_branch="$(git rev-parse --abbrev-ref HEAD)"
+
+	# merge to master
+	git switch master
+	git merge "${current_branch}"
+	git push
+	git switch "${current_branch}"
+	git status
+
+}
+
+function oneline {
+	git log --graph --decorate --oneline
+}
+
 function dock {
 
 	# get the folder in which the script is located
@@ -33,16 +51,16 @@ function dock {
     folder_now="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 	# import all modelines
-	# while read -r modeline; do
-	# 	# read line into array
-	#     read -ra array_modes <<< "${modeline}"
-	# 	# clean array
-	# 	array_modes[1]="$(tr -d '"' <<< "${array_modes[1]}")"
-	# 	# add modes
-	# 	xrandr --newmode "${array_modes[@]:1}"
-	# 	# add to specific monitor
-	# 	xrandr --addmode "${MONITOR}" "${array_modes[1]}"
-	# done < "${folder_now}/../../displays/nec-v72.modelines"
+	while read -r modeline; do
+		# read line into array
+	    read -ra array_modes <<< "${modeline}"
+		# clean array
+		array_modes[1]="$(tr -d '"' <<< "${array_modes[1]}")"
+		# add modes
+		xrandr --newmode "${array_modes[@]:1}"
+		# add to specific monitor
+		xrandr --addmode "${MONITOR}" "${array_modes[1]}"
+	done < "${folder_now}/../../displays/nec-v72.modelines"
 
 	# get the new scaling
 	normal_scale="${GDK_SCALE}x${GDK_SCALE}"
