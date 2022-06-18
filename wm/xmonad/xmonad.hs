@@ -458,12 +458,12 @@ superScripsNumbers numberString isSup =
                 listAgainst = "0123456789"
 
 -- Scales pixels with a multiplier
-scalePixels :: Integer -> Integer -> Integer
+scalePixels :: Float -> Integer -> Integer
 scalePixels scale inputPx =
-    scale * inputPx
+    round $ scale * (fromIntegral inputPx)
 
 -- Creates a spacing that is scalable
-spacingRawScalable :: Integer -> Integer -> l a -> ModifiedLayout Spacing l a
+spacingRawScalable :: Integer -> Float -> l a -> ModifiedLayout Spacing l a
 spacingRawScalable borderPx scalingFactor =
     spacingRaw False borderScaled True borderScaled True
     where
@@ -527,10 +527,15 @@ lookMap mapInput mapSearch defaultVal =
     where
         lookedVar = Data.Map.lookup mapSearch mapInput
 
--- Transforms string to integer
+-- Transforms monad string to integer
 mToInteger :: String -> Integer
 mToInteger strIn =
     read strIn::Integer
+
+-- Transforms monad string into float
+mToFloat :: String -> Float
+mToFloat strIn =
+    read strIn::Float
 
 -- }}}
 -- {{{ Main
@@ -542,7 +547,7 @@ main = do
 
     -- Get the scaling of the session
     scalingRaw <- getEnv scalingVarName
-    let scaling = mToInteger scalingRaw
+    let scaling = mToFloat scalingRaw
 
     -- Get the display and the path for the selected display
     display <- getEnv displayVar
