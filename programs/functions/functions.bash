@@ -87,7 +87,7 @@ function dock {
 	new_pos=$(( width * GDK_SCALE ))
 
 	# set custom resolution
-	custom_res="1920x1440_49.00"
+	custom_res="1440x1080_65.00"
 
 	# select the best resolution
 	xrandr --output "${MONITOR}" --mode "${custom_res}" --scale "${scaling}" --primary --pos "${new_pos}"x0 --output "${ATTACHED}" --scale "${normal_scale}" --auto
