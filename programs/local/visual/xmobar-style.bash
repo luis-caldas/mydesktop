@@ -43,8 +43,8 @@ build_block () {
 build_flag_block () {
 
 	# Start block with the given icon and create the rest
-	block="${block}<fc=${background},${colour1}:0><fn=1>${3}</fn><fn=3>${5}</fn></fc>"
-	block+="$(colour_arrow r "${colour1},${colour2}")<fc=${foreground},${colour2}:0>${2}</fc>"
+	block="${block}<fc=${background},${colour1}:0><fn=1>${3}</fn></fc>"
+	block+="$(colour_arrow r "${colour1},${colour2}")<fc=${foreground},${colour2}:0><fn=3>${2}</fn></fc>"
 
 	# Echo the whole block
 	echo -n "${block}"
