@@ -4,7 +4,6 @@ Config {
      font            = "xft:Mono:size=12"
    , additionalFonts = [ "xft:Iosevka Nerd Font:size=12"
                        , "xft:Mono:size=18"
-                       , "xft:flags color world:size=12"
                        ]
    , bgColor         = "${background}"
    , fgColor         = "${foreground}"

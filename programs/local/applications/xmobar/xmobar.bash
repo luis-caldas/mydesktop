@@ -52,7 +52,6 @@ top_bar+="$(build_block "popneonetwork" " %interf% " "  ")"
 top_bar+="$(build_block "wneosysinfo" " %cpu% " " ﬙ ")"
 top_bar+="%cmd-gov%"
 top_bar+="$(build_block "wneosysinfo" " %memory% " "  ")"
-top_bar+="$(build_flag_block "" " 0 " "  ")"
 
 # Create bottom bar
 bottom_bar="%UnsafeStdinReader%"
