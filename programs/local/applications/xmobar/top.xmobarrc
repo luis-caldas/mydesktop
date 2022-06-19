@@ -35,6 +35,11 @@ Config {
         , Run Memory [ "--template", "<used> / <total>"
                      , "-w", "5"
                      ] 10
+        , Run Mpris2 "spotify" [ "-t"
+                               , "<artist> - <title>"
+                               , "-x"
+                               , ""
+                               ] 10
         , Run ComX "cneokeys" [] "" "lock-show" 10
         -- Battery script
         , Run ComX "cneobattery" [ "pall" ] "" "control-bat" 10
