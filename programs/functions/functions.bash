@@ -17,6 +17,10 @@ function memdisk {
 	watch -d -c -n1 grep -A1 Dirty /proc/meminfo
 }
 
+function rescan {
+	nmcli d wifi rescan
+}
+
 function mmerge {
 
 	# get current branch
