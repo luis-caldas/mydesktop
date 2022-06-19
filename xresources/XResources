@@ -33,6 +33,24 @@
 #define MY_COLOUR_4 #838387
 #define MY_COLOUR_5 #ADAAB1
 
+! Somewhat colourful
+#define MY_COLOUR_REAL_0  #202020
+#define MY_COLOUR_REAL_8  #404040
+#define MY_COLOUR_REAL_1  #8C6969
+#define MY_COLOUR_REAL_9  #BF8F8F
+#define MY_COLOUR_REAL_2  #758C69
+#define MY_COLOUR_REAL_10 #A7BF8F
+#define MY_COLOUR_REAL_3  #8C8C69
+#define MY_COLOUR_REAL_11 #BFBF8F
+#define MY_COLOUR_REAL_4  #69818C
+#define MY_COLOUR_REAL_12 #8FA7BF
+#define MY_COLOUR_REAL_5  #81698C
+#define MY_COLOUR_REAL_13 #B38FBF
+#define MY_COLOUR_REAL_6  #698C8C
+#define MY_COLOUR_REAL_14 #8FBFBF
+#define MY_COLOUR_REAL_7  #808080
+#define MY_COLOUR_REAL_15 #BCBCBC
+
 ! One Dark Pro colours
 #define MY_THEME_0  #3F4451
 #define MY_THEME_1  #E05561
@@ -71,22 +89,22 @@
 *.cursorColor: MY_FOREGROUND
 
 ! Colours
-*.color0:  MY_SHADE_0
-*.color1:  MY_COLOUR_0
-*.color2:  MY_COLOUR_1
-*.color3:  MY_COLOUR_2
-*.color4:  MY_COLOUR_3
-*.color5:  MY_COLOUR_4
-*.color6:  MY_COLOUR_5
-*.color7:  MY_SHADE_1
-*.color8:  MY_SHADE_2
-*.color9:  MY_COLOUR_0
-*.color10: MY_COLOUR_1
-*.color11: MY_COLOUR_2
-*.color12: MY_COLOUR_3
-*.color13: MY_COLOUR_4
-*.color14: MY_COLOUR_5
-*.color15: MY_SHADE_3
+*.color0:  MY_COLOUR_REAL_0
+*.color1:  MY_COLOUR_REAL_1
+*.color2:  MY_COLOUR_REAL_2
+*.color3:  MY_COLOUR_REAL_3
+*.color4:  MY_COLOUR_REAL_4
+*.color5:  MY_COLOUR_REAL_5
+*.color6:  MY_COLOUR_REAL_6
+*.color7:  MY_COLOUR_REAL_7
+*.color8:  MY_COLOUR_REAL_8
+*.color9:  MY_COLOUR_REAL_9
+*.color10: MY_COLOUR_REAL_10
+*.color11: MY_COLOUR_REAL_11
+*.color12: MY_COLOUR_REAL_12
+*.color13: MY_COLOUR_REAL_13
+*.color14: MY_COLOUR_REAL_14
+*.color15: MY_COLOUR_REAL_15
 
 ! Rofi
 rofi.alpha-back: MY_ALPHA_BACK
