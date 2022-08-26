@@ -3,7 +3,7 @@
 VEND_ID="1a86"
 PROD_ID="e025"
 
-temper_update_every=3
+temper_update_every=1
 
 temper_script() {
 
