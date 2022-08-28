@@ -9,7 +9,6 @@ BATT_POPED_CHECK="${HOME}/.cache/batt-pop"
 
 # Battery paths
 BATTERY_PATH="/sys/class/power_supply"
-BATTERY_LIST=( "BAT" "BAT0" "BAT1" "BAT2" "cw2015-battery" )
 
 # }}}
 # {{{ Utils
@@ -55,10 +54,10 @@ mins_to_time() {
 
 # Checks which battery is present in the system from the list
 which_battery() {
-	for each in "${BATTERY_LIST[@]}"; do
-		full_bat_path="${BATTERY_PATH}/${each}"
-		if [ -d "$full_bat_path" ]; then
-			echo "$full_bat_path"
+	for each in "$BATTERY_PATH"/*; do
+		type_file_path="${each}/type"
+		if grep -Fxq "Battery" "$type_file_path"; then
+			echo "$each"
 		fi
 	done
 }
@@ -73,10 +72,20 @@ bat_capacity() {
 	battery_now="$1"
 	# Check battery present
 	if [ -n "$battery_now" ]; then
-		# Iterate through the list of the batteries
 		capacity_file="$battery_now""/capacity"
 		if [ -e "$capacity_file" ]; then
 			xargs printf "%3s" < "$capacity_file"
+		fi
+	fi
+}
+
+bat_level() {
+	battery_now="$1"
+	# Check battery present
+	if [ -n "$battery_now" ]; then
+		level_file="$battery_now""/capacity_level"
+		if [ -e "$level_file" ]; then
+			cat "$level_file"
 		fi
 	fi
 }
@@ -89,6 +98,73 @@ bat_time() {
 			time_mins=$(cat "$time_file")
 			converted_time=$(mins_to_time "$time_mins")
 			printf "%s" "$converted_time"
+		fi
+	fi
+}
+
+bat_cycle() {
+	battery_now="$1"
+	# Check battery present
+	if [ -n "$battery_now" ]; then
+		cycle_file="$battery_now""/cycle_count"
+		if [ -e "$cycle_file" ]; then
+			cat "$cycle_file"
+		fi
+	fi
+}
+
+bat_tech() {
+	battery_now="$1"
+	# Check battery present
+	if [ -n "$battery_now" ]; then
+		tech_file="$battery_now""/technology"
+		if [ -e "$tech_file" ]; then
+			cat "$tech_file"
+		fi
+	fi
+}
+
+bat_name() {
+	battery_now="$1"
+	# Check battery present
+	if [ -n "$battery_now" ]; then
+		model_file="$battery_now""/model_name"
+		if [ -e "$model_file" ]; then
+			cat < "$model_file"
+		fi
+	fi
+}
+
+bat_voltage() {
+	battery_now="$1"
+	# Check battery present
+	if [ -n "$battery_now" ]; then
+		voltage_file="$battery_now""/voltage_now"
+		if [ -e "$voltage_file" ]; then
+			awk '{ print $1 / 1000000 }' < "$voltage_file" | xargs printf "%s"
+		fi
+	fi
+}
+
+bat_energy() {
+	battery_now="$1"
+	# Check battery present
+	if [ -n "$battery_now" ]; then
+		energy_full_file="$battery_now""/energy_full"
+		energy_full_design_file="$battery_now""/energy_full_design"
+		if [ -e "$energy_full_file" ] && [ -e "$energy_full_design_file" ]; then
+			awk '{ print $1 / 1000000 }' < "$energy_full_file" | xargs printf "%s "
+			awk '{ print $1 / 1000000 }' < "$energy_full_design_file" | xargs printf "%s"
+		fi
+	fi
+}
+
+bat_status() {
+	battery_now="$1"
+	if [ -n "$battery_now" ]; then
+		charge_file="$battery_now""/status"
+		if [ -e "$charge_file" ]; then
+			cat "$charge_file"
 		fi
 	fi
 }
@@ -195,6 +271,38 @@ text_icon() {
 	fi
 }
 
+extra() {
+
+	if [ -n "$battery_present" ]; then
+
+		# Get all the batteries
+		all_bats=$battery_present
+
+		# Count battery numbers
+		battery_nr=1
+
+		# Create array with the functions
+		all_funcs=( "bat_name" "bat_capacity" "bat_level" "bat_status" "bat_time" "bat_cycle" "bat_voltage" "bat_energy" )
+
+		# Iterate the batteries
+		while IFS= read -r each_bat; do
+			# Create array with all conatined data
+			all_response=()
+			for each_func in "${all_funcs[@]}"; do
+				result="$("$each_func" "$each_bat")"
+				if [ -n "$result" ]; then
+					all_response+=("$result")
+				else
+					all_response+=("")
+				fi
+			done
+			# Print info
+			echo "${all_response[@]@Q}"
+		done <<< "$all_bats"
+	fi
+
+}
+
 power() {
 
 	if [ -n "$battery_present" ]; then
@@ -213,6 +321,7 @@ power() {
 
 			# Extract all possible battery information
 			var_bat_capacity="$(bat_capacity "$each_bat")"
+			var_bat_level="$(bat_level "$each_bat")"
 			var_bat_time="$(bat_time "$each_bat")"
 			var_bat_charging="$(bat_charging "$each_bat")"
 
@@ -223,8 +332,12 @@ power() {
 				charging_icon="$(text_icon "${var_bat_charging}")"
 			fi
 
+			# Check which type of capacity is to be shown
+			show_cap="$var_bat_capacity"
+			[ -z "$var_bat_capacity" ] && show_cap="$var_bat_level"
+
 			# Create the array with each data
-			var_bat_array=( "$var_bat_capacity" "$var_bat_time" "$charging_icon" )
+			var_bat_array=( "$show_cap" "$var_bat_time" "$charging_icon" )
 
 			# Create the array that will contain the existing vars
 			var_bat_real=()
@@ -251,14 +364,24 @@ power() {
 			# Check if all batteries are under a certain level
 			# if so raise the battery warning
 
-			# Check specific condition to trigger a battery warning
-			# Battery must be discharging and less than a given number
-			if (( "${var_bat_capacity}" <= "$BATT_WARNING_PERCENTAGE" )); then
-				if [ "${var_bat_charging}" = "c" ]; then
+			if [ -z "$var_bat_capacity" ]; then
+				if [ "$var_bat_level" == "Critical" ]; then
+					if [ "${var_bat_charging}" = "c" ]; then
+						is_under="no"
+					fi
+				else
 					is_under="no"
 				fi
 			else
-				is_under="no"
+				# Check specific condition to trigger a battery warning
+				# Battery must be discharging and less than a given number
+				if (( "${var_bat_capacity}" <= "$BATT_WARNING_PERCENTAGE" )); then
+					if [ "${var_bat_charging}" = "c" ]; then
+						is_under="no"
+					fi
+				else
+					is_under="no"
+				fi
 			fi
 
 			# Update battery number
@@ -304,18 +427,15 @@ all() {
 # {{{ Main
 
 usage() {
-	echo "Usage: $0 {capacity,time,charging,power,ppower,all,pall}"
+	echo "Usage: $0 {capacity,extra,power,ppower,all,pall}"
 }
 
 case "$1" in
 	capacity)
 		fn_all_bats bat_capacity
 		;;
-	time)
-		fn_all_bats bat_time
-		;;
-	charging)
-		fn_all_bats bat_charging
+	extra)
+		extra
 		;;
 	power)
 		power
@@ -323,11 +443,11 @@ case "$1" in
 	ppower)
 		power p
 		;;
-	pall)
-		all p
-		;;
 	all)
 		all
+		;;
+	pall)
+		all p
 		;;
 	-h|--help)
 		usage
