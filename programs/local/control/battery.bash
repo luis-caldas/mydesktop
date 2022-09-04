@@ -245,7 +245,7 @@ fn_all_bats() {
 
 pretty_section() {
 	source "${folder_now}/../visual/xmobar-style.bash"
-	build_block "popneobattery" " ${1}" "  ${2}"
+	build_block "popneobattery" " ${1}" "  ${2} "
 }
 
 # Covers the string with given chars
@@ -333,32 +333,33 @@ power() {
 			fi
 
 			# Check which type of capacity is to be shown
-			show_cap="$var_bat_capacity"
-			[ -z "$var_bat_capacity" ] && show_cap="$var_bat_level"
+			if [ -n "$var_bat_capacity" ]; then
 
-			# Create the array with each data
-			var_bat_array=( "$show_cap" "$var_bat_time" "$charging_icon" )
+				# Create the array with each data
+				var_bat_array=( "$var_bat_capacity" "$var_bat_time" "$charging_icon" )
 
-			# Create the array that will contain the existing vars
-			var_bat_real=()
+				# Create the array that will contain the existing vars
+				var_bat_real=()
 
-			# Check if each exist
-			for each in "${var_bat_array[@]}"; do
-				if [ -n "$each" ]; then
-					var_bat_real+=("$each")
+				# Check if each exist
+				for each in "${var_bat_array[@]}"; do
+					if [ -n "$each" ]; then
+						var_bat_real+=("$each")
+					fi
+				done
+
+				# Check if the array is not empty (no battery info found)
+				if [ ! "${#var_bat_real[@]}" -eq 0 ]; then
+					if [ "${1}" == "p" ]; then
+						full_bat="${var_bat_real[*]}"
+						pretty_section "$full_bat" "<fn=0>$(echo "${battery_nr}" | sed -e 'y|0123456789|⁰¹²³⁴⁵⁶⁷⁸⁹|')</fn>"
+					else
+						cover "${var_bat_real[@]}"
+						# Add new line at the end
+						echo
+					fi
 				fi
-			done
 
-			# Check if the array is not empty (no battery info found)
-			if [ ! "${#var_bat_real[@]}" -eq 0 ]; then
-				if [ "${1}" == "p" ]; then
-					full_bat="${var_bat_real[*]}"
-					pretty_section "$full_bat" "<fn=0>$(echo "${battery_nr}" | sed -e 'y|0123456789|⁰¹²³⁴⁵⁶⁷⁸⁹|')</fn>"
-				else
-					cover "${var_bat_real[@]}"
-					# Add new line at the end
-					echo
-				fi
 			fi
 
 			# Check if all batteries are under a certain level
