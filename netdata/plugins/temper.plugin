@@ -57,7 +57,7 @@ temper_check() {
 
 temper_create() {
 	cat <<- EOF
-		CHART temper.temperature "Temper" "Temperature TEMPer Probe" "Temperature in C"
+		CHART temper.temperature "" "Temperature TEMPer Probe" "Temperature in C"
 		DIMENSION int_temp "Device Temperature" absolute 1 100
 		DIMENSION ext_temp "Probe Temperature" absolute 1 100
 	EOF
@@ -110,7 +110,7 @@ main() {
 		next_run=$(( now - (now % UPDATE_MILISECONDS) + UPDATE_MILISECONDS ))
 
 		# Get data (takes a while)
-		temper_get
+		"$script_name"_get
 
 		# Wait until its time to execute
 		while true; do
@@ -138,7 +138,7 @@ main() {
 		first_run=1
 
 		# Print table
-		temper_print "$since_last_run" || { echo DISABLE; exit 1; }
+		"$script_name"_print "$since_last_run" || { echo DISABLE; exit 1; }
 		current_time_ms
 
 	done
