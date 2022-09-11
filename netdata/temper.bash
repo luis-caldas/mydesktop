@@ -3,7 +3,7 @@
 VEND_ID="1a86"
 PROD_ID="e025"
 
-temper_update_every=1
+UPDATE_MILISECONDS=1000
 
 temper_script() {
 
@@ -57,7 +57,7 @@ temper_check() {
 
 temper_create() {
 	cat <<- EOF
-		CHART temper.temperature "" "Temperature TEMPer Probe" "Temperature in C"
+		CHART temper.temperature "Temper" "Temperature TEMPer Probe" "Temperature in C"
 		DIMENSION int_temp "Device Temperature" absolute 1 100
 		DIMENSION ext_temp "Probe Temperature" absolute 1 100
 	EOF
@@ -75,3 +75,66 @@ temper_update() {
 	VALUESEOF
 	return 0
 }
+
+current_time_ms() {
+	now_s="$(date +'%s')"
+	now_m="$(date +'%N')"
+	printf "%s%s\n" "${now_s}" "${now_m:0:4}"
+}
+
+main() {
+
+	# Vars
+	script_name="temper"
+	first_run=0
+	since_last_run=0
+	last_run=0
+
+	# Check if can we run this script
+	"$script_name"_check || { echo DISABLE; exit 1; }
+
+	# Create charts
+	"$script_name"_create
+
+	# Infinite loop for the data update
+	while true; do
+
+		# Get current time
+		now="$(current_time_ms)"
+
+		# Calculate time for next run
+		next_run=$(( now - (now % UPDATE_MILISECONDS) + UPDATE_MILISECONDS ))
+
+		# Wait until its time to execute
+		while true; do
+
+			# Calculate time to sleep
+			time_to_sleep_ms=$(( next_run - now ))
+			time_to_sleep_ms="$(tr -d '-' <<< "${time_to_sleep_ms}" | xargs printf "%08d")"
+			time_to_sleep_s="${time_to_sleep_ms::-4}.${time_to_sleep_ms: -4}"
+			time_to_sleep_s="$(echo "${time_to_sleep_s}" | sed 's/^0*//' | sed 's/^\./0./')"
+
+			# Sleep for said amount of time
+			sleep "${time_to_sleep_s}"
+
+			# Get current time again
+			now="$(current_time_ms)"
+
+			# Exit if waited enough
+			[ "${now}" -ge "${next_run}" ] && break
+
+		done
+
+		# If not first run
+		[ "$first_run" != 0 ] && since_last_run=$(( now - last_run ))
+		last_run="$now"
+		first_run=1
+
+		# Update table
+		temper_update "$since_last_run" || { echo DISABLE; exit 1; }
+
+	done
+
+}
+
+main "$@"
