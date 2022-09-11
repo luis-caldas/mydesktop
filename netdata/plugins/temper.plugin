@@ -64,8 +64,7 @@ temper_create() {
 	return 0
 }
 
-temper_update() {
-	temper_get || return 1
+temper_print() {
 	# write the result of the work.
 	cat <<- VALUESEOF
 		BEGIN temper.temperature $1
@@ -76,10 +75,15 @@ temper_update() {
 	return 0
 }
 
+temper_update() {
+	temper_get
+	temper_print "$1"
+}
+
 current_time_ms() {
 	now_s="$(date +'%s')"
 	now_m="$(date +'%N')"
-	printf "%s%s\n" "${now_s}" "${now_m:0:4}"
+	printf "%s%s\n" "${now_s}" "${now_m:0:3}"
 }
 
 main() {
@@ -105,13 +109,16 @@ main() {
 		# Calculate time for next run
 		next_run=$(( now - (now % UPDATE_MILISECONDS) + UPDATE_MILISECONDS ))
 
+		# Get data (takes a while)
+		temper_get
+
 		# Wait until its time to execute
 		while true; do
 
 			# Calculate time to sleep
 			time_to_sleep_ms=$(( next_run - now ))
 			time_to_sleep_ms="$(tr -d '-' <<< "${time_to_sleep_ms}" | xargs printf "%08d")"
-			time_to_sleep_s="${time_to_sleep_ms::-4}.${time_to_sleep_ms: -4}"
+			time_to_sleep_s="${time_to_sleep_ms::-4}.${time_to_sleep_ms: -3}"
 			time_to_sleep_s="$(echo "${time_to_sleep_s}" | sed 's/^0*//' | sed 's/^\./0./')"
 
 			# Sleep for said amount of time
@@ -130,8 +137,9 @@ main() {
 		last_run="$now"
 		first_run=1
 
-		# Update table
-		temper_update "$since_last_run" || { echo DISABLE; exit 1; }
+		# Print table
+		temper_print "$since_last_run" || { echo DISABLE; exit 1; }
+		current_time_ms
 
 	done
 
