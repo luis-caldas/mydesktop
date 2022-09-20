@@ -7,31 +7,6 @@ XRESOURCE_NAME="dunst"
 # Functions #
 #############
 
-# Function to get real script dir
-function get_folder() {
-
-    # get the folder in which the script is located
-    SOURCE="${BASH_SOURCE[0]}"
-
-    # resolve $SOURCE until the file is no longer a symlink
-    while [ -h "$SOURCE" ]; do
-
-      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-      SOURCE="$(readlink "$SOURCE")"
-
-      # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-
-    done
-
-    # the final assignment of the directory
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-    # return the directory
-    echo "$DIR"
-}
-
 function extract_scaling_factor() {
 
 	# run the gsettings command to get the scaling factor
@@ -95,7 +70,7 @@ colour_nbackground=$(extract "nbackground")
 colour_cbackground=$(extract "cbackground")
 
 # Get local folder
-local_folder="$(get_folder)"
+local_folder="$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")"
 
 # Export variables that are going to be used in envsubst
 export -- scale \

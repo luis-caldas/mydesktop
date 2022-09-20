@@ -41,18 +41,8 @@ function oneline {
 
 function dock {
 
-	# get the folder in which the script is located
-    SOURCE="${BASH_SOURCE[0]}"
-
-    # resolve $SOURCE until the file is no longer a symlink
-    while [ -h "$SOURCE" ]; do
-      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-      SOURCE="$(readlink "$SOURCE")"
-      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-    done
-
     # the final assignment of the directory
-    folder_now="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    folder_now="$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")"
 
 	# import all modelines
 	while read -r modeline; do

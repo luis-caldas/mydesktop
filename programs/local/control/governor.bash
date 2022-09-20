@@ -18,31 +18,6 @@ SAVE_FOLDER="${HOME}/.config/neogovernor"
 # }}}
 # {{{ Utils
 
-# Function to get real script dir
-function get_folder() {
-
-    # get the folder in which the script is located
-    SOURCE="${BASH_SOURCE[0]}"
-
-    # resolve $SOURCE until the file is no longer a symlink
-    while [ -h "$SOURCE" ]; do
-
-      DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-      SOURCE="$(readlink "$SOURCE")"
-
-      # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
-      [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
-
-    done
-
-    # the final assignment of the directory
-    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-
-    # return the directory
-    echo "$DIR"
-}
-
 good_list() {
 	tr ' ' '\n' <<< "$@"
 }
@@ -361,7 +336,7 @@ pretty_cpu() {
 	# if it is not empty print it
 	if [ -n "$print_data" ]; then
 		# Import styling tools
-		folder_now="$(get_folder)"
+		folder_now="$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")"
 		source "${folder_now}/../visual/xmobar-style.bash"
 
 		# Build the full block
@@ -392,7 +367,7 @@ pretty_gpu() {
 	# if it is not empty print it
 	if [ -n "$print_data" ]; then
 		# Import styling tools
-		folder_now="$(get_folder)"
+		folder_now="$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")"
 		source "${folder_now}/../visual/xmobar-style.bash"
 
 		# Build the full block
