@@ -104,20 +104,20 @@
 
 ! Colours
 *.color0:  MY_SHADE_0
-*.color1:  MY_COLOUR_GOOD_0
-*.color2:  MY_COLOUR_GOOD_1
-*.color3:  MY_COLOUR_GOOD_2
-*.color4:  MY_COLOUR_GOOD_3
-*.color5:  MY_COLOUR_GOOD_4
-*.color6:  MY_COLOUR_GOOD_5
+*.color1:  MY_COLOUR_0
+*.color2:  MY_COLOUR_1
+*.color3:  MY_COLOUR_2
+*.color4:  MY_COLOUR_3
+*.color5:  MY_COLOUR_4
+*.color6:  MY_COLOUR_5
 *.color7:  MY_SHADE_1
 *.color8:  MY_SHADE_2
-*.color9:  MY_COLOUR_GOOD_6
-*.color10: MY_COLOUR_GOOD_7
-*.color11: MY_COLOUR_GOOD_8
-*.color12: MY_COLOUR_GOOD_9
-*.color13: MY_COLOUR_GOOD_10
-*.color14: MY_COLOUR_GOOD_11
+*.color9:  MY_COLOUR_0
+*.color10: MY_COLOUR_1
+*.color11: MY_COLOUR_2
+*.color12: MY_COLOUR_3
+*.color13: MY_COLOUR_4
+*.color14: MY_COLOUR_5
 *.color15: MY_SHADE_3
 
 ! Rofi
