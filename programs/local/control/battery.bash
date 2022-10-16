@@ -156,6 +156,8 @@ bat_charging() {
 				echo -n f
 			elif grep -Fxq "Discharging" "$charge_file"; then
 				echo -n d
+			elif grep -Fxq "Not charging" "$charge_file"; then
+				echo -n n
 			else
 				echo -n ?
 			fi
@@ -233,8 +235,9 @@ cover() {
 
 pretty_icon() {
 	if   [ "${1}" == "c" ]; then echo "<fn=1> </fn>"
-	elif [ "${1}" == "d" ]; then echo "<fn=1> </fn>"
+	elif [ "${1}" == "d" ]; then echo "<fn=1> </fn>"
 	elif [ "${1}" == "f" ]; then echo "<fn=1> </fn>"
+	elif [ "${1}" == "n" ]; then echo "<fn=1> </fn>"
 	else echo "<fn=1> </fn>"
 	fi
 }
@@ -243,6 +246,7 @@ text_icon() {
 	if   [ "${1}" == "c" ]; then echo "/\\"
 	elif [ "${1}" == "d" ]; then echo "\\/"
 	elif [ "${1}" == "f" ]; then echo "##"
+	elif [ "${1}" == "n" ]; then echo "--"
 	else echo "??"
 	fi
 }
