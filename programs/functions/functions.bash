@@ -84,15 +84,16 @@ function dock {
 
 	# fix rest of stuff for desktop
 	xinput map-to-output "Raydium Corporation Raydium Touch System" "${ATTACHED}"
+	cneogovernor cpu set performance
 	numlockx on
 	reneorevbackslash
 	neotrogen restore
-
 }
 
 function undock {
 	xrandr --output "${MONITOR}" --off --output "${ATTACHED}" --auto --primary
 	xinput map-to-output "Raydium Corporation Raydium Touch System" "${ATTACHED}"
+	cneogovernor cpu set powersave
 	numlockx off
 	reneoslashtoback
 	neotrogen restore
