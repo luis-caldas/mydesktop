@@ -54,6 +54,6 @@ Config {
         -- Volume indication
         , Run ComX "cneovolume" [] "" "volumm" 10
         -- Time and date indicator
-        , Run Date "%Y/%m/%d %T %a %Z" "date" 10
+        , Run ComX "vmiltime" [] "date" 10
         ]
    }
