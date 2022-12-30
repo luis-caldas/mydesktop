@@ -142,7 +142,7 @@ myBar = "neomobar"
 
 myBarArguments :: [String]
 myBarArguments =
-    [ "-f", myFontFace ++ " " ++ (show myFontSize)
+    [ "-f", myFontFace ++ "\\ " ++ (show myFontSize)
     ]
 
 -- Commands that should be run before startup
