@@ -170,6 +170,7 @@ xmobar.foreground: MY_FOREGROUND
 xmobar.colour0: MY_GREY_0
 xmobar.colour1: MY_GREY_1
 xmobar.colour2: MY_GREY_2
+xmobar.height: MY_INSIDE_SPACING
 
 ! Conky
 conky.background: MY_BACKGROUND

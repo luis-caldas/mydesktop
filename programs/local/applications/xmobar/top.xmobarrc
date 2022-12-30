@@ -1,13 +1,13 @@
 -- vim: syntax=haskell
 Config {
    -- Appearance
-     font            = "xft:Mono:size=12"
-   , additionalFonts = [ "xft:Iosevka Nerd Font:size=12"
-                       , "xft:Mono:size=18"
+     font            = "Mono 12"
+   , additionalFonts = [ "Iosevka Nerd Font 12"
+                       , "Mono 18"
                        ]
    , bgColor         = "${background}"
    , fgColor         = "${foreground}"
-   , position        = Top
+   , position        = TopH ${bar_height}
    -- General behavior
    , lowerOnStart     = True
    , hideOnStart      = False
