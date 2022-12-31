@@ -72,6 +72,12 @@ devices() {
 	# Create array for all devices
 	all_connected_devices=()
 
+	# Check if the bluetooth service is running
+	if ! systemctl is-active --quiet bluetooth &&
+	   ! systemctl is-active --quiet bluetoothd ; then
+	   return
+	fi
+
 	# Get every device in bluetooth
 	all_devices="$(bluetoothctl devices | awk '{print $2}')"
 
