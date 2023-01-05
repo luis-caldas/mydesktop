@@ -61,7 +61,7 @@ function notfy_bar() {
 function main() {
 
 	# Get connected devices
-	connected_devices="$(nmcli device | grep '[^A-z]connected[^A-z]')"
+	connected_devices="$(nmcli device | grep '[^a-zA-Z]connected[^a-zA-Z]')"
 
 	# Array of icons and variables
 	wifi_icon_prefix="wireless-"
