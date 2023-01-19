@@ -2,7 +2,7 @@
 
 # Globals
 ATTACHED="eDP1"
-MONITOR="DP1"
+MONITOR="HDMI-1"
 
 # All local functions that will be available to the user terminal
 
@@ -83,19 +83,16 @@ function dock {
 	xrandr --output "${MONITOR}" --mode "${custom_res}" --scale "${scaling}" --primary --pos "${new_pos}"x0 --output "${ATTACHED}" --scale "${normal_scale}" --auto
 
 	# fix rest of stuff for desktop
-	xinput map-to-output "Raydium Corporation Raydium Touch System" "${ATTACHED}"
 	cneogovernor cpu set performance
-	numlockx on
-	reneorevbackslash
+	setxkbmap us
 	neotrogen restore
+
 }
 
 function undock {
 	xrandr --output "${MONITOR}" --off --output "${ATTACHED}" --auto --primary
-	xinput map-to-output "Raydium Corporation Raydium Touch System" "${ATTACHED}"
 	cneogovernor cpu set powersave
-	numlockx off
-	reneoslashtoback
+	setxkbmap gb
 	neotrogen restore
 }
 
