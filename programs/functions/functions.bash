@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Globals
-ATTACHED="eDP1"
+ATTACHED="eDP"
 MONITOR="HDMI-A-0"
 
 # All local functions that will be available to the user terminal
