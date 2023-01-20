@@ -7,6 +7,7 @@ Config {
                        ]
    , bgColor         = "${background}"
    , fgColor         = "${foreground}"
+   , alpha           = 0
    , position        = BottomH ${bar_height}
    -- General behavior
    , lowerOnStart     = True
