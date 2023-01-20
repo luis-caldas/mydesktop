@@ -2,7 +2,7 @@
 
 # Globals
 ATTACHED="eDP1"
-MONITOR="HDMI-1"
+MONITOR="HDMI-A-0"
 
 # All local functions that will be available to the user terminal
 
