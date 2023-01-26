@@ -27,6 +27,10 @@ get_state() {
 	xset q | grep -Po "$state"':\K[^\d]+' | tr -d ' '
 }
 
+get_layout() {
+	setxkbmap -v | awk -F "+" '/symbols/ {print $2}' | tr '[:lower:]' '[:upper:]'
+}
+
 ########
 # Main #
 ########
@@ -39,6 +43,9 @@ main() {
 
 	# Array with all states
 	all_states=( "$num_state" "$caps_state" "$scroll_state" )
+
+	# Get the keyboard layout now
+	key_layout="$(get_layout)"
 
 	# Inside data initialization
 	inside_data=""
@@ -53,8 +60,8 @@ main() {
 	done
 
 	# Check if it is empty and exit
-	if [ -z "${inside_data// }" ]; then
-		exit 1
+	if [ -n "${inside_data// }" ]; then
+		new_inside=" - ${inside_data}"
 	fi
 
 	# Build whole block prettily
@@ -62,7 +69,7 @@ main() {
 	source "${folder_now}/../visual/xmobar-style.bash"
 
 	# Print block
-	build_block "" " ${inside_data} " "  "
+	build_block "" " ${key_layout}${new_inside} " "  "
 
 }
 
