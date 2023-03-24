@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 
-# Globals
+###########
+# Globals #
+###########
+
+# Docking
 ATTACHED="eDP"
 MONITOR="HDMI-A-0"
+
+# Webcam
+VIRTUAL_CAM_NR="7"
+VIRTUAL_CAM_NAME="V4L2 Loopback"
+
 
 # All local functions that will be available to the user terminal
 
@@ -111,4 +120,18 @@ function after {
 
 function wher {
 	readlink "$(whereis "${1}" | awk '{print $2}')"
+}
+
+function camdum {
+  case $1 in
+      start)
+          sudo modprobe v4l2loopback card_label="${VIRTUAL_CAM_NAME}" video_nr="${VIRTUAL_CAM_NR}" exclusive_caps=1
+          ;;
+      stop)
+          sudo modprobe -r v4l2loopback
+          ;;
+      *)
+          echo "Not understood, use either {start/stop}"
+          ;;
+  esac
 }
