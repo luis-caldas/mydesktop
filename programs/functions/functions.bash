@@ -6,7 +6,7 @@
 
 # Docking
 ATTACHED="eDP"
-MONITOR="HDMI-A-0"
+MONITOR="DisplayPort-0"
 
 # Webcam
 VIRTUAL_CAM_NR="7"
