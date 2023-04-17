@@ -7,6 +7,8 @@
 # Docking
 ATTACHED="eDP"
 MONITOR="DisplayPort-0"
+MODEL="nec-v72"
+RESOLUTION="1440x1080_65.00"
 
 # Webcam
 VIRTUAL_CAM_NR="7"
@@ -63,7 +65,7 @@ function dock {
 		xrandr --newmode "${array_modes[@]:1}"
 		# add to specific monitor
 		xrandr --addmode "${MONITOR}" "${array_modes[1]}"
-	done < "${folder_now}/../../displays/nec-v72.modelines"
+	done < "${folder_now}/../../displays/${MODEL}.modelines"
 
 	# get the new scaling
 	normal_scale="${GDK_SCALE}x${GDK_SCALE}"
@@ -85,11 +87,8 @@ function dock {
 	width="$(xrandr | sed -n "/^${ATTACHED}.*/,/^[^[:space:]]/p" | head -n-1 | awk '/\*/ {print $1}' | head -n1 | cut -d'x' -f1)"
 	new_pos=$(( width * GDK_SCALE ))
 
-	# set custom resolution
-	custom_res="1440x1080_65.00"
-
 	# select the best resolution
-	xrandr --output "${MONITOR}" --mode "${custom_res}" --scale "${scaling}" --primary --pos "${new_pos}"x0 --output "${ATTACHED}" --scale "${normal_scale}" --auto
+	xrandr --output "${MONITOR}" --mode "${RESOLUTION}" --scale "${scaling}" --primary --pos "${new_pos}"x0 --output "${ATTACHED}" --scale "${normal_scale}" --auto
 
 	# fix rest of stuff for desktop
 	cneogovernor cpu set performance
