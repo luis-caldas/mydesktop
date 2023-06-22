@@ -121,6 +121,15 @@ function wher {
 	readlink "$(whereis "${1}" | awk '{print $2}')"
 }
 
+function inot {
+  file="$1"
+  shift
+  inotifywait -q -m -e close_write "$file" | while read -r filename _; do
+    "$@"
+    echo "$filename" changed
+  done
+}
+
 function camdum {
   case $1 in
       start)
