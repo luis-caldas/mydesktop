@@ -32,6 +32,10 @@ function rescan {
 	nmcli d wifi rescan
 }
 
+function ipapi {
+	curl http://ip-api.com/json -s | jq
+}
+
 function mmerge {
 
 	# get current branch
